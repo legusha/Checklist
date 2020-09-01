@@ -1,19 +1,40 @@
 import React, { Component } from 'react'
+
 import Button from '../components/UI/Button'
+import FormInput from '../components/UI/FormInput'
 
 class Main extends Component {
   state = {
     buttons: {
       all: [
-        {to: '/note', label: 'Add', color: 'success', nextCurrent: 1},
-        {to: '/', label: 'Cancel', color: 'primary', nextCurrent: 0}
+        {to: '/note', label: 'Add', color: 'success', nextCurrentIndex: 1},
+        {to: '/', label: 'Cancel', color: 'primary', nextCurrentIndex: 0}
       ],
-      current: 0
+      currentIndex: 0
+    },
+    formInput: {
+      option: {
+        titleBtn: 'Add',
+        value: ''
+      },
+      onChange: this.handleChangeFormInput,
+      onSubmit: this.handleSubmitFormInput
     }
   }
-  renderButton () {
-    const btn = this.button
+  get button () {
+    const buttons = this.state.buttons
+    const currentIndex = buttons.currentIndex
 
+    return this.renderButton(buttons.all[currentIndex])
+  }
+  set button (value) {
+    const oldButtons = this.state.buttons
+    const newButtons = Object.assign({ ...oldButtons }, { currentIndex: value })
+
+    this.setState({ buttons: newButtons })
+  }
+
+  renderButton (btn) {
     return (
       <Button
         color={btn.color}
@@ -22,36 +43,50 @@ class Main extends Component {
       />
     )
   }
-  get button () {
-    const button = this.state.buttons
-    const current = button.current
 
-    return button.all[current]
-  }
-  set button (value) {
-    const oldButtons = this.state.buttons
-    const newButtons = Object.assign({...oldButtons}, {current: value})
-
-    this.setState({ buttons: newButtons })
+  handleButton ({ nextCurrentIndex }) {
+    this.button = nextCurrentIndex
   }
 
-  handleButton ({ nextCurrent }) {
-    this.button = nextCurrent
+  handleFormInput (handler, e) {
+    handler(e)
   }
+
+  handleChangeFormInput (e) {
+    e.stopPropagation()
+
+    const formInput = this.state.formInput
+    formInput.option.value = e.target.value
+    this.setState({formInput})
+  }
+
+  handleSubmitFormInput (e) {
+    e.preventDefault()
+    e.stopPropagation()
+
+    console.log(this.state.formInput)
+  }
+
   render() {
+    const state = this.state
+    const formInput = state.formInput
+
+    const handleChangeFormInput = this.handleFormInput.bind(this, formInput.onChange.bind(this))
+    const handleSubmitFormInput = this.handleFormInput.bind(this, formInput.onSubmit.bind(this))
+
     return (
       <section className="container main">
         <div className="main-action text-left mb-4 p-4 border-secondary bg-secondary">
-          {this.renderButton()}
+          {this.button}
         </div>
+        <FormInput
+          option={formInput.option}
+          onChange={handleChangeFormInput}
+          onSubmit={handleSubmitFormInput}
+        />
       </section>
     )
   }
-
 }
-
-// Main.propTypes = {
-//   link: React.PropTypes.object,
-// }
 
 export default Main;

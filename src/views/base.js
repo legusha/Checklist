@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Button, FormInput } from '../components/ui'
+import { Button, Card, FormInput } from '../components/ui'
 
 class Base extends Component {
   state = {
@@ -83,6 +83,14 @@ class Base extends Component {
           onChange={handleChangeFormInput}
           onSubmit={handleSubmitFormInput}
         />
+        <Card
+          header={
+            <h3 className='m-0'>Title</h3>
+          }
+          body={
+            <h4>Body</h4>
+          }
+        ></Card>
       </section>
     )
   }

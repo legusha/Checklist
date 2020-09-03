@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 
-import Button from '../components/UI/Button'
-import FormInput from '../components/UI/FormInput'
+import { Button, FormInput } from '../components/ui'
 
-class Main extends Component {
+class Base extends Component {
   state = {
     buttons: {
       all: [
@@ -89,4 +88,4 @@ class Main extends Component {
   }
 }
 
-export default Main;
+export default Base;

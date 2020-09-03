@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom'
-import Main from './views/Main';
-import Note from './views/Note';
+
+import Base from '../../views/base';
+import Note from '../../views/note';
 
 class App extends Component {
 
@@ -9,7 +10,7 @@ class App extends Component {
     return (
       <div className="App, mt-4">
         <Switch>
-          <Route path="/" component={Main} exact />
+          <Route path="/" component={Base} exact />
           <Route path="/note" component={Note} exact />
           <Redirect to={'/'}/>
         </Switch>

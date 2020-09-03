@@ -14,17 +14,19 @@ class Base extends Component {
     formInput: {
       option: {
         titleBtn: 'Add',
-        value: ''
+        valueInput: ''
       },
-      onChange: this.handleChangeFormInput,
-      onSubmit: this.handleSubmitFormInput
+      events: {
+        onChange: this.handleChangeFormInput.bind(this),
+        onSubmit: this.handleSubmitFormInput.bind(this)
+      }
     }
   }
   get button () {
     const buttons = this.state.buttons
-    const currentIndex = buttons.currentIndex
+    const { all, currentIndex } = buttons
 
-    return this.renderButton(buttons.all[currentIndex])
+    return this.renderButton(all[currentIndex])
   }
   set button (value) {
     const oldButtons = this.state.buttons
@@ -47,15 +49,12 @@ class Base extends Component {
     this.button = nextCurrentIndex
   }
 
-  handleFormInput (handler, e) {
-    handler(e)
-  }
-
   handleChangeFormInput (e) {
     e.stopPropagation()
 
     const formInput = this.state.formInput
-    formInput.option.value = e.target.value
+    formInput.option.valueInput = e.target.value
+
     this.setState({formInput})
   }
 
@@ -70,9 +69,6 @@ class Base extends Component {
     const state = this.state
     const formInput = state.formInput
 
-    const handleChangeFormInput = this.handleFormInput.bind(this, formInput.onChange.bind(this))
-    const handleSubmitFormInput = this.handleFormInput.bind(this, formInput.onSubmit.bind(this))
-
     return (
       <section className="container main">
         <div className="main-action text-left mb-4 p-4 border-secondary bg-secondary">
@@ -80,8 +76,7 @@ class Base extends Component {
         </div>
         <FormInput
           option={formInput.option}
-          onChange={handleChangeFormInput}
-          onSubmit={handleSubmitFormInput}
+          events={formInput.events}
         />
         <Card
           header={

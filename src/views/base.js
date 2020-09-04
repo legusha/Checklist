@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
-import { Button, Card, FormInput } from '../components/ui'
+import { Button, FormInput } from '../components/ui'
+import ListNote from '../components/listNote'
 
 class Base extends Component {
   state = {
@@ -20,7 +21,36 @@ class Base extends Component {
         onChange: this.handleChangeFormInput.bind(this),
         onSubmit: this.handleSubmitFormInput.bind(this)
       }
-    }
+    },
+    lists: {
+      note: [
+        {
+          title: 'First note',
+          id: 1
+        },
+        {
+          title: 'Second note',
+          id: 2
+        }
+      ],
+      todo: [
+        {
+          noteId: 1,
+          executeFlag: false,
+          title: 'Checkbox First notes'
+        },
+        {
+          noteId: 2,
+          executeFlag: false,
+          title: 'Checkbox Second notes'
+        },
+        {
+          noteId: 1,
+          executeFlag: true,
+          title: 'Checkbox First notes 2222'
+        }
+      ]
+    },
   }
   get button () {
     const buttons = this.state.buttons
@@ -36,10 +66,12 @@ class Base extends Component {
   }
 
   renderButton (btn) {
+    const { color, label } = btn
+
     return (
       <Button
-        color={btn.color}
-        label={btn.label}
+        color={color}
+        label={label}
         handler={this.handleButton.bind(this, btn)}
       />
     )
@@ -52,7 +84,7 @@ class Base extends Component {
   handleChangeFormInput (e) {
     e.stopPropagation()
 
-    const formInput = this.state.formInput
+    const formInput = { ...this.state.formInput }
     formInput.option.valueInput = e.target.value
 
     this.setState({formInput})
@@ -78,14 +110,9 @@ class Base extends Component {
           option={formInput.option}
           events={formInput.events}
         />
-        <Card
-          header={
-            <h3 className='m-0'>Title</h3>
-          }
-          body={
-            <h4>Body</h4>
-          }
-        ></Card>
+        <ListNote
+          lists={ this.state.lists }
+        />
       </section>
     )
   }

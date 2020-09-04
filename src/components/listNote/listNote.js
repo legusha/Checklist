@@ -12,8 +12,14 @@ export default function ListNote ({ lists }) {
 
   const renderTodo = (todo) => {
     return (
-      <ListTodo todo={todo}/>
+      <ListTodo
+        todo={todo}
+        handler={handleOnChange.bind(this, todo)}
+      />
     )
+  }
+  function handleOnChange (todo, e) {
+    console.log(todo, e)
   }
   const renderNote = (listNote, allListTodo, renderTodo) => {
 

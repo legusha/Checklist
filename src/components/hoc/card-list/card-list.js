@@ -1,27 +1,24 @@
 import React from 'react'
 
-import { Card } from '../ui'
-import ListTodo from '../listTodo';
+import { Card } from '../../ui'
+import CheckboxList from '../checkbox-list';
 
-export default function ListNote ({ lists }) {
-  const { note, todo } = lists
+export default function CardList ({ lists }) {
+  const { note, todo, events } = lists
 
   const searchTodo = (todo, id) => {
     return todo.filter(item => item.noteId === id)
   }
 
-  const renderTodo = (todo) => {
+  const renderTodo = (listTodo) => {
     return (
-      <ListTodo
-        todo={todo}
-        handler={handleOnChange.bind(this, todo)}
+      <CheckboxList
+        todo={listTodo}
+        events={events}
       />
     )
   }
-  function handleOnChange (todo, e) {
-    console.log(todo, e)
-  }
-  const renderNote = (listNote, allListTodo, renderTodo) => {
+  const renderList = (listNote, allListTodo, renderTodo) => {
 
     return listNote.map(item => {
       const { id, title } = item
@@ -43,7 +40,7 @@ export default function ListNote ({ lists }) {
   }
   return (
     <div className={'d-flex justify-between flex-wrap notes-list p-4 border-secondary'}>
-      {renderNote(note, todo, renderTodo)}
+      {renderList(note, todo, renderTodo)}
     </div>
   )
 }

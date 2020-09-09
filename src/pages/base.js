@@ -39,7 +39,7 @@ class Base extends Component {
     e.stopPropagation()
 
     const formInput = { ...this.state.formInput }
-    formInput.option.valueInput = e.target.value
+    formInput.input.value = e.target.value
 
     this.setState({formInput})
   }
@@ -62,14 +62,17 @@ class Base extends Component {
       currentIndex: 0
     },
     formInput: {
-      option: {
-        titleBtn: 'Add',
-        valueInput: ''
+      btn: {
+        title: 'Add'
       },
+      input: {
+        value: ''
+      },
+      show: true,
       events: {
         onChange: this.handleChangeFormInput,
         onSubmit: this.handleSubmitFormInput
-      }
+      },
     },
     lists: {
       events: {
@@ -164,10 +167,7 @@ class Base extends Component {
         <div className="main-action text-left mb-4 p-4 border-secondary bg-secondary">
           {this.button}
         </div>
-        <FormInput
-          option={formInput.option}
-          events={formInput.events}
-        />
+        <FormInput {...formInput} />
         <CardList
           list={ lists.note }
           view={ checkboxListView }

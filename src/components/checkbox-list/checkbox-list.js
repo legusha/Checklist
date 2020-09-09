@@ -1,5 +1,5 @@
 import React from 'react'
-import { Checkbox } from '../../ui'
+import { Checkbox } from '../ui'
 
 export default function CheckboxList ({ todo, events }) {
   const { self, onChangeCheckbox } = events

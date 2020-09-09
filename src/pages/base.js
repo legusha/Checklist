@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 
 import { Button, FormInput } from '../components/ui'
-import { CardList } from '../components/hoc'
+import CardList from '../components/card-list'
+import CheckboxList from '../components/checkbox-list'
 
 
 class Base extends Component {
@@ -133,9 +134,27 @@ class Base extends Component {
     }
   }
 
+  findByNoteIdTodo = (id) => {
+    const { todo } = this.state.lists
+    return todo.filter(item => item.noteId === id)
+  }
+
+  renderTodo (listTodo) {
+    const { events } = this.state.lists
+    return (
+      <CheckboxList
+        todo={listTodo}
+        events={events}
+      />
+    )
+  }
+
   render() {
-    const state = this.state
-    const formInput = state.formInput
+    const { formInput, lists } = this.state
+    const checkboxListView = {
+      render: this.renderTodo.bind(this),
+      helper: this.findByNoteIdTodo.bind(this)
+    }
 
     return (
       <section className="container main">
@@ -147,7 +166,8 @@ class Base extends Component {
           events={formInput.events}
         />
         <CardList
-          lists={ this.state.lists }
+          list={ lists.note }
+          view={ checkboxListView }
         />
       </section>
     )

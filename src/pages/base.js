@@ -7,8 +7,6 @@ import CheckboxList from '../components/checkbox-list'
 
 class Base extends Component {
 
-  todoStartId = 100
-
   handleChangeListNote = (item, e) => {
     const classNameCheckbox = 'checkbox-wrap'
     const isCheckbox = e.target.parentNode.classList.contains(classNameCheckbox)
@@ -17,7 +15,7 @@ class Base extends Component {
         const listTodo = oldState.lists.todo
         const indexItem = listTodo.findIndex(todo => todo.id === item.id)
 
-        const newTodo = this.newTodo(item.noteId, item.id, 'New todo', !item.executeFlag)
+        const newTodo = this.newTodo({ ...item, executeFlag: !item.executeFlag })
 
         const startAllTodo = listTodo.slice(0, indexItem)
         const endAllTodo = listTodo.slice(indexItem + 1)
@@ -53,6 +51,8 @@ class Base extends Component {
     console.log(this.state.formInput)
   }
 
+  startIdNote = 0
+  startIdTodo = 100
   state = {
     buttons: {
       all: [
@@ -77,20 +77,15 @@ class Base extends Component {
         onChangeCheckbox: this.handleChangeListNote
       },
       note: [
-        {
-          title: 'First note',
-          id: 1
-        },
-        {
-          title: 'Second note',
-          id: 2
-        }
+        this.newNote({id: undefined, title: 'Note #1'}),
+        this.newNote({id: undefined, title: 'Note #2'}),
+        this.newNote({id: 3, title: 'Note #3'}),
       ],
       todo: [
-        this.newTodo(1, 1,'Checkbox First notes'),
-        this.newTodo(1, 2,'Checkbox Second notes'),
-        this.newTodo(1, 3,'Checkbox Three notes'),
-        this.newTodo(2, 4,'Checkbox First notes 2')
+        this.newTodo({noteId: 1, id: 1, title: 'Checkbox First notes'}),
+        this.newTodo({noteId: 1, id: 2, title: 'Checkbox Second notes'}),
+        this.newTodo({noteId: 1, id: 3, title: 'Checkbox Three notes'}),
+        this.newTodo({noteId: 2, id: 4, title: 'Checkbox First notes 2'}),
       ]
     },
   }
@@ -125,12 +120,20 @@ class Base extends Component {
     this.button = nextCurrentIndex
   }
 
-  newTodo (noteId, id = ++this.todoStartId, title, executeFlag = false) {
+  newNote (props) {
+    const { id = ++this.startIdNote } = props
     return {
-      executeFlag,
-      noteId,
+      ...props,
+      id
+    }
+  }
+
+  newTodo (props) {
+    const { id = ++this.startIdTodo, executeFlag = false } = props
+    return {
+      ...props,
       id,
-      title
+      executeFlag
     }
   }
 

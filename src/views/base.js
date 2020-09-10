@@ -3,16 +3,29 @@ import React, { Component } from 'react'
 import { Button, FormInput } from '../components/ui'
 import CardList from '../components/card-list'
 import CheckboxList from '../components/checkbox-list'
+import { WithModelContext } from '../components/hoc'
 
 
 class Base extends Component {
+
+  // note = new this.model.Note(() => this.state)
+  // newNote = this.model.newItem
+
+  newNote = (props) => {
+    const { id = ++this.startIdNote } = props
+    console.log(id)
+    return {
+      ...props,
+      id
+    }
+  }
 
   handleChangeListNote = (item, e) => {
     const classNameCheckbox = 'checkbox-wrap'
     const isCheckbox = e.target.parentNode.classList.contains(classNameCheckbox)
     if (isCheckbox) {
       this.setState((oldState) => {
-        const listTodo = oldState.lists.todo
+        const listTodo = oldState.checkList.todo
         const indexItem = listTodo.findIndex(todo => todo.id === item.id)
 
         const newTodo = this.newTodo({ ...item, executeFlag: !item.executeFlag })
@@ -24,8 +37,8 @@ class Base extends Component {
 
         return {
           ...oldState,
-          lists: {
-            ...oldState.lists,
+          checkList: {
+            ...oldState.checkList,
             todo: allTodo
           }
         }
@@ -35,7 +48,7 @@ class Base extends Component {
     }
   }
 
-  handleChangeFormInput = (e) => {
+  handleChangeFormInput = e => {
     e.stopPropagation()
 
     const formInput = { ...this.state.formInput }
@@ -44,20 +57,42 @@ class Base extends Component {
     this.setState({formInput})
   }
 
-  handleSubmitFormInput = (e) => {
+  handleSubmitFormInput = e => {
     e.preventDefault()
     e.stopPropagation()
 
-    console.log(this.state.formInput)
+    // this.state.formInput.input.value
+    const newNote = this.newNote({title: this.state.formInput.input.value})
+    this.setState((oldState) => {
+      return {
+        ...oldState,
+        checkList: {
+          ...oldState.checkList,
+          note: [newNote, ...oldState.checkList.note]
+        }
+      }
+    })
+  }
+
+  toggleFormInput = e => {
+    const newState = oldState => {
+      const formInput = { ...oldState.formInput, show: !oldState.formInput.show }
+      return {
+        ...oldState,
+        formInput
+      }
+    }
+    this.setState(newState)
   }
 
   startIdNote = 0
   startIdTodo = 100
   state = {
+    model: null,
     buttons: {
       all: [
-        {to: '/note', label: 'Add', color: 'success', nextCurrentIndex: 1},
-        {to: '/', label: 'Cancel', color: 'primary', nextCurrentIndex: 0}
+        {to: '/note', label: 'Add', color: 'success', nextCurrentIndex: 1, onClick: this.toggleFormInput},
+        {to: '/', label: 'Cancel', color: 'primary', nextCurrentIndex: 0, onClick: this.toggleFormInput}
       ],
       currentIndex: 0
     },
@@ -68,20 +103,20 @@ class Base extends Component {
       input: {
         value: ''
       },
-      show: true,
+      show: false,
       events: {
         onChange: this.handleChangeFormInput,
         onSubmit: this.handleSubmitFormInput
       },
     },
-    lists: {
+    checkList: {
       events: {
         self: this,
         onChangeCheckbox: this.handleChangeListNote
       },
       note: [
-        this.newNote({id: undefined, title: 'Note #1'}),
-        this.newNote({id: undefined, title: 'Note #2'}),
+        this.newNote({id: 1, title: 'Note #1'}),
+        this.newNote({id: 2, title: 'Note #2'}),
         this.newNote({id: 3, title: 'Note #3'}),
       ],
       todo: [
@@ -107,6 +142,37 @@ class Base extends Component {
     this.setState({ buttons: newButtons })
   }
 
+  handleButton ({ nextCurrentIndex, onClick }) {
+    onClick()
+    this.button = nextCurrentIndex
+
+  }
+  // newNote (props) {
+  //   const note = this.state?.checkList?.note
+  //   const lastItem  = note ? note[note?.length - 1]?.id : null
+  //   const isDd =  lastItem || this.startIdNote
+  //   const { id = (isDd + 1) } = props
+  //   console.log(id)
+  //   return {
+  //     ...props,
+  //     id
+  //   }
+  // }
+
+  newTodo (props) {
+    const { id = ++this.startIdTodo, executeFlag = false } = props
+    return {
+      ...props,
+      id,
+      executeFlag
+    }
+  }
+
+  findByNoteIdTodo = (id) => {
+    const { todo } = this.state.checkList
+    return todo.filter(item => item.noteId === id)
+  }
+
   renderButton (btn) {
     const { color, label } = btn
 
@@ -119,34 +185,8 @@ class Base extends Component {
     )
   }
 
-  handleButton ({ nextCurrentIndex }) {
-    this.button = nextCurrentIndex
-  }
-
-  newNote (props) {
-    const { id = ++this.startIdNote } = props
-    return {
-      ...props,
-      id
-    }
-  }
-
-  newTodo (props) {
-    const { id = ++this.startIdTodo, executeFlag = false } = props
-    return {
-      ...props,
-      id,
-      executeFlag
-    }
-  }
-
-  findByNoteIdTodo = (id) => {
-    const { todo } = this.state.lists
-    return todo.filter(item => item.noteId === id)
-  }
-
   renderTodo (listTodo) {
-    const { events } = this.state.lists
+    const { events } = this.state.checkList
     return (
       <CheckboxList
         todo={listTodo}
@@ -156,25 +196,32 @@ class Base extends Component {
   }
 
   render() {
-    const { formInput, lists } = this.state
+    const { formInput, checkList } = this.state
     const checkboxListView = {
       render: this.renderTodo.bind(this),
       helper: this.findByNoteIdTodo.bind(this)
     }
+    const showFormInput = formInput.show ? <FormInput {...formInput} /> : null
 
     return (
       <section className="container main">
         <div className="main-action text-left mb-4 p-4 border-secondary bg-secondary">
           {this.button}
         </div>
-        <FormInput {...formInput} />
+        {showFormInput}
         <CardList
-          list={ lists.note }
+          list={ checkList.note }
           view={ checkboxListView }
         />
       </section>
     )
   }
 }
+const mapMethodsToProps = (modelContext) => {
+  console.log(modelContext)
+  return {
+    note: modelContext,
+  }
+};
 
-export default Base;
+export default WithModelContext(Base, mapMethodsToProps)

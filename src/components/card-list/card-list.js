@@ -9,8 +9,7 @@ export default function CardList ({ list , view }) {
 
     return list.map(item => {
       const { id, title } = item
-      const listTodo = helperView(id)
-      const cardBody = renderView(listTodo)
+      const cardBody = renderView(helperView(id))
 
       return (
         <Card

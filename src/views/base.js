@@ -8,18 +8,6 @@ import { WithModelContext } from '../components/hoc'
 
 class Base extends Component {
 
-  // note = new this.model.Note(() => this.state)
-  // newNote = this.model.newItem
-
-  newNote = (props) => {
-    const { id = ++this.startIdNote } = props
-    console.log(id)
-    return {
-      ...props,
-      id
-    }
-  }
-
   handleChangeListNote = (item, e) => {
     const classNameCheckbox = 'checkbox-wrap'
     const isCheckbox = e.target.parentNode.classList.contains(classNameCheckbox)
@@ -28,7 +16,7 @@ class Base extends Component {
         const listTodo = oldState.checkList.todo
         const indexItem = listTodo.findIndex(todo => todo.id === item.id)
 
-        const newTodo = this.newTodo({ ...item, executeFlag: !item.executeFlag })
+        const newTodo = this.props.todo.create({ ...item, executeFlag: !item.executeFlag })
 
         const startAllTodo = listTodo.slice(0, indexItem)
         const endAllTodo = listTodo.slice(indexItem + 1)
@@ -62,7 +50,7 @@ class Base extends Component {
     e.stopPropagation()
 
     // this.state.formInput.input.value
-    const newNote = this.newNote({title: this.state.formInput.input.value})
+    const newNote = this.props.note.create({title: this.state.formInput.input.value})
     this.setState((oldState) => {
       return {
         ...oldState,
@@ -115,15 +103,16 @@ class Base extends Component {
         onChangeCheckbox: this.handleChangeListNote
       },
       note: [
-        this.newNote({id: 1, title: 'Note #1'}),
-        this.newNote({id: 2, title: 'Note #2'}),
-        this.newNote({id: 3, title: 'Note #3'}),
+        this.props.note.create({id: 1, title: 'Note #1'}),
+        this.props.note.create({id: 2, title: 'Note #2'}),
+        this.props.note.create({id: 3, title: 'Note #3'}),
+        this.props.note.create({id: 4, title: 'Note #4'}),
       ],
       todo: [
-        this.newTodo({noteId: 1, id: 1, title: 'Checkbox First notes'}),
-        this.newTodo({noteId: 1, id: 2, title: 'Checkbox Second notes'}),
-        this.newTodo({noteId: 1, id: 3, title: 'Checkbox Three notes'}),
-        this.newTodo({noteId: 2, id: 4, title: 'Checkbox First notes 2'}),
+        this.props.todo.create({noteId: 1, id: 1, title: 'Checkbox First notes'}),
+        this.props.todo.create({noteId: 1, id: 2, title: 'Checkbox Second notes'}),
+        this.props.todo.create({noteId: 1, id: 3, title: 'Checkbox Three notes'}),
+        this.props.todo.create({noteId: 2, id: 4, title: 'Checkbox First notes 2'}),
       ]
     },
   }
@@ -147,26 +136,6 @@ class Base extends Component {
     this.button = nextCurrentIndex
 
   }
-  // newNote (props) {
-  //   const note = this.state?.checkList?.note
-  //   const lastItem  = note ? note[note?.length - 1]?.id : null
-  //   const isDd =  lastItem || this.startIdNote
-  //   const { id = (isDd + 1) } = props
-  //   console.log(id)
-  //   return {
-  //     ...props,
-  //     id
-  //   }
-  // }
-
-  newTodo (props) {
-    const { id = ++this.startIdTodo, executeFlag = false } = props
-    return {
-      ...props,
-      id,
-      executeFlag
-    }
-  }
 
   findByNoteIdTodo = (id) => {
     const { todo } = this.state.checkList
@@ -187,6 +156,7 @@ class Base extends Component {
 
   renderTodo (listTodo) {
     const { events } = this.state.checkList
+
     return (
       <CheckboxList
         todo={listTodo}
@@ -195,7 +165,7 @@ class Base extends Component {
     )
   }
 
-  render() {
+  render(props) {
     const { formInput, checkList } = this.state
     const checkboxListView = {
       render: this.renderTodo.bind(this),
@@ -217,10 +187,10 @@ class Base extends Component {
     )
   }
 }
-const mapMethodsToProps = (modelContext) => {
-  console.log(modelContext)
+const mapMethodsToProps = ({mapNote, mapTodo}) => {
   return {
-    note: modelContext,
+    note: mapNote,
+    todo: mapTodo
   }
 };
 

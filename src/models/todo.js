@@ -1,11 +1,8 @@
-export default class Note {
-  #countId = 100
-
+export default class Todo {
   newItem (props) {
-    const { id = ++this.#countId, executeFlag = false } = props
+    const { executeFlag = false } = props
     return {
       ...props,
-      id,
       executeFlag
     }
   }

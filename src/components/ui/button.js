@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import BButton from 'react-bootstrap/Button';
 
 Button.propTypes = {
   color: PropTypes.string,
@@ -9,6 +10,6 @@ Button.propTypes = {
 
 export default function Button ({ color, label, handler }) {
   return (
-    <button className={`btn-${color} btn-big`} onClick={handler}>{label}</button>
+    <BButton className={`btn btn-${color} btn-big`} size="lg" onClick={handler}>{label}</BButton>
   )
 }

@@ -1,9 +1,3 @@
-export const inc = () => ({ type: 'INC' });
-
-export const dec = () => ({ type: 'DEC' });
-
-export const rnd = (payload) => ({ type: 'RND', payload });
-
 const actionsMap = {
   inc: () => ({ type: 'INC' }),
   dec: () => ({ type: 'DEC' }),

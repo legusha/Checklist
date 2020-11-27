@@ -5,18 +5,17 @@ import {BrowserRouter} from 'react-router-dom'
 import * as serviceWorker from './serviceWorker'
 
 import './assets/scss/main.scss'
-import {store, actions} from "./store"
+import * as store from './store'
 
-console.log(store.getState())
-console.log(actions.inc(10))
-console.log(store.getState())
-
-
+const {store: nestedStore, actions} = store
 
 const application = (
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <App
+        store={nestedStore}
+        actions={actions}
+      />
     </BrowserRouter>
   </React.StrictMode>
 )

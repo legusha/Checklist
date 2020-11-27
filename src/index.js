@@ -5,6 +5,13 @@ import {BrowserRouter} from 'react-router-dom'
 import * as serviceWorker from './serviceWorker'
 
 import './assets/scss/main.scss'
+import {store, actions} from "./store"
+
+console.log(store.getState())
+console.log(actions.inc(10))
+console.log(store.getState())
+
+
 
 const application = (
   <React.StrictMode>

@@ -3,9 +3,7 @@
 @import 'variables';
 @import 'content';
 @import 'grid';
-@import 'ui/button';
-@import 'ui/card';
-@import 'ui/checkbox';
-@import 'ui/input';
-@import 'base';
+@import 'helper';
+
+@import "~bootstrap/scss/bootstrap";
 

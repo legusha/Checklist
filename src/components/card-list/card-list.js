@@ -34,7 +34,7 @@ export default function CardList ({ list , view }) {
     })
   }
   return (
-    <div className={'d-flex justify-between flex-wrap notes-list p-4 border-secondary'}>
+    <div className={'d-flex justify-between flex-wrap notes-list p-4 border mt-4'}>
       {renderList(list, view)}
     </div>
   )

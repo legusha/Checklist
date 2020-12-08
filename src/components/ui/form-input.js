@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from "prop-types";
+import BButton from 'react-bootstrap/Button';
 
 FormInput.propTypes = {
   option: PropTypes.object,
@@ -10,9 +11,9 @@ export default function FormInput ({ btn, input, events }) {
   const { onChange, onSubmit } = events
 
   return (
-    <form onSubmit={onSubmit} className="p-4 border-secondary text-left d-flex justify-between">
-      <input type="text" value={input.value} onChange={onChange} className="input-primary input-big mr-4"/>
-      <button className="btn-outline-success btn-big text-black bg-white" type="submit">{btn.title}</button>
+    <form onSubmit={onSubmit} className="p-4 border text-left d-flex justify-between input-group d-flex align-items-center">
+      <input type="text" value={input.value} onChange={onChange} className="mr-4 form-control" placeholder="Username" aria-label="Username"/>
+      <BButton className="btn-outline-success bg-white l-height-26" size="lg" type="submit">{btn.title}</BButton>
     </form>
   )
 }

@@ -173,8 +173,13 @@ class Base extends Component {
 
     return (
       <section className="container main">
-        <div className="main-action text-left mb-4 p-4 border-secondary bg-secondary">
-          {this.button}
+        <div className="main-action text-left mb-4 p-4 border-secondary bg-secondary d-flex align-items-center justify-content-between">
+          <div>
+            <h3 className={'text-muted'}>Welcome to Checklist</h3>
+          </div>
+          <div>
+            {this.button}
+          </div>
         </div>
         {showFormInput}
         <CardList

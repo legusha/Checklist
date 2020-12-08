@@ -10,6 +10,6 @@ Button.propTypes = {
 
 export default function Button ({ color, label, handler }) {
   return (
-    <BButton className={`btn btn-${color} btn-big`} size="lg" onClick={handler}>{label}</BButton>
+    <BButton className={`btn btn-${color} btn-big l-height-26`} onClick={handler}>{label}</BButton>
   )
 }

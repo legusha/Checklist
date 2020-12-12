@@ -1,13 +1,16 @@
-import { createStore, bindActionCreators } from 'redux';
+import { createStore, bindActionCreators, combineReducers } from 'redux';
 
 import reducer from './reducer';
-import * as actionsMap from './actions';
+import { checklist } from './modules';
 
-const store = createStore(reducer);
+const mapRootReduce = {
+  checklist: reducer(checklist.initialState, checklist.actions),
+}
+
+const rootReducer = combineReducers(mapRootReduce)
+const store = createStore(rootReducer);
 const { dispatch } = store;
-
-const actions = bindActionCreators(actionsMap, dispatch);
-
+const actions = bindActionCreators({...checklist.actionsTypes}, dispatch);
 
 export {
   store,

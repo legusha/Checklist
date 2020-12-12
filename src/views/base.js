@@ -46,25 +46,35 @@ class Base extends Component {
   }
 
   handleSubmitFormInput = e => {
+
     e.preventDefault()
     e.stopPropagation()
 
     // this.state.formInput.input.value
-    const newNote = this.props.checkList.newNote({title: this.state.formInput.input.value})
-    this.setState((oldState) => {
-      return {
-        ...oldState,
-        checkList: {
-          ...oldState.checkList,
-          note: [newNote, ...oldState.checkList.note]
+    const title = this.state.formInput.input.value
+    if (title) {
+      const newNote = this.props.checkList.newNote({
+        title
+      })
+
+      this.setState((oldState) => {
+        return {
+          ...oldState,
+          checkList: {
+            ...oldState.checkList,
+            note: [newNote, ...oldState.checkList.note]
+          }
         }
-      }
-    })
+      })
+    }
   }
 
   toggleFormInput = e => {
     const newState = oldState => {
-      const formInput = { ...oldState.formInput, show: !oldState.formInput.show }
+      const formInput = {
+        ...oldState.formInput,
+        show: !oldState.formInput.show
+      }
       return {
         ...oldState,
         formInput

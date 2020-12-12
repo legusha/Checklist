@@ -9,6 +9,10 @@ import * as store from './store'
 
 const {store: nestedStore, actions} = store
 
+nestedStore.dispatch(actions.inc())
+nestedStore.dispatch(actions.rnd(33))
+
+console.log(nestedStore.getState())
 const application = (
   <React.StrictMode>
     <BrowserRouter>

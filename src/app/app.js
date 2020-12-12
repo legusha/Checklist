@@ -8,7 +8,7 @@ import { ModelProvider } from '../components/model-context';
 
 export default class App extends Component {
   state = {
-    checkList: this.props.store.getState().checkList,
+    checkList: this.props.store.getState().checklist.checklist
   }
   render() {
     const { checkList } = this.state

@@ -21,8 +21,8 @@ export default function CardList ({ list , view, handleIcon }) {
             <div className='d-flex align-center justify-between w-100'>
               <h3 className='m-0 font-18 font-weight-5'>{title}</h3>
               <div className='text-right'>
-                <IconPencil onClick={handleIcon('edit')} className='text-success cursor-point' />
-                <IconClose onClick={handleIcon('remove')} className='text-danger cursor-point' />
+                <IconPencil onClick={handleIcon('edit').bind(null, item)} className='text-success cursor-point' />
+                <IconClose onClick={handleIcon('remove').bind(null, item)} className='text-danger cursor-point' />
               </div>
             </div>
           }

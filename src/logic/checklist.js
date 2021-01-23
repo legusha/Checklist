@@ -27,6 +27,11 @@ export default class Checklist {
 
     return note
   }
+  removeNote (id) {
+    const list = this.#noteList
+    const itemIndex = list.findIndex(item => item.id === id)
+    this.#noteList.slice(itemIndex, 1)
+  }
   newTodo (props) {
     const id = this.incrementTodoId()
     const propsWithId = { ...props, id }

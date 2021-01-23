@@ -15,21 +15,32 @@ export default class App extends Component {
     this.setState({ modal })
   }
   handleModalDisplayShow = ({ typeName }) => {
-    return async () => {
-      await this.setModalCurrentAction(typeName)
+    return async (item) => {
+      await this.setModalCurrentAction(typeName, { item })
       this.handleModalDisplay(true)
     }
   }
+  handleModalAccept = () => {
+    const props = this.state?.modal?.current?.props
+    const { store, actions } = this.props
+    store.dispatch(actions.checkListItemRemove(props))
+    console.log(props)
+    console.log(this.props)
+  }
 
   getModalCurrentAction = () => {
-    const { currentAction, actions } = this.state.modal
-    return actions.find(item => item.typeName === currentAction)
+    const { current, actions } = this.state.modal
+    const currentAction = actions.find(item => item.typeName === current.typeName)
+    return { ...currentAction, props: current.props }
   }
-  async setModalCurrentAction (typeName) {
+  async setModalCurrentAction (typeName = '', props = {}) {
     const newState = oldState => {
       const modal = {
         ...oldState.modal,
-        currentAction: typeName
+        current: {
+          typeName: typeName,
+          props: props
+        },
       }
       return {
         ...oldState,
@@ -44,26 +55,30 @@ export default class App extends Component {
     checkList: this.props.store.getState().checklist.checklist,
     modal: {
       show: false,
+      current: {
+        typeName: '',
+        props: {}
+      },
+      currentAction: '',
       makeShow: this.handleModalDisplayShow,
       makeHide: this.handleModalDisplay.bind(this, false),
       actions: [
         {
           typeName: 'checklist:item:remove',
           content: {
-            header: <div>Header</div>,
-            body: <div>Body</div>,
+            header: <div>Modal Accept</div>,
+            body: <div>Are you sure? Do you want to delete item?</div>,
             footer: <div>
-              <BButton variant="secondary" onClick={this.handleModalDisplay.bind(this, false)}>
-                Close
+              <BButton variant="outline-primary" onClick={this.handleModalDisplay.bind(this, false)}>
+                Cancel
               </BButton>
-              <BButton variant="primary" onClick={this.handleModalDisplay.bind(this, false)}>
-                Save Changes
+              <BButton variant="outline-danger" className={'ml-2'} onClick={this.handleModalAccept}>
+                Accept
               </BButton>
             </div>
           }
         }
       ],
-      currentAction: '',
     }
   }
   render() {

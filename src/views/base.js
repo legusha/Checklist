@@ -156,10 +156,10 @@ class Base extends Component {
   }
 
   handleCardList (actionName) {
-    return () => {
+    return (...args) => {
       const action = this.state.checkList.actions.find(item => item.typeName === actionName)
       if (action) {
-        action.handler()
+        action.handler(...args)
       }
     }
   }

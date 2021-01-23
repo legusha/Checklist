@@ -10,7 +10,7 @@ class Base extends Component {
 
   handleChangeListNote = (item, e) => {
     const classNameCheckbox = 'checkbox-wrap'
-    const isCheckbox = e.target.parentNode.classList.contains(classNameCheckbox)
+    const isCheckbox = e?.target?.parentNode?.classList?.contains(classNameCheckbox)
     if (isCheckbox) {
       this.setState((oldState) => {
         const listTodo = oldState.checkList.todo
@@ -108,8 +108,19 @@ class Base extends Component {
     checkList: {
       events: {
         self: this,
-        onChangeCheckbox: this.handleChangeListNote
+        onChangeCheckbox: this.handleChangeListNote,
+        onChangeList: this.handleCardList.bind(this),
       },
+      actions: [
+        {
+          typeName: 'edit',
+          handler: this.props.modal.actions.show,
+        },
+        {
+          typeName: 'remove',
+          handler: this.props.modal.actions.show,
+        }
+      ],
       note: [
         this.props.checkList.newNote({title: 'Note #1'}),
         this.props.checkList.newNote({title: 'Note #2'}),
@@ -142,7 +153,15 @@ class Base extends Component {
   handleButton ({ nextCurrentIndex, onClick }) {
     onClick()
     this.button = nextCurrentIndex
+  }
 
+  handleCardList (actionName) {
+    return () => {
+      const action = this.state.checkList.actions.find(item => item.typeName === actionName)
+      if (action) {
+        action.handler()
+      }
+    }
   }
 
   findByNoteIdTodo = (id) => {
@@ -195,15 +214,17 @@ class Base extends Component {
         <CardList
           list={ checkList.note }
           view={ checkboxListView }
+          handleIcon={ checkList.events.onChangeList }
         />
       </section>
     )
   }
 }
 
-const mapContextToProps = ({ checkList }) => {
+const mapContextToProps = ({ checkList, modal }) => {
   return {
-    checkList
+    checkList,
+    modal
   }
 }
 

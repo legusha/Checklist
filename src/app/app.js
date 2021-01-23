@@ -14,10 +14,15 @@ export default class App extends Component {
     this.setState({ modal })
   }
 
+
   state = {
     checkList: this.props.store.getState().checklist.checklist,
     modal: {
-      show: false
+      show: false,
+      actions: {
+        show: this.handleModalDisplay.bind(this, true),
+        hide: this.handleModalDisplay.bind(this, false),
+      }
     }
   }
   render() {
@@ -27,7 +32,7 @@ export default class App extends Component {
     return (
       <div className="App, mt-4">
         <Switch>
-          <ModelProvider value={{checkList}}>
+          <ModelProvider value={{checkList, modal}}>
             <Route path="/" component={PageBase} exact />
             <Route path="/note" component={PageNote} exact />
             <Redirect to={'/'}/>

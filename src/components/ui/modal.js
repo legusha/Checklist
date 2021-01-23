@@ -5,10 +5,6 @@ import BModal from 'react-bootstrap/Modal';
 function Modal({ show, handleClose, handleShow }) {
   return (
     <>
-      <BButton variant="primary" onClick={handleShow}>
-        Launch demo modal
-      </BButton>
-
       <BModal show={show} onHide={handleClose}>
         <BModal.Header closeButton>
           <BModal.Title>Modal heading</BModal.Title>

@@ -5,13 +5,25 @@ import PageBase from '../views/base'
 import PageNote from '../views/note'
 
 import { ModelProvider } from '../components/model-context';
+import { Modal } from '../components/ui';
 
 export default class App extends Component {
+  handleModalDisplay = (show = false) => {
+    const modal = { ...this.state.modal }
+    modal.show = show
+    this.setState({ modal })
+  }
+
   state = {
-    checkList: this.props.store.getState().checklist.checklist
+    checkList: this.props.store.getState().checklist.checklist,
+    modal: {
+      show: false
+    }
   }
   render() {
-    const { checkList } = this.state
+    const { handleModalDisplay } = this
+    const { checkList, modal } = this.state
+
     return (
       <div className="App, mt-4">
         <Switch>
@@ -21,6 +33,11 @@ export default class App extends Component {
             <Redirect to={'/'}/>
           </ModelProvider>
         </Switch>
+        <Modal
+          show={modal.show}
+          handleShow={handleModalDisplay.bind(this, true)}
+          handleClose={handleModalDisplay.bind(this, false)}
+        />
       </div>
     )
   }

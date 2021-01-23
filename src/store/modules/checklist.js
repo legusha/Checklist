@@ -6,22 +6,14 @@ const initialState = {
 }
 
 const actions = {
-  RND: (action, state) => {
-    console.log(action)
-    const counter = state.counter + action.payload
-    return {...state, counter }
-  },
   INC: (action, state) => {
     const counter = state.counter + 1
     return {...state, counter }
   },
-  DEC: (action, state) => state.counter - 1,
 }
 
 const actionsTypes = {
   inc: () => ({ type: 'INC' }),
-  dec: () => ({ type: 'DEC' }),
-  rnd: (payload) => ({ type: 'RND', payload })
 }
 
 export {

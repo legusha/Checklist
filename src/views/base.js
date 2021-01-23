@@ -114,11 +114,11 @@ class Base extends Component {
       actions: [
         {
           typeName: 'edit',
-          handler: this.props.modal.actions.show,
+          handler: () => {},
         },
         {
           typeName: 'remove',
-          handler: this.props.modal.actions.show,
+          handler: this.props.modal.makeShow({ typeName: 'checklist:item:remove' }),
         }
       ],
       note: [

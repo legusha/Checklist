@@ -1,22 +1,18 @@
 import React from 'react';
-import BButton from 'react-bootstrap/Button';
 import BModal from 'react-bootstrap/Modal';
 
-function Modal({ show, handleClose, handleShow }) {
+function Modal({ show, handleClose, header, body, footer, handleShow }) {
   return (
     <>
       <BModal show={show} onHide={handleClose}>
         <BModal.Header closeButton>
-          <BModal.Title>Modal heading</BModal.Title>
+          { header }
         </BModal.Header>
-        <BModal.Body>Woohoo, you're reading this text in a modal!</BModal.Body>
+        <BModal.Body>
+          { body }
+        </BModal.Body>
         <BModal.Footer>
-          <BButton variant="secondary" onClick={handleClose}>
-            Close
-          </BButton>
-          <BButton variant="primary" onClick={handleClose}>
-            Save Changes
-          </BButton>
+          { footer }
         </BModal.Footer>
       </BModal>
     </>

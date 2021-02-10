@@ -6,7 +6,7 @@ import PageNote from '../views/note'
 
 import { ModelProvider } from '../components/model-context';
 
-import { Checklist, Note, Todo } from '../models'
+import { Checklist, Note, Todo } from '../logic'
 
 export default class App extends Component {
   state = {

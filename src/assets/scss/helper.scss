@@ -1,0 +1,213 @@
+//
+// type.scss
+//
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6{
+  margin: 10px 0;
+  //font-weight: $font-weight-bold;
+}
+
+
+// Font sizes (Custom)
+
+.font-10 {
+  font-size: 10px !important;
+}
+
+.font-11 {
+  font-size: 11px !important;
+}
+
+.font-12 {
+  font-size: 12px !important;
+}
+
+.font-13 {
+  font-size: 13px !important;
+}
+
+.font-14 {
+  font-size: 14px !important;
+}
+
+.font-15 {
+  font-size: 15px !important;
+}
+
+.font-16 {
+  font-size: 16px !important;
+}
+
+.font-18 {
+  font-size: 18px !important;
+}
+
+.font-20 {
+  font-size: 20px !important;
+}
+
+.font-21 {
+  font-size: 21px !important;
+}
+
+.font-22 {
+  font-size: 22px !important;
+}
+
+.font-24 {
+  font-size: 24px !important;
+}
+
+.font-32 {
+  font-size: 32px !important;
+}
+
+.font-48 {
+  font-size: 48px !important;
+}
+
+// Font-family
+
+.font-extra {
+  font-family: "Pragmatica", sans-serif;
+}
+
+// Font-weight
+
+.font-weight-1 {
+  font-weight: 100;
+}
+
+.font-weight-2 {
+  font-weight: 200;
+}
+
+.font-weight-3 {
+  font-weight: 300;
+}
+
+.font-weight-4 {
+  font-weight: 400;
+}
+
+.font-weight-5 {
+  font-weight: 500;
+}
+
+.font-weight-6 {
+  font-weight: 600;
+}
+
+.font-weight-7 {
+  font-weight: 700;
+}
+
+.font-weight-8 {
+  font-weight: 800;
+}
+
+.font-weight-9 {
+  font-weight: 900;
+}
+
+// Line-height
+
+.l-height-12 {
+  line-height: 12px;
+}
+
+.l-height-13 {
+  line-height: 13px;
+}
+
+.l-height-14 {
+  line-height: 14px;
+}
+
+.l-height-15 {
+  line-height: 15px;
+}
+
+.l-height-16 {
+  line-height: 16px;
+}
+
+.l-height-17 {
+  line-height: 17px;
+}
+
+.l-height-18 {
+  line-height: 18px;
+}
+
+.l-height-19 {
+  line-height: 19px;
+}
+
+.l-height-20 {
+  line-height: 20px;
+}
+
+.l-height-21 {
+  line-height: 21px;
+}
+
+.l-height-22 {
+  line-height: 22px;
+}
+
+.l-height-23 {
+  line-height: 23px;
+}
+
+.l-height-24 {
+  line-height: 24px;
+}
+
+.l-height-25 {
+  line-height: 25px;
+}
+
+.l-height-26 {
+  line-height: 26px;
+}
+
+.l-height-27 {
+  line-height: 27px;
+}
+
+.l-height-28 {
+  line-height: 28px;
+}
+
+.l-height-29 {
+  line-height: 29px;
+}
+
+.l-height-30 {
+  line-height: 30px;
+}
+
+.l-height-31 {
+  line-height: 31px;
+}
+
+.l-height-32 {
+  line-height: 32px;
+}
+
+.l-height-48 {
+  line-height: 48px;
+}
+
+.strikethrough {
+  text-decoration: line-through;
+}
+
+.rounded-extra {
+  border-radius: 1rem;
+}
+
+.white-space-no {
+  white-space: nowrap;
+}

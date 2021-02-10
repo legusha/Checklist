@@ -1,5 +1,7 @@
 import React from 'react'
-import PencilIcon from 'mdi-react/PencilIcon';
+
+import IconPencil from 'mdi-react/PencilIcon';
+import IconClose from 'mdi-react/CloseIcon';
 
 import { Card } from '../ui'
 
@@ -17,9 +19,10 @@ export default function CardList ({ list , view }) {
           key={id}
           header={
             <div className='d-flex align-center justify-between w-100'>
-              <h3 className='m-0'>{title}</h3>
+              <h3 className='m-0 font-18 font-weight-5'>{title}</h3>
               <div className='text-right'>
-                <PencilIcon className='text-success' />
+                <IconPencil className='text-success cursor-point' />
+                <IconClose className='text-danger cursor-point' />
               </div>
             </div>
           }

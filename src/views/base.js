@@ -64,6 +64,11 @@ class Base extends Component {
 
   handleActionCard = (item, actionType) => {
     console.log(item, actionType)
+    const action = this.state.checkList.events.actionsModal.find(item => item.typeName === actionType)
+    console.log(action)
+    if (action) {
+      action.handler()
+    }
   }
 
   toggleFormInput = e => {
@@ -104,6 +109,16 @@ class Base extends Component {
         self: this,
         onChangeCheckbox: this.handleChangeListNote,
         onActionCard: this.handleActionCard,
+        actionsModal: [
+          {
+            typeName: 'edit',
+            handler: () => {},
+          },
+          {
+            typeName: 'delete',
+            handler: this.props.modal.makeShow({ typeName: 'checklist:item:remove' }),
+          }
+        ],
       },
       note: [
         this.props.checkList.newNote({title: 'Note #1'}),
@@ -197,9 +212,10 @@ class Base extends Component {
   }
 }
 
-const mapContextToProps = ({ checkList }) => {
+const mapContextToProps = ({ checkList, modal }) => {
   return {
-    checkList
+    checkList,
+    modal
   }
 }
 

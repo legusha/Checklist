@@ -5,7 +5,11 @@ import IconClose from 'mdi-react/CloseIcon';
 
 import { Card } from '../ui'
 
-export default function CardList ({ list , view }) {
+export default function CardList ({ list , view, action }) {
+
+  const handleIconAction = (item, actionType) => {
+    action(item, actionType)
+  }
 
   const renderList = (list, view) => {
     const { render: renderView, helper: helperView } = view
@@ -21,8 +25,8 @@ export default function CardList ({ list , view }) {
             <div className='d-flex align-center justify-between w-100'>
               <h3 className='m-0 font-18 font-weight-5'>{title}</h3>
               <div className='text-right'>
-                <IconPencil className='text-success cursor-point' />
-                <IconClose className='text-danger cursor-point' />
+                <IconPencil className='text-success cursor-point' onClick={() => handleIconAction(item, 'edit')}/>
+                <IconClose className='text-danger cursor-point' onClick={() => handleIconAction(item, 'delete')}/>
               </div>
             </div>
           }

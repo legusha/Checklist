@@ -62,6 +62,10 @@ class Base extends Component {
     })
   }
 
+  handleActionCard = (item, actionType) => {
+    console.log(item, actionType)
+  }
+
   toggleFormInput = e => {
     const newState = oldState => {
       const formInput = { ...oldState.formInput, show: !oldState.formInput.show }
@@ -98,7 +102,8 @@ class Base extends Component {
     checkList: {
       events: {
         self: this,
-        onChangeCheckbox: this.handleChangeListNote
+        onChangeCheckbox: this.handleChangeListNote,
+        onActionCard: this.handleActionCard,
       },
       note: [
         this.props.checkList.newNote({title: 'Note #1'}),
@@ -167,7 +172,7 @@ class Base extends Component {
     const { formInput, checkList } = this.state
     const checkboxListView = {
       render: this.renderTodo.bind(this),
-      helper: this.findByNoteIdTodo.bind(this)
+      helper: this.findByNoteIdTodo.bind(this),
     }
     const showFormInput = formInput.show ? <FormInput {...formInput} /> : null
 
@@ -185,6 +190,7 @@ class Base extends Component {
         <CardList
           list={ checkList.note }
           view={ checkboxListView }
+          action={this.handleActionCard}
         />
       </section>
     )

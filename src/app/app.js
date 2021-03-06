@@ -8,7 +8,7 @@ import { ModelProvider } from '../components/model-context';
 import {Modal} from '../components/ui';
 import BButton from 'react-bootstrap/Button';
 
-import { Checklist, Note, Todo } from '../logic'
+import { Checklist, Note, Todo } from '../services'
 
 export default class App extends Component {
   handleModalDisplay = (show = false) => {

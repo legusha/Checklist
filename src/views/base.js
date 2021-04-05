@@ -12,27 +12,11 @@ class Base extends Component {
     const classNameCheckbox = 'checkbox-wrap'
     const isCheckbox = e.target.parentNode.classList.contains(classNameCheckbox)
     if (isCheckbox) {
-      this.setState((oldState) => {
-        const listTodo = oldState.checkList.todo
-        const indexItem = listTodo.findIndex(todo => todo.id === item.id)
-
-        const newTodo = this.props.checkList.newTodo({ ...item, executeFlag: !item.executeFlag })
-
-        const startAllTodo = listTodo.slice(0, indexItem)
-        const endAllTodo = listTodo.slice(indexItem + 1)
-
-        const allTodo = [...startAllTodo, newTodo, ...endAllTodo]
-
-        return {
-          ...oldState,
-          checkList: {
-            ...oldState.checkList,
-            todo: allTodo
-          }
-        }
-      })
-      // e.target.checked
+      // const newTodo = this.props.checkList.newTodo({ ...item, executeFlag: !item.executeFlag })
       console.log(item)
+      const newTodo = this.props.checkListAPI.newTodo(item)
+      this.props.checkListAPI.updateTodo(newTodo)
+      console.log(this.props.checkList.todo)
     }
   }
 
@@ -119,18 +103,8 @@ class Base extends Component {
           }
         ],
       },
-      note: [
-        this.props.checkList.newNote({title: 'Note #1'}),
-        this.props.checkList.newNote({title: 'Note #2'}),
-        this.props.checkList.newNote({title: 'Note #3'}),
-        this.props.checkList.newNote({title: 'Note #4'}),
-      ],
-      todo: [
-        this.props.checkList.newTodo({noteId: 105, title: 'Checkbox First notes'}),
-        this.props.checkList.newTodo({noteId: 105, title: 'Checkbox Second notes'}),
-        this.props.checkList.newTodo({noteId: 106, title: 'Checkbox Three notes'}),
-        this.props.checkList.newTodo({noteId: 108, title: 'Checkbox First notes 2'}),
-      ]
+      note: this.props.checkList.note,
+      todo: this.props.checkList.todo,
     },
   }
 
@@ -211,9 +185,10 @@ class Base extends Component {
   }
 }
 
-const mapContextToProps = ({ checkList, modal }) => {
+const mapContextToProps = ({ checkList, modal, checkListAPI }) => {
   return {
     checkList,
+    checkListAPI,
     modal
   }
 }

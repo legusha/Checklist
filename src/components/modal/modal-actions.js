@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import {Modal} from '../ui'
-import BButton from "react-bootstrap/Button";
+import { Modal } from '../ui'
+import BButton from 'react-bootstrap/Button'
 
-export default function ModalActions () {
+export default function ModalActions ({ ModalService }) {
+
   const defaultModal = {
-    show: true,
-    makeShow: handleModalDisplayShow,
-    makeHide: setModalDisplay.bind(this, false),
+    show: false,
     actions: [
       {
         typeName: 'checklist:item:remove',
@@ -25,30 +24,26 @@ export default function ModalActions () {
         }
       }
     ],
-    currentAction: 'checklist:item:remove',
+    currentAction: '',
   }
   const [modal, updateModal] = useState(defaultModal)
+  const modalService = new ModalService(modal, updateModal)
+
 
   function setModalDisplay(show = false) {
-    updateModal((newModal) => {
-      return { ...newModal, show }
-    })
+    modalService.setModalDisplay(show)
   }
 
   function getModalCurrentAction () {
-    const { currentAction, actions } = modal
-    return actions.find(item => item.typeName === currentAction)
+    return modalService.getModalCurrentAction()
   }
 
   function setModalCurrentAction (typeName) {
-    updateModal((newModal) => {
-      return { ...newModal, currentAction: typeName }
-    })
+    modalService.setModalCurrentAction(typeName)
   }
 
   function handleModalDisplayShow ({ typeName }) {
-    setModalCurrentAction(typeName)
-    setModalDisplay(true)
+    modalService.handleModalDisplayShow({ typeName })
   }
 
   return (

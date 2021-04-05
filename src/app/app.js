@@ -9,62 +9,80 @@ import ModalActions from '../components/modal'
 import {Modal} from '../components/ui'
 import BButton from 'react-bootstrap/Button'
 
-import { Checklist, Note, Todo } from '../services'
+import { Checklist, Note, Todo, ModalService } from '../services'
+
+const checkList = new Checklist (new Note(), new Todo())
 
 export default class App extends Component {
-  // handleModalDisplay = (show = false) => {
-  //   const modal = { ...this.state.modal, show }
-  //   this.setState({ modal })
-  // }
-  //
-  // handleModalDisplayShow = ({ typeName }) => {
-  //   return async () => {
-  //     await this.setModalCurrentAction(typeName)
-  //     this.handleModalDisplay(true)
-  //   }
-  // }
+  updateTodo = (item) => {
+    this.setState((oldState) => {
 
-  // getModalCurrentAction = () => {
-  //   const { currentAction, actions } = this.state.modal
-  //   return actions.find(item => item.typeName === currentAction)
-  // }
-  // async setModalCurrentAction (typeName) {
-  //   const newState = oldState => {
-  //     const modal = {
-  //       ...oldState.modal,
-  //       currentAction: typeName
-  //     }
-  //     return {
-  //       ...oldState,
-  //       modal
-  //     }
-  //   }
-  //   await this.setState(newState)
-  // }
+      const { checkList: checkListOld } = oldState
+      const listTodo = checkListOld.todo
+      const indexItem = listTodo.findIndex(todo => todo.id === item.id) ? -1 : 0
 
+      const newTodo = checkList.newTodo({ ...item, executeFlag: !item.executeFlag })
+
+      const startAllTodo = listTodo.slice(0, indexItem)
+      const endAllTodo = listTodo.slice(indexItem + 1)
+
+      const allTodo = [...startAllTodo, newTodo, ...endAllTodo]
+
+      return {
+        ...oldState,
+        checkList: {
+          ...oldState.checkList,
+          todo: allTodo
+        }
+      }
+    })
+  }
+
+  initModalService = (Service, modal) => {
+    const newService = new Service(modal)
+  }
   state = {
-    checkList: new Checklist (new Note(), new Todo()),
+    checkList: {
+      note: [
+        checkList.newNote({title: 'Note #1'}),
+        checkList.newNote({title: 'Note #2'}),
+        checkList.newNote({title: 'Note #3'}),
+        checkList.newNote({title: 'Note #4'}),
+      ],
+      todo: [
+        checkList.newTodo({noteId: 105, title: 'Checkbox First notes'}),
+        checkList.newTodo({noteId: 105, title: 'Checkbox Second notes'}),
+        checkList.newTodo({noteId: 106, title: 'Checkbox Three notes'}),
+        checkList.newTodo({noteId: 108, title: 'Checkbox First notes 2'}),
+      ],
+    },
     modal: {
       show: false,
+      currentAction: '',
       makeShow: () => {},
       makeHide: () => {},
-      currentAction: '',
     }
   }
   render() {
-    // const { handleModalDisplay, getModalCurrentAction } = this
-    const { checkList, modal } = this.state
+    const { checkList: checkListState, modal } = this.state
+    const checkListAPI = {
+      newTodo: checkList.newTodo.bind(checkList),
+      newNote: checkList.newNote.bind(checkList),
+      updateTodo: this.updateTodo
+    }
+
+    this.initModalService(ModalService, modal)
 
     return (
       <div className="App, mt-4">
         <Switch>
-          <ModelProvider value={{checkList, modal}}>
+          <ModelProvider value={{checkList: checkListState, modal, checkListAPI}}>
             <Route path="/" component={PageBase} exact />
             <Route path="/note" component={PageNote} exact />
             <Redirect to={'/'}/>
           </ModelProvider>
         </Switch>
-        <ModalActions/>
+        <ModalActions ModalService={ModalService}/>
       </div>
     )
   }

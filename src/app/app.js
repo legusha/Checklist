@@ -1,41 +1,23 @@
-import React, { Component } from 'react'
-import {Route, Switch, Redirect} from 'react-router-dom'
+import React, { Component } from 'react';
+import {Route, Switch, Redirect} from 'react-router-dom';
 
-import PageBase from '../views/base'
-import PageNote from '../views/note'
+import PageBase from '../views/base';
+import PageNote from '../views/note';
 
-import { ModelProvider } from '../components/model-context'
-import ModalActions from '../components/modal'
+import { ModelProvider } from '../components/model-context';
+import ModalActions from '../components/modal';
 // import {Modal} from '../components/ui'
 // import BButton from 'react-bootstrap/Button'
 
-import { Checklist, Note, Todo, ModalService } from '../services'
+import { Checklist, Note, Todo, ModalService } from '../services';
+import { updateTodo } from './mutation';
 
 const checkList = new Checklist (new Note(), new Todo())
 
 export default class App extends Component {
   updateTodo = (item) => {
-    this.setState((oldState) => {
-
-      const { checkList: checkListOld } = oldState
-      const listTodo = checkListOld.todo
-      const indexItem = listTodo.findIndex(todo => todo.id === item.id) ? -1 : 0
-
-      const newTodo = checkList.newTodo({ ...item, executeFlag: !item.executeFlag })
-
-      const startAllTodo = listTodo.slice(0, indexItem)
-      const endAllTodo = listTodo.slice(indexItem + 1)
-
-      const allTodo = [...startAllTodo, newTodo, ...endAllTodo]
-
-      return {
-        ...oldState,
-        checkList: {
-          ...oldState.checkList,
-          todo: allTodo
-        }
-      }
-    })
+    const handler = updateTodo.bind(this, checkList, item)
+    this.setState(handler)
   }
 
   initModalService = (Service, modal) => {

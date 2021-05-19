@@ -17,17 +17,24 @@ export default class Checklist {
 
     return this.#todoCountId
   }
-  newNote (props) {
-    const id = this.incrementNoteId()
-    const propsWithId = { ...props, id }
-
-    return this.note.newItem(propsWithId)
+  newItem(item, type = 'note') {
+    const typeID = {
+      note: this.incrementNoteId.bind(this),
+      todo: this.incrementTodoId.bind(this),
+    }
+    const id = typeID[type]()
+    return  { ...item, id }
   }
-  newTodo (props) {
-    const id = this.incrementTodoId()
-    const propsWithId = { ...props, id }
-
-    return this.todo.newItem(propsWithId)
+  newNote (item) {
+    const newItem = this.newItem(item, 'note')
+    return this.note.newItem(newItem)
+  }
+  newTodo (item) {
+    const newItem = this.newItem(item, 'todo')
+    return this.todo.newItem(newItem)
+  }
+  createNote (list, item) {
+    return [...list, this.newItem(item)]
   }
 }
 

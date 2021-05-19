@@ -35,15 +35,15 @@ class Base extends Component {
 
     // this.state.formInput.input.value
     const newNote = this.props.checkList.api.newNote({title: this.state.formInput.input.value})
-    this.setState((oldState) => {
-      return {
-        ...oldState,
-        checkList: {
-          ...oldState.checkList,
-          note: [newNote, ...oldState.checkList.note]
-        }
-      }
-    })
+    // this.setState((oldState) => {
+    //   return {
+    //     ...oldState,
+    //     checkList: {
+    //       ...oldState.checkList,
+    //       note: [newNote, ...oldState.checkList.note]
+    //     }
+    //   }
+    // })
   }
 
   handleActionCard = (item, actionType) => {
@@ -68,8 +68,20 @@ class Base extends Component {
     model: null,
     buttons: {
       all: [
-        {to: '/note', label: 'Add', color: 'success', nextCurrentIndex: 1, onClick: this.toggleFormInput},
-        {to: '/', label: 'Cancel', color: 'primary', nextCurrentIndex: 0, onClick: this.toggleFormInput}
+        {
+          to: '/note',
+          label: 'Add',
+          color: 'success',
+          nextCurrentIndex: 1,
+          onClick: this.toggleFormInput
+        },
+        {
+          to: '/',
+          label: 'Cancel',
+          color: 'primary',
+          nextCurrentIndex: 0,
+          onClick: this.toggleFormInput
+        }
       ],
       currentIndex: 0
     },
@@ -146,7 +158,6 @@ class Base extends Component {
 
   renderTodo (listTodo) {
     const { events } = this.state.checkList
-
     return (
       <CheckboxList
         todo={listTodo}

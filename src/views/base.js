@@ -47,7 +47,6 @@ class Base extends Component {
   }
 
   handleActionCard = (item, actionType) => {
-    console.log(item, actionType)
     const action = this.state.checkList.events.actionsModal.find(item => item.typeName === actionType)
     if (action) {
       action.handler()
@@ -99,7 +98,7 @@ class Base extends Component {
           },
           {
             typeName: 'delete',
-            handler: this.props.modal.makeShow({ typeName: 'checklist:item:remove' }),
+            handler: this.props.modal.makeShow,
           }
         ],
       },

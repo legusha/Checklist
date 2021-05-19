@@ -6,8 +6,8 @@ import PageNote from '../views/note'
 
 import { ModelProvider } from '../components/model-context'
 import ModalActions from '../components/modal'
-import {Modal} from '../components/ui'
-import BButton from 'react-bootstrap/Button'
+// import {Modal} from '../components/ui'
+// import BButton from 'react-bootstrap/Button'
 
 import { Checklist, Note, Todo, ModalService } from '../services'
 

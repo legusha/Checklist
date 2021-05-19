@@ -70,13 +70,14 @@ export default class App extends Component {
       newNote: checkList.newNote.bind(checkList),
       updateTodo: this.updateTodo
     }
+    const checkListContext = { state: checkListState, api: checkListAPI }
 
     this.initModalService(ModalService, modal)
 
     return (
       <div className="App, mt-4">
         <Switch>
-          <ModelProvider value={{checkList: checkListState, modal, checkListAPI}}>
+          <ModelProvider value={{checkList: checkListContext, modal, checkListAPI}}>
             <Route path="/" component={PageBase} exact />
             <Route path="/note" component={PageNote} exact />
             <Redirect to={'/'}/>

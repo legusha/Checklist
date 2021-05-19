@@ -14,9 +14,9 @@ class Base extends Component {
     if (isCheckbox) {
       // const newTodo = this.props.checkList.newTodo({ ...item, executeFlag: !item.executeFlag })
       console.log(item)
-      const newTodo = this.props.checkListAPI.newTodo(item)
-      this.props.checkListAPI.updateTodo(newTodo)
-      console.log(this.props.checkList.todo)
+      const newTodo = this.props.checkList.api.newTodo(item)
+      this.props.checkList.api.updateTodo(newTodo)
+      console.log(this.props.checkList.state.todo)
     }
   }
 
@@ -34,7 +34,7 @@ class Base extends Component {
     e.stopPropagation()
 
     // this.state.formInput.input.value
-    const newNote = this.props.checkList.newNote({title: this.state.formInput.input.value})
+    const newNote = this.props.checkList.api.newNote({title: this.state.formInput.input.value})
     this.setState((oldState) => {
       return {
         ...oldState,
@@ -102,8 +102,8 @@ class Base extends Component {
           }
         ],
       },
-      note: this.props.checkList.note,
-      todo: this.props.checkList.todo,
+      note: this.props.checkList.state.note,
+      todo: this.props.checkList.state.todo,
     },
   }
 

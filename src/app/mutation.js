@@ -19,4 +19,16 @@ const updateTodo = function (checklist, item, oldState) {
   }
 }
 
-export { updateTodo }
+const updateNote = function (checklist, item, oldState) {
+  const newNote = checklist.newNote(item)
+
+  return {
+    ...oldState,
+    checkList: {
+      ...oldState.checkList,
+      note: [newNote, ...oldState.checkList.note]
+    }
+  }
+}
+
+export { updateTodo, updateNote }

@@ -33,17 +33,7 @@ class Base extends Component {
     e.preventDefault()
     e.stopPropagation()
 
-    // this.state.formInput.input.value
-    const newNote = this.props.checkList.api.newNote({title: this.state.formInput.input.value})
-    // this.setState((oldState) => {
-    //   return {
-    //     ...oldState,
-    //     checkList: {
-    //       ...oldState.checkList,
-    //       note: [newNote, ...oldState.checkList.note]
-    //     }
-    //   }
-    // })
+    this.props.checkList.api.updateNote({title: this.state.formInput.input.value})
   }
 
   handleActionCard = (item, actionType) => {

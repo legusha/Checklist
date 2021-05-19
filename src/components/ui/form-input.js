@@ -8,6 +8,7 @@ export default function FormInput ({ btn, input, events }) {
     input: PropTypes.string,
     events: PropTypes.object,
   }
+  console.log(input)
   const { onChange, onSubmit } = events
 
   return (

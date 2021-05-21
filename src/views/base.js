@@ -21,23 +21,23 @@ class Base extends Component {
   }
 
   handleChangeFormInput = e => {
-    e.stopPropagation()
+    e.stopPropagation();
 
-    const formInput = { ...this.state.formInput }
-    formInput.input.value = e.target.value
+    const formInput = { ...this.state.formInput };
+    formInput.input.value = e.target.value;
 
     this.setState({formInput})
   }
 
   handleSubmitFormInput = e => {
-    e.preventDefault()
-    e.stopPropagation()
+    e.preventDefault();
+    e.stopPropagation();
 
     this.props.checkList.api.updateNote({title: this.state.formInput.input.value})
   }
 
   handleActionCard = (item, actionType) => {
-    const action = this.state.checkList.events.actionsModal.find(item => item.typeName === actionType)
+    const action = this.state.checkList.events.actionsModal.find(item => item.typeName === actionType);
     if (action) {
       action.handler()
     }

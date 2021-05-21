@@ -5,10 +5,9 @@ import BButton from 'react-bootstrap/Button'
 export default function FormInput ({ btn, input, events }) {
   FormInput.propTypes = {
     btn: PropTypes.object,
-    input: PropTypes.string,
+    input: PropTypes.object,
     events: PropTypes.object,
   }
-  console.log(input)
   const { onChange, onSubmit } = events
 
   return (

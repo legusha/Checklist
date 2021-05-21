@@ -17,7 +17,7 @@ const checkList = new Checklist (new Note(), new Todo());
 export default class App extends Component {
   updateTodo = (item) => {
     const handler = updateTodo.bind(this, checkList, item);
-    this.setState(handler)
+    this.setState(handler);
   }
   updateNote = (item) => {
     const handler = updateNote.bind(this, checkList, item);

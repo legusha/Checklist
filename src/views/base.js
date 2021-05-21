@@ -104,8 +104,6 @@ class Base extends Component {
           }
         ],
       },
-      note: this.props.checkList.state.note,
-      todo: this.props.checkList.state.todo,
     },
   }
 
@@ -130,7 +128,7 @@ class Base extends Component {
   }
 
   findByNoteIdTodo = (id) => {
-    const { todo } = this.state.checkList
+    const { todo } = this.props.checkList.state
     return todo.filter(item => item.noteId === id)
   }
 
@@ -176,7 +174,7 @@ class Base extends Component {
         </div>
         {showFormInput}
         <CardList
-          list={ checkList.note }
+          list={ this.props.checkList.state.note }
           view={ checkboxListView }
           action={this.handleActionCard}
         />

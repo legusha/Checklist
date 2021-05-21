@@ -9,23 +9,23 @@ import ModalActions from '../components/modal';
 // import {Modal} from '../components/ui'
 // import BButton from 'react-bootstrap/Button'
 
-import { Checklist, Note, Todo, ModalService } from '../services';
-import { updateTodo, updateNote } from './mutation';
+import { Checklist, Note, Todo, ModalService, mutation } from '../services';
 
-const checkList = new Checklist (new Note(), new Todo())
+const { updateTodo, updateNote } = mutation;
+const checkList = new Checklist (new Note(), new Todo());
 
 export default class App extends Component {
   updateTodo = (item) => {
-    const handler = updateTodo.bind(this, checkList, item)
+    const handler = updateTodo.bind(this, checkList, item);
     this.setState(handler)
   }
   updateNote = (item) => {
-    const handler = updateNote.bind(this, checkList, item)
+    const handler = updateNote.bind(this, checkList, item);
     this.setState(handler)
   }
 
   initModalService = (Service, modal) => {
-    const newService = new Service(modal)
+    const newService = new Service(modal);
   }
   state = {
     checkList: {

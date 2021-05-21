@@ -12,11 +12,7 @@ class Base extends Component {
     const classNameCheckbox = 'checkbox-wrap'
     const isCheckbox = e.target.parentNode.classList.contains(classNameCheckbox)
     if (isCheckbox) {
-      // const newTodo = this.props.checkList.newTodo({ ...item, executeFlag: !item.executeFlag })
-      console.log(item)
-      const newTodo = this.props.checkList.api.newTodo(item)
-      this.props.checkList.api.updateTodo(newTodo)
-      console.log(this.props.checkList.state.todo)
+      this.props.checkList.api.updateTodo(item)
     }
   }
 

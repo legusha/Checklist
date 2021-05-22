@@ -25,7 +25,8 @@ export default class App extends Component {
   }
 
   initModalService = (Service, modal) => {
-    const newService = new Service(modal);
+    // const newService = new Service(modal);
+    // console.log(newService);
   }
   state = {
     checkList: {

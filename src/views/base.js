@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { Button, FormInput } from '../components/ui'
 import CardList from '../components/card-list'
 import CheckboxList from '../components/checkbox-list'
+import EmptyValue from '../components/empty-value'
 import { WithModelContext } from '../components/hoc'
 
 
@@ -51,7 +52,6 @@ class Base extends Component {
   }
 
   state = {
-    model: null,
     buttons: {
       all: [
         {
@@ -101,6 +101,10 @@ class Base extends Component {
         ],
       },
     },
+    emptyValue: {
+      text: 'Список пуст',
+      classNameWrap: ['w-100', 'h-100', 'd-flex', 'align-items-center', 'justify-content-center', 'text-muted'],
+    }
   }
 
   get button () {
@@ -142,6 +146,10 @@ class Base extends Component {
 
   renderTodo (listTodo) {
     const { events } = this.state.checkList
+
+    if (listTodo.length === 0) return (
+      <EmptyValue {...this.state.emptyValue}/>
+    )
     return (
       <CheckboxList
         todo={listTodo}
@@ -151,7 +159,7 @@ class Base extends Component {
   }
 
   render () {
-    const { formInput, checkList } = this.state
+    const { formInput } = this.state
     const checkboxListView = {
       render: this.renderTodo.bind(this),
       helper: this.findByNoteIdTodo.bind(this),

@@ -24,10 +24,7 @@ export default class App extends Component {
     this.setState(handler)
   }
 
-  initModalService = (Service, modal) => {
-    // const newService = new Service(modal);
-    // console.log(newService);
-  }
+  initModalService = (Service, modal) => new Service(modal, this.setState);
   state = {
     checkList: {
       note: [
@@ -46,10 +43,18 @@ export default class App extends Component {
     modal: {
       show: false,
       currentAction: '',
-      makeShow: () => {},
+      makeShow: () => {
+        // console.log(this.initModalService());
+      },
       makeHide: () => {},
     }
   }
+  componentDidMount() {
+    const { modal } = this.state
+    const contextModal = this.initModalService(ModalService, modal);
+    contextModal.setModalDisplay(true, this);
+  }
+
   render() {
     const { checkList: checkListState, modal } = this.state
     const checkListAPI = {
@@ -58,14 +63,12 @@ export default class App extends Component {
       updateTodo: this.updateTodo,
       updateNote: this.updateNote
     }
-    const checkListContext = { state: checkListState, api: checkListAPI }
-
-    this.initModalService(ModalService, modal)
+    const contextCheckList = { state: checkListState, api: checkListAPI };
 
     return (
       <div className="App, mt-4">
         <Switch>
-          <ModelProvider value={{checkList: checkListContext, modal, checkListAPI}}>
+          <ModelProvider value={{checkList: contextCheckList, checkListAPI, modal}}>
             <Route path="/" component={PageBase} exact />
             <Route path="/note" component={PageNote} exact />
             <Redirect to={'/'}/>

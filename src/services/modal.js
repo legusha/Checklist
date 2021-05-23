@@ -3,9 +3,10 @@ export default class Modal {
     this.modal = modal
     this.updateModal = updateModal
   }
-  setModalDisplay(show = false) {
-    this.updateModal((newModal) => {
-      return { ...newModal, show }
+  setModalDisplay(show = false, context) {
+    this.updateModal.bind(context)((oldState) => {
+      return { ...oldState, modal: {...oldState.modal, show} }
+      // return { ...oldState }
     })
   }
   getModalCurrentAction () {

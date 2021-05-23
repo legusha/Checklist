@@ -92,7 +92,7 @@ class Base extends Component {
         actionsModal: [
           {
             typeName: 'edit',
-            handler: () => {},
+            handler: this.props.modal.makeShow,
           },
           {
             typeName: 'delete',

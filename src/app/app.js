@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef, forwardRef } from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 
 import PageBase from '../views/base';
@@ -15,6 +15,13 @@ const { updateTodo, updateNote } = mutation;
 const checkList = new Checklist (new Note(), new Todo());
 
 export default class App extends Component {
+  // constructor(props) {
+  //   super(props);
+  //   // this.modal = {
+  //   //   ref: React.forwardRef((props, ref) =>
+  //   //     <ModalActions ModalService={ModalService} ref={ref}/>),
+  //   // }
+  // }
   updateTodo = (item) => {
     const handler = updateTodo.bind(this, checkList, item);
     this.setState(handler);
@@ -24,7 +31,12 @@ export default class App extends Component {
     this.setState(handler)
   }
 
+  showModal = () => {
+    console.log(this.state.modal)
+    console.log(this.state.modal.ref.current.toggle(true));
+  }
   initModalService = (Service, modal) => new Service(modal, this.setState);
+
   state = {
     checkList: {
       note: [
@@ -42,11 +54,10 @@ export default class App extends Component {
     },
     modal: {
       show: false,
-      currentAction: '',
-      makeShow: () => {
-        // console.log(this.initModalService());
-      },
+      makeShow: this.showModal,
       makeHide: () => {},
+      context: {},
+      ref: createRef(),
     }
   }
   componentDidMount() {
@@ -74,7 +85,7 @@ export default class App extends Component {
             <Redirect to={'/'}/>
           </ModelProvider>
         </Switch>
-        <ModalActions ModalService={ModalService}/>
+        <ModalActions ModalService={ModalService} ref={modal.ref} />
       </div>
     )
   }

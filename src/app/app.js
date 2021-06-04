@@ -9,10 +9,10 @@ import ModalActions from '../components/modal';
 // import {Modal} from '../components/ui'
 // import BButton from 'react-bootstrap/Button'
 
-import { Checklist, Note, Todo, ModalService, mutation } from '../services';
+import { Checklist, Note, Todo, ModalService, Mutation } from '../services';
 import BButton from "react-bootstrap/Button";
 
-const { updateTodo, updateNote } = mutation;
+const { updateTodo, updateNote, setModalDisplay } = Mutation;
 const checkList = new Checklist (new Note(), new Todo());
 
 
@@ -29,13 +29,13 @@ export default class App extends Component {
     this.setState(handler)
   }
   updateModal = (value) => {
-    const handler = this.state.modalService.setModalDisplay.bind(this, value);
+    const handler = setModalDisplay.bind(this, value);
     this.setState(handler)
   }
 
   showModal = async () => {
     await console.log(this.state.modal)
-    this.state.modal.ref.current.toggle(true, this)
+    this.updateModal(true)
     console.log(this.state.modal)
     // console.log(this.state.modal.ref.current.toggle(true, this));
   }
@@ -72,7 +72,6 @@ export default class App extends Component {
       makeShow: this.showModal,
       makeHide: () => {},
       context: {},
-      ref: createRef(),
       actions: [
         {
           typeName: 'checklist:item:remove',
@@ -132,7 +131,7 @@ export default class App extends Component {
             <Redirect to={'/'}/>
           </ModelProvider>
         </Switch>
-        <ModalActions modalService={apiModal} modal={modal} ref={modal.ref} />
+        <ModalActions modalService={apiModal} modal={modal} />
       </div>
     )
   }

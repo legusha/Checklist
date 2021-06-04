@@ -1,4 +1,4 @@
-import React, { Component, createRef, forwardRef } from 'react';
+import React, { Component } from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 
 import PageBase from '../views/base';
@@ -6,13 +6,11 @@ import PageNote from '../views/note';
 
 import { ModelProvider } from '../components/model-context';
 import ModalActions from '../components/modal';
-// import {Modal} from '../components/ui'
-// import BButton from 'react-bootstrap/Button'
+import ModalContent from '../components/modal-content';
 
-import { Checklist, Note, Todo, ModalService, Mutation } from '../services';
-import BButton from "react-bootstrap/Button";
+import { Checklist, Note, Todo, mutation } from '../services';
 
-const { updateTodo, updateNote, setModalDisplay } = Mutation;
+const { updateTodo, updateNote, setModalDisplay } = mutation;
 const checkList = new Checklist (new Note(), new Todo());
 
 
@@ -37,7 +35,6 @@ export default class App extends Component {
     await console.log(this.state.modal)
     this.updateModal(true)
     console.log(this.state.modal)
-    // console.log(this.state.modal.ref.current.toggle(true, this));
   }
 
   // Init methods
@@ -72,41 +69,12 @@ export default class App extends Component {
       makeShow: this.showModal,
       makeHide: () => {},
       context: {},
-      actions: [
-        {
-          typeName: 'checklist:item:remove',
-          content: {
-            header: <div>Header</div>,
-            body: <div>Body</div>,
-            footer: <div>
-              <BButton variant="secondary" onClick={this.showModal}>
-                Close
-              </BButton>
-              <BButton variant="primary" onClick={this.showModal}>
-                Save Changes
-              </BButton>
-            </div>
-          }
-        }
-      ],
+      actions: ModalContent({handlers: {showModal: this.showModal}}),
       currentAction: 'checklist:item:remove',
-    },
-    modalService: {
-      getModalCurrentAction: () => {},
-      contextModal: () => {}
     },
   }
 
   // Hooks
-
-  componentDidMount() {
-    const { modal } = this.state
-    const contextModal = this.initService(ModalService, modal);
-    this.initApi('modalService', contextModal)
-    console.log(contextModal)
-    // contextModal.setModalDisplay(true, this);
-    console.log(modal)
-  }
 
   render() {
     const { checkList: checkListState, modal } = this.state

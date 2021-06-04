@@ -69,7 +69,7 @@ export default class App extends Component {
       makeShow: this.showModal,
       makeHide: () => {},
       context: {},
-      actions: ModalContent({handlers: {showModal: this.showModal}}),
+      actions: ModalContent({handlers: {showModal: this.showModal, modalHide: this}}),
       currentAction: 'checklist:item:remove',
     },
   }
@@ -78,7 +78,7 @@ export default class App extends Component {
 
   render() {
     const { checkList: checkListState, modal } = this.state
-    const checkListAPI = {
+    const apiCheckList = {
       newTodo: checkList.newTodo.bind(checkList),
       newNote: checkList.newNote.bind(checkList),
       updateTodo: this.updateTodo,
@@ -91,12 +91,12 @@ export default class App extends Component {
         return actions.find(item => item.typeName === currentAction)
       },
     }
-    const contextCheckList = { state: checkListState, api: checkListAPI };
+    const contextCheckList = { state: checkListState, api: apiCheckList };
 
     return (
       <div className="App, mt-4">
         <Switch>
-          <ModelProvider value={{checkList: contextCheckList, checkListAPI, modal}}>
+          <ModelProvider value={{checkList: contextCheckList, apiCheckList, modal}}>
             <Route path="/" component={PageBase} exact />
             <Route path="/note" component={PageNote} exact />
             <Redirect to={'/'}/>

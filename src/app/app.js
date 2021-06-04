@@ -32,22 +32,24 @@ export default class App extends Component {
   }
 
   showModal = async () => {
-    await console.log(this.state.modal)
     this.updateModal(true)
-    console.log(this.state.modal)
+  }
+
+  hideModal = async () => {
+    this.updateModal(false)
   }
 
   // Init methods
 
-  initService = (Service, ...args) => new Service(...args, this.setState);
-  initApi = (rootKeyState, api) => {
-    this.setState((oldState) => {
-      return {
-        ...oldState,
-        [rootKeyState]: api
-      }
-    })
-  }
+  // initService = (Service, ...args) => new Service(...args, this.setState);
+  // initApi = (rootKeyState, api) => {
+  //   this.setState((oldState) => {
+  //     return {
+  //       ...oldState,
+  //       [rootKeyState]: api
+  //     }
+  //   })
+  // }
 
   state = {
     checkList: {
@@ -69,7 +71,7 @@ export default class App extends Component {
       makeShow: this.showModal,
       makeHide: () => {},
       context: {},
-      actions: ModalContent({handlers: {showModal: this.showModal, modalHide: this}}),
+      actions: ModalContent({handlers: {modalShow: this.showModal, modalHide: this.hideModal}}),
       currentAction: 'checklist:item:remove',
     },
   }

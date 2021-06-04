@@ -12,9 +12,9 @@ export default class Modal {
     const { currentAction, actions } = this.modal
     return actions.find(item => item.typeName === currentAction)
   }
-  setModalCurrentAction (typeName) {
+  setModalCurrentAction (typeName, oldState) {
     this.updateModal((newModal) => {
-      return { ...newModal, currentAction: typeName }
+      return { ...newModal, modal: {...oldState.modal, currentAction: typeName} }
     })
   }
   handleModalDisplayShow ({ typeName }) {

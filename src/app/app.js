@@ -89,7 +89,7 @@ export default class App extends Component {
           }
         }
       ],
-      currentAction: '',
+      currentAction: 'checklist:item:remove',
     },
     modalService: {
       getModalCurrentAction: () => {},
@@ -118,7 +118,10 @@ export default class App extends Component {
     }
     const apiModal = {
       updateModal: this.updateModal.bind(this),
-      currentAction: () => modal.currentAction,
+      currentAction: () => {
+        const { currentAction, actions } = modal
+        return actions.find(item => item.typeName === currentAction)
+      },
     }
     const contextCheckList = { state: checkListState, api: checkListAPI };
 

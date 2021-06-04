@@ -10,18 +10,16 @@ import ModalActions from '../components/modal';
 // import BButton from 'react-bootstrap/Button'
 
 import { Checklist, Note, Todo, ModalService, mutation } from '../services';
+import BButton from "react-bootstrap/Button";
 
 const { updateTodo, updateNote } = mutation;
 const checkList = new Checklist (new Note(), new Todo());
 
+
 export default class App extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   // this.modal = {
-  //   //   ref: React.forwardRef((props, ref) =>
-  //   //     <ModalActions ModalService={ModalService} ref={ref}/>),
-  //   // }
-  // }
+
+  // Service methods
+
   updateTodo = (item) => {
     const handler = updateTodo.bind(this, checkList, item);
     this.setState(handler);
@@ -30,12 +28,29 @@ export default class App extends Component {
     const handler = updateNote.bind(this, checkList, item);
     this.setState(handler)
   }
-
-  showModal = () => {
-    console.log(this.state.modal)
-    console.log(this.state.modal.ref.current.toggle(true));
+  updateModal = (value) => {
+    const handler = this.state.modalService.setModalDisplay.bind(this, value);
+    this.setState(handler)
   }
-  initModalService = (Service, modal) => new Service(modal, this.setState);
+
+  showModal = async () => {
+    await console.log(this.state.modal)
+    this.state.modal.ref.current.toggle(true, this)
+    console.log(this.state.modal)
+    // console.log(this.state.modal.ref.current.toggle(true, this));
+  }
+
+  // Init methods
+
+  initService = (Service, ...args) => new Service(...args, this.setState);
+  initApi = (rootKeyState, api) => {
+    this.setState((oldState) => {
+      return {
+        ...oldState,
+        [rootKeyState]: api
+      }
+    })
+  }
 
   state = {
     checkList: {
@@ -58,12 +73,40 @@ export default class App extends Component {
       makeHide: () => {},
       context: {},
       ref: createRef(),
-    }
+      actions: [
+        {
+          typeName: 'checklist:item:remove',
+          content: {
+            header: <div>Header</div>,
+            body: <div>Body</div>,
+            footer: <div>
+              <BButton variant="secondary" onClick={this.showModal}>
+                Close
+              </BButton>
+              <BButton variant="primary" onClick={this.showModal}>
+                Save Changes
+              </BButton>
+            </div>
+          }
+        }
+      ],
+      currentAction: '',
+    },
+    modalService: {
+      getModalCurrentAction: () => {},
+      contextModal: () => {}
+    },
   }
+
+  // Hooks
+
   componentDidMount() {
     const { modal } = this.state
-    const contextModal = this.initModalService(ModalService, modal);
-    contextModal.setModalDisplay(true, this);
+    const contextModal = this.initService(ModalService, modal);
+    this.initApi('modalService', contextModal)
+    console.log(contextModal)
+    // contextModal.setModalDisplay(true, this);
+    console.log(modal)
   }
 
   render() {
@@ -73,6 +116,10 @@ export default class App extends Component {
       newNote: checkList.newNote.bind(checkList),
       updateTodo: this.updateTodo,
       updateNote: this.updateNote
+    }
+    const apiModal = {
+      updateModal: this.updateModal.bind(this),
+      currentAction: () => modal.currentAction,
     }
     const contextCheckList = { state: checkListState, api: checkListAPI };
 
@@ -85,7 +132,7 @@ export default class App extends Component {
             <Redirect to={'/'}/>
           </ModelProvider>
         </Switch>
-        <ModalActions ModalService={ModalService} ref={modal.ref} />
+        <ModalActions modalService={apiModal} modal={modal} ref={modal.ref} />
       </div>
     )
   }

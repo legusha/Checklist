@@ -3,13 +3,12 @@ export default class Modal {
     this.modal = modal
     this.updateModal = updateModal
   }
-  setModalDisplay(show = false, context) {
-    this.updateModal.bind(context)((oldState) => {
-      return { ...oldState, modal: {...oldState.modal, show} }
-      // return { ...oldState }
-    })
+  setModalDisplay(show, oldState)  {
+    return { ...oldState, modal: {...oldState.modal, show} }
   }
   getModalCurrentAction () {
+    // debugger
+    // console.log(this.modal)
     const { currentAction, actions } = this.modal
     return actions.find(item => item.typeName === currentAction)
   }

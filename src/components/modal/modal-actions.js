@@ -3,7 +3,8 @@ import React, { forwardRef, useState, useImperativeHandle } from 'react'
 import { Modal } from '../ui'
 import BButton from 'react-bootstrap/Button'
 
-export default forwardRef(({ ModalService }, ref) => {
+
+export default forwardRef(({ modalService, modal }, ref) => {
 
   const defaultModal = {
     show: false,
@@ -26,16 +27,16 @@ export default forwardRef(({ ModalService }, ref) => {
     ],
     currentAction: '',
   }
-  const [modal, updateModal] = useState(defaultModal)
-  const modalService = new ModalService(modal, updateModal)
+  // const [modal, updateModal] = useState(defaultModal)
+  // const modalService = new ModalService(modal, updateModal)
 
 
   function setModalDisplay(show = false) {
-    modalService.setModalDisplay(show)
+    modalService.updateModal(show)
   }
 
   function getModalCurrentAction () {
-    return modalService.getModalCurrentAction()
+    return modalService.currentAction()
   }
 
   // function setModalCurrentAction (typeName) {

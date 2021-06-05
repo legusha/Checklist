@@ -101,7 +101,6 @@ export default class App extends Component {
     }
     const apiModal = {
       updateModal: (value, modalContentType = 'checklist:item:remove') => {
-        console.log(value, this);
         this.updateModalActionType(modalContentType);
         this.modalToggle(value)
       },
@@ -111,10 +110,11 @@ export default class App extends Component {
       },
     }
     const contextCheckList = { state: checkListState, api: apiCheckList };
+
     const app = {
       checkList: {
-        ...contextCheckList,
-        ...apiCheckList
+        ...checkListState,
+        ...apiCheckList,
       },
       modal: {
         ...modal,

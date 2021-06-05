@@ -189,11 +189,8 @@ class Base extends Component {
   }
 }
 
-const mapContextToProps = ({ checkList, modal, apiCheckList, app }) => {
+const mapContextToProps = ({ app }) => {
   return {
-    checkList,
-    apiCheckList,
-    modal,
     app,
   }
 }

@@ -10,7 +10,7 @@ import ModalContent from '../components/modal-content';
 
 import { Checklist, Note, Todo, mutation } from '../services';
 
-const { updateTodo, updateNote, setModalDisplay } = mutation;
+const { updateTodo, updateNote, setModalDisplay, setModalAction } = mutation;
 const checkList = new Checklist (new Note(), new Todo());
 
 
@@ -30,12 +30,20 @@ export default class App extends Component {
     const handler = setModalDisplay.bind(this, value);
     this.setState(handler)
   }
+  updateModalActionType = (value) => {
+    const handler = setModalAction.bind(this, value);
+    this.setState(handler)
+  }
 
-  showModal = async () => {
+  modalToggle = (value) => {
+    this.updateModal(value)
+  }
+
+  showModal = () => {
     this.updateModal(true)
   }
 
-  hideModal = async () => {
+  hideModal = () => {
     this.updateModal(false)
   }
 
@@ -71,8 +79,13 @@ export default class App extends Component {
       makeShow: this.showModal,
       makeHide: () => {},
       context: {},
-      actions: ModalContent({handlers: {modalShow: this.showModal, modalHide: this.hideModal}}),
-      currentAction: 'checklist:item:remove',
+      actions: ModalContent({
+        handlers: {
+          modalShow: this.showModal,
+          modalHide: this.hideModal
+        }
+      }),
+      currentAction: '',
     },
   }
 
@@ -87,18 +100,32 @@ export default class App extends Component {
       updateNote: this.updateNote
     }
     const apiModal = {
-      updateModal: this.updateModal.bind(this),
+      updateModal: (value, modalContentType = 'checklist:item:remove') => {
+        console.log(value, this);
+        this.updateModalActionType(modalContentType);
+        this.modalToggle(value)
+      },
       currentAction: () => {
         const { currentAction, actions } = modal
         return actions.find(item => item.typeName === currentAction)
       },
     }
     const contextCheckList = { state: checkListState, api: apiCheckList };
+    const app = {
+      checkList: {
+        ...contextCheckList,
+        ...apiCheckList
+      },
+      modal: {
+        ...modal,
+        ...apiModal
+      }
+    }
 
     return (
       <div className="App, mt-4">
         <Switch>
-          <ModelProvider value={{checkList: contextCheckList, apiCheckList, modal}}>
+          <ModelProvider value={{checkList: contextCheckList, apiCheckList, modal, app}}>
             <Route path="/" component={PageBase} exact />
             <Route path="/note" component={PageNote} exact />
             <Redirect to={'/'}/>

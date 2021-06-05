@@ -36,7 +36,7 @@ class Base extends Component {
   handleActionCard = (item, actionType) => {
     const action = this.state.checkList.events.actionsModal.find(item => item.typeName === actionType);
     if (action) {
-      action.handler()
+      action.handler(...action.args)
     }
   }
 
@@ -92,11 +92,13 @@ class Base extends Component {
         actionsModal: [
           {
             typeName: 'edit',
-            handler: this.props.modal.makeShow,
+            handler: this.props.app.modal.updateModal,
+            args: [true, 'checklist:item:remove']
           },
           {
             typeName: 'delete',
-            handler: this.props.modal.makeShow,
+            handler: this.props.app.modal.updateModal,
+            args: [true, 'checklist:item:remove']
           }
         ],
       },
@@ -187,11 +189,12 @@ class Base extends Component {
   }
 }
 
-const mapContextToProps = ({ checkList, modal, apiCheckList }) => {
+const mapContextToProps = ({ checkList, modal, apiCheckList, app }) => {
   return {
     checkList,
     apiCheckList,
-    modal
+    modal,
+    app,
   }
 }
 

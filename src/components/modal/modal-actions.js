@@ -1,31 +1,23 @@
 import React from 'react'
 // import PropTypes from 'prop-types'
 import { Modal } from '../ui'
-import BButton from 'react-bootstrap/Button'
 
-export default function ModalActions ({ modalService, modal }) {
+export default function ModalActions ({ modal }) {
 
   function setModalDisplay(show = false) {
-    modalService.update(show)
+    modal.update(show)
   }
 
-  function getModalCurrentAction () {
-    return modalService.currentContent()
+  function getModalCurrentContent () {
+    return modal.currentContent()
   }
 
-  // function setModalCurrentAction (typeName) {
-  //   modalService.setModalCurrentAction(typeName)
-  // }
-  //
-  // function handleModalDisplayShow ({ typeName }) {
-  //   modalService.handleModalDisplayShow({ typeName })
-  // }
   return (
     <Modal
       show={modal.show}
-      header={getModalCurrentAction()?.content?.header}
-      body={getModalCurrentAction()?.content?.body}
-      footer={getModalCurrentAction()?.content?.footer}
+      header={getModalCurrentContent()?.content?.header}
+      body={getModalCurrentContent()?.content?.body}
+      footer={getModalCurrentContent()?.content?.footer}
       handleShow={setModalDisplay.bind(this, true)}
       handleClose={setModalDisplay.bind(this, false)}
     />

@@ -16,18 +16,6 @@ const checkList = new Checklist (new Note(), new Todo());
 
 export default class App extends Component {
 
-  // Init methods
-
-  // initService = (Service, ...args) => new Service(...args, this.setState);
-  // initApi = (rootKeyState, api) => {
-  //   this.setState((oldState) => {
-  //     return {
-  //       ...oldState,
-  //       [rootKeyState]: api
-  //     }
-  //   })
-  // }
-
   constructor(props) {
     super(props);
     this.contoller = new Controller({ checkList }, this.setState.bind(this))
@@ -49,8 +37,6 @@ export default class App extends Component {
       },
       modal: {
         show: false,
-        makeShow: this.contoller.modalShow,
-        makeHide: () => {},
         context: {},
         actions: ModalContent({
           handlers: {
@@ -63,17 +49,17 @@ export default class App extends Component {
     }
   }
 
-  // Hooks
-
-  render() {
-    const { checkList: checkListState, modal } = this.state
-    const apiCheckList = {
+  initApiCheckList = () => {
+    return {
       newTodo: checkList.newTodo.bind(checkList),
       newNote: checkList.newNote.bind(checkList),
       updateTodo: this.contoller.updateTodo,
       updateNote: this.contoller.updateNote
     }
-    const apiModal = {
+  }
+  initApiModal = () => {
+    const { modal } = this.state;
+    return {
       update: (value, modalContentType = 'checklist:item:remove') => {
         this.contoller.modalUpdateContent(modalContentType);
         this.contoller.modalToggle(value)
@@ -83,6 +69,14 @@ export default class App extends Component {
         return actions.find(item => item.typeName === currentAction)
       },
     }
+  }
+
+  // Hooks
+
+  render() {
+    const { checkList: checkListState, modal } = this.state;
+    const apiCheckList = this.initApiCheckList();
+    const apiModal = this.initApiModal();
 
     const app = {
       checkList: {
@@ -104,7 +98,7 @@ export default class App extends Component {
             <Redirect to={'/'}/>
           </ModelProvider>
         </Switch>
-        <ModalActions modalService={apiModal} modal={modal} />
+        <ModalActions modal={app.modal} />
       </div>
     )
   }

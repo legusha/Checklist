@@ -19,6 +19,11 @@ export default function ({ checkList }, setState) {
       const handler = updateNote.bind(this, checkList, item);
       setState(handler)
     },
+    deleteNote: (item) => {
+      console.log(item)
+      // const handler = updateNote.bind(this, checkList, item);
+      // setState(handler)
+    },
 
 
     // Modal

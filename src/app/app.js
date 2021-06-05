@@ -54,13 +54,14 @@ export default class App extends Component {
       newTodo: checkList.newTodo.bind(checkList),
       newNote: checkList.newNote.bind(checkList),
       updateTodo: this.contoller.updateTodo,
-      updateNote: this.contoller.updateNote
+      updateNote: this.contoller.updateNote,
+      deleteNote: this.contoller.deleteNote,
     }
   }
   initApiModal = () => {
     const { modal } = this.state;
     return {
-      update: (value, modalContentType = 'checklist:item:remove') => {
+      update: (item, value, modalContentType = 'checklist:item:remove', props) => {
         this.contoller.modalUpdateContent(modalContentType);
         this.contoller.modalToggle(value)
       },

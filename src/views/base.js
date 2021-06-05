@@ -36,7 +36,7 @@ class Base extends Component {
   handleActionCard = (item, actionType) => {
     const action = this.state.checkList.events.actionsModal.find(item => item.typeName === actionType);
     if (action) {
-      action.handler(...action.args)
+      action.handler(item, ...action.args)
     }
   }
 

@@ -9,6 +9,8 @@ const {
 
 export default function ({ checkList }, setState) {
   return {
+    // Checklist
+
     updateTodo: (item) => {
       const handler = updateTodo.bind(this, checkList, item);
       setState(handler);
@@ -17,25 +19,30 @@ export default function ({ checkList }, setState) {
       const handler = updateNote.bind(this, checkList, item);
       setState(handler)
     },
-    updateModal: (value) => {
-      const handler = setModalDisplay.bind(this, value);
-      setState(handler)
-    },
-    updateModalActionType: (value) => {
+
+
+    // Modal
+
+    modalUpdateContent: (value) => {
       const handler = setModalAction.bind(this, value);
       setState(handler)
     },
 
+    modalUpdate: (value) => {
+      const handler = setModalDisplay.bind(this, value);
+      setState(handler)
+    },
+
     modalToggle(value) {
-      this.updateModal(value)
+      this.modalUpdate(value)
     },
 
-    showModal() {
-      this.updateModal(true)
+    modalShow() {
+      this.modalUpdate(true)
     },
 
-    hideModal() {
-      this.updateModal(false)
+    modalHide() {
+      this.modalUpdate(false)
     }
   }
 }

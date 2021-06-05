@@ -11,8 +11,6 @@ import ModalActions from '../components/modal';
 import ModalContent from '../components/modal-content';
 
 import { Checklist, Note, Todo } from '../services';
-
-// const { updateTodo, updateNote, setModalDisplay, setModalAction } = mutation;
 const checkList = new Checklist (new Note(), new Todo());
 
 
@@ -51,13 +49,13 @@ export default class App extends Component {
       },
       modal: {
         show: false,
-        makeShow: this.showModal,
+        makeShow: this.contoller.modalShow,
         makeHide: () => {},
         context: {},
         actions: ModalContent({
           handlers: {
-            modalShow: this.contoller.showModal.bind(this.contoller),
-            modalHide: this.contoller.hideModal.bind(this.contoller)
+            modalShow: this.contoller.modalShow.bind(this.contoller),
+            modalHide: this.contoller.modalHide.bind(this.contoller)
           }
         }),
         currentAction: '',
@@ -76,11 +74,11 @@ export default class App extends Component {
       updateNote: this.contoller.updateNote
     }
     const apiModal = {
-      updateModal: (value, modalContentType = 'checklist:item:remove') => {
-        this.contoller.updateModalActionType(modalContentType);
+      update: (value, modalContentType = 'checklist:item:remove') => {
+        this.contoller.modalUpdateContent(modalContentType);
         this.contoller.modalToggle(value)
       },
-      currentAction: () => {
+      currentContent: () => {
         const { currentAction, actions } = modal
         return actions.find(item => item.typeName === currentAction)
       },

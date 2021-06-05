@@ -6,11 +6,11 @@ import BButton from 'react-bootstrap/Button'
 export default function ModalActions ({ modalService, modal }) {
 
   function setModalDisplay(show = false) {
-    modalService.updateModal(show)
+    modalService.update(show)
   }
 
   function getModalCurrentAction () {
-    return modalService.currentAction()
+    return modalService.currentContent()
   }
 
   // function setModalCurrentAction (typeName) {

@@ -22,14 +22,14 @@ export default function ({ handlers }) {
     {
       typeName: 'checklist:item:remove',
       content: {
-        header: <div>Header</div>,
-        body: <div>Body</div>,
+        header: <div className="font-20 font-weight-6 text-muted">Are you sure?</div>,
+        body: <div className="font-14 font-weight-6">Please accept action or cancel.</div>,
         footer: <div>
-          <BButton variant="secondary" onClick={modalHide}>
-            Close
+          <BButton variant="secondary" onClick={modalHide} size="sm">
+            Cancel
           </BButton>
-          <BButton variant="primary" onClick={modalHide}>
-            Save Changes
+          <BButton variant="primary" onClick={modalHide} size="sm" className="ml-3">
+            Accept
           </BButton>
         </div>
       }

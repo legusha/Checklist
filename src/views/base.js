@@ -172,7 +172,7 @@ class Base extends Component {
       <section className="container main">
         <div className="main-action text-left mb-4 p-4 border-secondary bg-secondary d-flex align-items-center justify-content-between">
           <div>
-            <h3 className={'text-muted'}>Welcome to Checklist</h3>
+            <h3 className={'text-muted font-weight-6 font-24'}>Welcome to Checklist</h3>
           </div>
           <div>
             {this.button}

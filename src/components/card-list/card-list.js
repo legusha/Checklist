@@ -24,7 +24,7 @@ export default function CardList ({ list , view, action }) {
             classNameWrap={['card', 'mb-3', 'note', 'bg-white', 'h-100']}
             header={
               <div className='d-flex align-center justify-between w-100'>
-                <h3 className='m-0 font-18 font-weight-5'>{title}</h3>
+                <h3 className='m-0 font-18 font-weight-6'>{title}</h3>
                 <div className='text-right'>
                   {/*<IconPencil className='text-success cursor-point' onClick={() => handleIconAction(item, 'edit')}/>*/}
                   <IconClose className='text-danger cursor-point' onClick={() => handleIconAction(item, 'delete')}/>

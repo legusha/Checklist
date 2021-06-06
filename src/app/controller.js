@@ -28,8 +28,8 @@ export default function ({ checkList }, setState) {
 
     // Modal
 
-    modalUpdateContent: (value, props) => {
-      const handler = setModalAction.bind(this, value, props);
+    modalUpdateContent: (...args) => {
+      const handler = setModalAction.bind(this, ...args);
       setState(handler)
     },
 

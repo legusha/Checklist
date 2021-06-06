@@ -29,7 +29,7 @@ export default function ({ handlers, props }) {
           <BButton variant="secondary" onClick={modalHide} size="sm">
             Cancel
           </BButton>
-          <BButton variant="primary" onClick={props.delete} size="sm" className="ml-3">
+          <BButton variant="primary" onClick={() => props.delete(props.item)} size="sm" className="ml-3">
             Accept
           </BButton>
         </div>

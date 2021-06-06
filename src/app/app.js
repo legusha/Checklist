@@ -60,9 +60,13 @@ export default class App extends Component {
   initApiModal = () => {
     const { modal } = this.state;
     return {
-      update: (item, value, modalContentType = 'checklist:item:remove', props) => {
-        this.contoller.modalUpdateContent(modalContentType, props);
-        this.modalContent = this.initModalContent(props)
+      update: (value, modalContentType = 'checklist:item:remove') => {
+        this.contoller.modalUpdateContent(modalContentType);
+        this.contoller.modalToggle(value)
+      },
+      updateWithItem: (item, value, modalContentType = 'checklist:item:remove', props) => {
+        this.contoller.modalUpdateContent(modalContentType);
+        this.modalContent = this.initModalContent({ item, ...props })
         this.contoller.modalToggle(value)
       },
       currentContent: () => {

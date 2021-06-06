@@ -92,15 +92,13 @@ class Base extends Component {
         actionsModal: [
           {
             typeName: 'edit',
-            handler: this.props.app.modal.update,
-            args: [true, 'checklist:item:edit']
+            handler: this.props.app.modal.updateWithItem,
+            args: [true, 'checklist:item:edit', { edit: this.props.app.checkList.deleteNote }]
           },
           {
             typeName: 'delete',
-            handler: this.props.app.modal.update,
-            args: [true, 'checklist:item:remove', {delete: () => {
-              console.log('handler from base page');
-              }}]
+            handler: this.props.app.modal.updateWithItem,
+            args: [true, 'checklist:item:remove', { delete: this.props.app.checkList.deleteNote }]
           }
         ],
       },

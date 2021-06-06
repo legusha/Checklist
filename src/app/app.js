@@ -1,107 +1,118 @@
-import React, { Component } from 'react'
-import {Route, Switch, Redirect} from 'react-router-dom'
+import React, { Component } from 'react';
+import {Route, Switch, Redirect} from 'react-router-dom';
 
-import PageBase from '../views/base'
-import PageNote from '../views/note'
+import Controller from './controller'
+
+import PageBase from '../views/base';
+import PageNote from '../views/note';
 
 import { ModelProvider } from '../components/model-context';
-import {Modal} from '../components/ui';
-import BButton from 'react-bootstrap/Button';
+import ModalActions from '../components/modal';
+import ModalContent from '../components/modal-content';
+
+import { Checklist, Note, Todo } from '../services';
+const checkList = new Checklist (new Note(), new Todo());
+
 
 export default class App extends Component {
-  handleModalDisplay = (show = false) => {
-    const modal = { ...this.state.modal }
-    modal.show = show
-    this.setState({ modal })
-  }
-  handleModalDisplayShow = ({ typeName }) => {
-    return async (item) => {
-      await this.setModalCurrentAction(typeName, { item })
-      this.handleModalDisplay(true)
-    }
-  }
-  handleModalAccept = () => {
-    const props = this.state?.modal?.current?.props
-    const { store, actions } = this.props
-    store.dispatch(actions.checkListItemRemove(props))
-    console.log(props)
-    console.log(this.props)
-  }
 
-  getModalCurrentAction = () => {
-    const { current, actions } = this.state.modal
-    const currentAction = actions.find(item => item.typeName === current.typeName)
-    return { ...currentAction, props: current.props }
-  }
-  async setModalCurrentAction (typeName = '', props = {}) {
-    const newState = oldState => {
-      const modal = {
-        ...oldState.modal,
-        current: {
-          typeName: typeName,
-          props: props
-        },
-      }
-      return {
-        ...oldState,
-        modal
-      }
-    }
-    await this.setState(newState)
-  }
+  constructor(props) {
+    super(props);
+    this.contoller = new Controller({ checkList }, this.setState.bind(this));
 
-
-  state = {
-    checkList: this.props.store.getState().checklist.checklist,
-    modal: {
-      show: false,
-      current: {
-        typeName: '',
-        props: {}
+    this.state = {
+      checkList: {
+        note: [
+          checkList.newNote({title: 'Note #1'}),
+          checkList.newNote({title: 'Note #2'}),
+          checkList.newNote({title: 'Note #3'}),
+          checkList.newNote({title: 'Note #4'}),
+        ],
+        todo: [
+          checkList.newTodo({noteId: 105, title: 'Checkbox First notes'}),
+          checkList.newTodo({noteId: 105, title: 'Checkbox Second notes'}),
+          checkList.newTodo({noteId: 106, title: 'Checkbox Three notes'}),
+          checkList.newTodo({noteId: 108, title: 'Checkbox First notes 2'}),
+        ],
       },
-      currentAction: '',
-      makeShow: this.handleModalDisplayShow,
-      makeHide: this.handleModalDisplay.bind(this, false),
-      actions: [
-        {
-          typeName: 'checklist:item:remove',
-          content: {
-            header: <div>Modal Accept</div>,
-            body: <div>Are you sure? Do you want to delete item?</div>,
-            footer: <div>
-              <BButton variant="outline-primary" onClick={this.handleModalDisplay.bind(this, false)}>
-                Cancel
-              </BButton>
-              <BButton variant="outline-danger" className={'ml-2'} onClick={this.handleModalAccept}>
-                Accept
-              </BButton>
-            </div>
-          }
-        }
-      ],
+      modal: {
+        show: false,
+        context: {},
+        currentContentType: '',
+      },
+    }
+
+    this.modalContent = this.initModalContent();
+  }
+
+  // Init handlers
+
+  initApiCheckList = () => {
+    return {
+      newTodo: checkList.newTodo.bind(checkList),
+      newNote: checkList.newNote.bind(checkList),
+      updateTodo: this.contoller.updateTodo,
+      updateNote: this.contoller.updateNote,
+      deleteNote: this.contoller.deleteNote,
     }
   }
+  initApiModal = () => {
+    const { modal } = this.state;
+    return {
+      update: (value, modalContentType = 'checklist:item:remove') => {
+        this.contoller.modalUpdateContent(modalContentType);
+        this.contoller.modalToggle(value)
+      },
+      updateWithItem: (item, value, modalContentType = 'checklist:item:remove', props) => {
+        this.contoller.modalUpdateContent(modalContentType);
+        this.modalContent = this.initModalContent({ item, ...props })
+        this.contoller.modalToggle(value)
+      },
+      currentContent: () => {
+        const { currentContentType } = modal
+        return this.modalContent.find(item => item.typeName === currentContentType)
+      },
+    }
+  }
+  initModalContent(props = {}) {
+    return ModalContent({
+      handlers: {
+        modalShow: this.contoller.modalShow.bind(this.contoller),
+        modalHide: this.contoller.modalHide.bind(this.contoller)
+      },
+      modal: this.initApiModal(),
+      props,
+    })
+  }
+
+  // Hooks
+
   render() {
-    const { handleModalDisplay, getModalCurrentAction } = this
-    const { checkList, modal } = this.state
+    const { checkList: checkListState, modal } = this.state;
+    const apiCheckList = this.initApiCheckList();
+    const apiModal = this.initApiModal();
+
+    const app = {
+      checkList: {
+        ...checkListState,
+        ...apiCheckList,
+      },
+      modal: {
+        ...modal,
+        ...apiModal
+      }
+    }
 
     return (
       <div className="App, mt-4">
         <Switch>
-          <ModelProvider value={{checkList, modal}}>
+          <ModelProvider value={{ app }}>
             <Route path="/" component={PageBase} exact />
             <Route path="/note" component={PageNote} exact />
             <Redirect to={'/'}/>
           </ModelProvider>
         </Switch>
-        <Modal
-          show={modal.show}
-          header={getModalCurrentAction()?.content?.header}
-          body={getModalCurrentAction()?.content?.body}
-          footer={getModalCurrentAction()?.content?.footer}
-          handleShow={handleModalDisplay.bind(this, true)}
-          handleClose={handleModalDisplay.bind(this, false)}
-        />
+        <ModalActions modal={app.modal} />
       </div>
     )
   }

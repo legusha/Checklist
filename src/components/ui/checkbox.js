@@ -1,6 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 export default function Checkbox ({ option, handler }) {
+  Checkbox.propTypes = {
+    option: PropTypes.object,
+    handler: PropTypes.func
+  }
   const { id, title, executeFlag } = option
 
   return (

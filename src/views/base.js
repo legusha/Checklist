@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { Button, FormInput } from '../components/ui'
 import CardList from '../components/card-list'
 import CheckboxList from '../components/checkbox-list'
+import EmptyValue from '../components/empty-value'
 import { WithModelContext } from '../components/hoc'
 
 
@@ -10,71 +11,38 @@ class Base extends Component {
 
   handleChangeListNote = (item, e) => {
     const classNameCheckbox = 'checkbox-wrap'
-    const isCheckbox = e?.target?.parentNode?.classList?.contains(classNameCheckbox)
+    const isCheckbox = e.target.parentNode.classList.contains(classNameCheckbox)
     if (isCheckbox) {
-      this.setState((oldState) => {
-        const listTodo = oldState.checkList.todo
-        const indexItem = listTodo.findIndex(todo => todo.id === item.id)
-
-        const newTodo = this.props.checkList.newTodo({ ...item, executeFlag: !item.executeFlag })
-
-        const startAllTodo = listTodo.slice(0, indexItem)
-        const endAllTodo = listTodo.slice(indexItem + 1)
-
-        const allTodo = [...startAllTodo, newTodo, ...endAllTodo]
-
-        return {
-          ...oldState,
-          checkList: {
-            ...oldState.checkList,
-            todo: allTodo
-          }
-        }
-      })
-      // e.target.checked
-      console.log(item)
+      this.props.app.checkList.updateTodo(item)
     }
   }
 
   handleChangeFormInput = e => {
-    e.stopPropagation()
+    e.stopPropagation();
 
-    const formInput = { ...this.state.formInput }
-    formInput.input.value = e.target.value
+    const formInput = { ...this.state.formInput };
+    formInput.input.value = e.target.value;
 
     this.setState({formInput})
   }
 
   handleSubmitFormInput = e => {
+    e.preventDefault();
+    e.stopPropagation();
 
-    e.preventDefault()
-    e.stopPropagation()
+    this.props.app.checkList.updateNote({title: this.state.formInput.input.value})
+  }
 
-    // this.state.formInput.input.value
-    const title = this.state.formInput.input.value
-    if (title) {
-      const newNote = this.props.checkList.newNote({
-        title
-      })
-
-      this.setState((oldState) => {
-        return {
-          ...oldState,
-          checkList: {
-            ...oldState.checkList,
-            note: [newNote, ...oldState.checkList.note]
-          }
-        }
-      })
+  handleActionCard = (item, actionType) => {
+    const action = this.state.checkList.events.actionsModal.find(item => item.typeName === actionType);
+    if (action) {
+      action.handler(item, ...action.args)
     }
   }
 
   toggleFormInput = e => {
     const newState = oldState => {
-      const formInput = {
-        ...oldState.formInput,
-        show: !oldState.formInput.show
-      }
+      const formInput = { ...oldState.formInput, show: !oldState.formInput.show }
       return {
         ...oldState,
         formInput
@@ -84,11 +52,22 @@ class Base extends Component {
   }
 
   state = {
-    model: null,
     buttons: {
       all: [
-        {to: '/note', label: 'Add', color: 'success', nextCurrentIndex: 1, onClick: this.toggleFormInput},
-        {to: '/', label: 'Cancel', color: 'primary', nextCurrentIndex: 0, onClick: this.toggleFormInput}
+        {
+          to: '/note',
+          label: 'Add',
+          color: 'success',
+          nextCurrentIndex: 1,
+          onClick: this.toggleFormInput
+        },
+        {
+          to: '/',
+          label: 'Cancel',
+          color: 'primary',
+          nextCurrentIndex: 0,
+          onClick: this.toggleFormInput
+        }
       ],
       currentIndex: 0
     },
@@ -109,31 +88,43 @@ class Base extends Component {
       events: {
         self: this,
         onChangeCheckbox: this.handleChangeListNote,
-        onChangeList: this.handleCardList.bind(this),
+        onActionCard: this.handleActionCard,
+        actionsModal: [
+          {
+            typeName: 'edit',
+            handler: this.props.app.modal.updateWithItem,
+            args: [true, 'checklist:item:edit', { edit: this.props.app.checkList.deleteNote }]
+          },
+          {
+            typeName: 'delete',
+            handler: this.props.app.modal.updateWithItem,
+            args: [true, 'checklist:item:remove', { delete: this.props.app.checkList.deleteNote }]
+          }
+        ],
       },
-      actions: [
-        {
-          typeName: 'edit',
-          handler: () => {},
-        },
-        {
-          typeName: 'remove',
-          handler: this.props.modal.makeShow({ typeName: 'checklist:item:remove' }),
-        }
-      ],
-      note: [
-        this.props.checkList.newNote({title: 'Note #1'}),
-        this.props.checkList.newNote({title: 'Note #2'}),
-        this.props.checkList.newNote({title: 'Note #3'}),
-        this.props.checkList.newNote({title: 'Note #4'}),
-      ],
-      todo: [
-        this.props.checkList.newTodo({noteId: 105, title: 'Checkbox First notes'}),
-        this.props.checkList.newTodo({noteId: 105, title: 'Checkbox Second notes'}),
-        this.props.checkList.newTodo({noteId: 106, title: 'Checkbox Three notes'}),
-        this.props.checkList.newTodo({noteId: 108, title: 'Checkbox First notes 2'}),
-      ]
     },
+    emptyValue: {
+      text: 'Список пуст',
+      classNameWrap: [
+        'w-100',
+        'h-100',
+        'd-flex',
+        'align-items-center',
+        'justify-content-center',
+        'text-muted',
+      ],
+      classNameWrapChecklist: [
+        'w-100',
+        'h-100',
+        'd-flex',
+        'align-items-center',
+        'justify-content-center',
+        'text-muted',
+        'p-4',
+        'border',
+        'mt-4'
+      ],
+    }
   }
 
   get button () {
@@ -153,19 +144,11 @@ class Base extends Component {
   handleButton ({ nextCurrentIndex, onClick }) {
     onClick()
     this.button = nextCurrentIndex
-  }
 
-  handleCardList (actionName) {
-    return (...args) => {
-      const action = this.state.checkList.actions.find(item => item.typeName === actionName)
-      if (action) {
-        action.handler(...args)
-      }
-    }
   }
 
   findByNoteIdTodo = (id) => {
-    const { todo } = this.state.checkList
+    const { todo } = this.props.app.checkList
     return todo.filter(item => item.noteId === id)
   }
 
@@ -184,6 +167,9 @@ class Base extends Component {
   renderTodo (listTodo) {
     const { events } = this.state.checkList
 
+    if (listTodo.length === 0) return (
+      <EmptyValue {...this.state.emptyValue}/>
+    )
     return (
       <CheckboxList
         todo={listTodo}
@@ -191,40 +177,55 @@ class Base extends Component {
       />
     )
   }
+  renderChecklist() {
+    const note = this.props.app.checkList.note
+    const noteEmpty = note.length === 0
 
-  render () {
-    const { formInput, checkList } = this.state
+    if (noteEmpty) return (
+      <EmptyValue {...this.state.emptyValue} classNameWrap={this.state.emptyValue.classNameWrapChecklist}/>
+    )
     const checkboxListView = {
       render: this.renderTodo.bind(this),
-      helper: this.findByNoteIdTodo.bind(this)
+      helper: this.findByNoteIdTodo.bind(this),
     }
+    return (
+      <CardList
+        list={ this.props.app.checkList.note }
+        view={ checkboxListView }
+        action={this.handleActionCard}
+      />
+    )
+  }
+
+  render () {
+    const { formInput } = this.state
     const showFormInput = formInput.show ? <FormInput {...formInput} /> : null
 
     return (
       <section className="container main">
         <div className="main-action text-left mb-4 p-4 border-secondary bg-secondary d-flex align-items-center justify-content-between">
           <div>
-            <h3 className={'text-muted'}>Welcome to Checklist</h3>
+            <h3 className={'text-muted font-weight-6 font-24'}>Welcome to Checklist</h3>
           </div>
           <div>
             {this.button}
           </div>
         </div>
         {showFormInput}
-        <CardList
-          list={ checkList.note }
-          view={ checkboxListView }
-          handleIcon={ checkList.events.onChangeList }
-        />
+        {this.renderChecklist()}
+        {/*<CardList*/}
+        {/*  list={ this.props.app.checkList.note }*/}
+        {/*  view={ checkboxListView }*/}
+        {/*  action={this.handleActionCard}*/}
+        {/*/>*/}
       </section>
     )
   }
 }
 
-const mapContextToProps = ({ checkList, modal }) => {
+const mapContextToProps = ({ app }) => {
   return {
-    checkList,
-    modal
+    app,
   }
 }
 

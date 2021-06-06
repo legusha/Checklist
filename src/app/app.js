@@ -39,7 +39,6 @@ export default class App extends Component {
         show: false,
         context: {},
         currentContentType: '',
-        currentContentProps: {},
       },
     }
 
@@ -81,6 +80,7 @@ export default class App extends Component {
         modalShow: this.contoller.modalShow.bind(this.contoller),
         modalHide: this.contoller.modalHide.bind(this.contoller)
       },
+      modal: this.initApiModal(),
       props,
     })
   }

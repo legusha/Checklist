@@ -4,7 +4,8 @@ const {
   updateTodo,
   updateNote,
   setModalDisplay,
-  setModalAction
+  setModalAction,
+  deleteNote,
 } = mutation;
 
 export default function ({ checkList }, setState) {
@@ -20,9 +21,8 @@ export default function ({ checkList }, setState) {
       setState(handler)
     },
     deleteNote: (item) => {
-      console.log(item)
-      // const handler = updateNote.bind(this, checkList, item);
-      // setState(handler)
+      const handler = deleteNote.bind(this, item);
+      setState(handler)
     },
 
 

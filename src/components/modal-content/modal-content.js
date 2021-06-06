@@ -1,8 +1,9 @@
 import BButton from "react-bootstrap/Button";
 import React from "react";
 
-export default function ({ handlers }) {
+export default function ({ handlers, props }) {
   const { modalShow, modalHide } = handlers
+  console.log(props);
   return [
     {
       typeName: 'checklist:item:edit',
@@ -28,7 +29,7 @@ export default function ({ handlers }) {
           <BButton variant="secondary" onClick={modalHide} size="sm">
             Cancel
           </BButton>
-          <BButton variant="primary" onClick={modalHide} size="sm" className="ml-3">
+          <BButton variant="primary" onClick={props.delete} size="sm" className="ml-3">
             Accept
           </BButton>
         </div>

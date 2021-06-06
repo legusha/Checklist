@@ -18,7 +18,7 @@ export default class App extends Component {
 
   constructor(props) {
     super(props);
-    this.contoller = new Controller({ checkList }, this.setState.bind(this))
+    this.contoller = new Controller({ checkList }, this.setState.bind(this));
 
     this.state = {
       checkList: {
@@ -38,16 +38,15 @@ export default class App extends Component {
       modal: {
         show: false,
         context: {},
-        actions: ModalContent({
-          handlers: {
-            modalShow: this.contoller.modalShow.bind(this.contoller),
-            modalHide: this.contoller.modalHide.bind(this.contoller)
-          }
-        }),
-        currentAction: '',
+        currentContentType: '',
+        currentContentProps: {},
       },
     }
+
+    this.modalContent = this.initModalContent();
   }
+
+  // Init handlers
 
   initApiCheckList = () => {
     return {
@@ -62,14 +61,24 @@ export default class App extends Component {
     const { modal } = this.state;
     return {
       update: (item, value, modalContentType = 'checklist:item:remove', props) => {
-        this.contoller.modalUpdateContent(modalContentType);
+        this.contoller.modalUpdateContent(modalContentType, props);
+        this.modalContent = this.initModalContent(props)
         this.contoller.modalToggle(value)
       },
       currentContent: () => {
-        const { currentAction, actions } = modal
-        return actions.find(item => item.typeName === currentAction)
+        const { currentContentType } = modal
+        return this.modalContent.find(item => item.typeName === currentContentType)
       },
     }
+  }
+  initModalContent(props = {}) {
+    return ModalContent({
+      handlers: {
+        modalShow: this.contoller.modalShow.bind(this.contoller),
+        modalHide: this.contoller.modalHide.bind(this.contoller)
+      },
+      props,
+    })
   }
 
   // Hooks

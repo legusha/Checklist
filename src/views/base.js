@@ -98,7 +98,9 @@ class Base extends Component {
           {
             typeName: 'delete',
             handler: this.props.app.modal.update,
-            args: [true, 'checklist:item:remove']
+            args: [true, 'checklist:item:remove', {delete: () => {
+              console.log('handler from base page');
+              }}]
           }
         ],
       },

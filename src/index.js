@@ -1,13 +1,21 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import App from './app'
+import {BrowserRouter} from 'react-router-dom'
+import * as serviceWorker from './serviceWorker'
+
+import './assets/scss/main.scss'
+
+const application = (
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
+)
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  application,
   document.getElementById('root')
 );
 

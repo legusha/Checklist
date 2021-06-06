@@ -1,0 +1,44 @@
+@import 'node_modules/bootstrap/scss/functions';
+@import 'node_modules/bootstrap/scss/variables';
+
+
+$container-width: 1200px;
+
+$white: #FFFFFF;
+$black: #2c3e50;
+$success: rgba(33, 180, 96, .9);
+$primary: #385cfa;
+$secondary: #b3bfdc5e;
+$danger: #d44950;
+
+$primary-action: #0094F6;
+$primary-action-extra: #47a7f5;
+
+$success-action: #12ac5c;
+$success-action-extra: #11c468;
+
+$secondary-extra: #b6b6b6;
+$secondary-shadow: 0 0 4px #999;
+$secondary-shadow-extra: 0 0 2px rgba(169, 164, 164, 0.3);
+
+$card-width: 240px;
+$card-border: $secondary;
+
+
+// Body
+//
+// Settings for the `<body>` element.
+
+$body-bg:                   $white !default;
+$body-color:                $black;
+
+
+$theme-colors: (
+  primary: $primary,
+  secondary: $secondary,
+  success: $success
+);
+
+
+$input-color:                           $gray-700
+

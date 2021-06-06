@@ -2,8 +2,7 @@ import BButton from "react-bootstrap/Button";
 import React from "react";
 
 export default function ({ handlers, modal, props }) {
-  const { modalShow, modalHide } = handlers
-  console.log(props);
+  const { modalHide } = handlers
 
   function handlerWrap(show = false, handler, ...args) {
     handler(...args)

@@ -105,7 +105,25 @@ class Base extends Component {
     },
     emptyValue: {
       text: 'Список пуст',
-      classNameWrap: ['w-100', 'h-100', 'd-flex', 'align-items-center', 'justify-content-center', 'text-muted'],
+      classNameWrap: [
+        'w-100',
+        'h-100',
+        'd-flex',
+        'align-items-center',
+        'justify-content-center',
+        'text-muted',
+      ],
+      classNameWrapChecklist: [
+        'w-100',
+        'h-100',
+        'd-flex',
+        'align-items-center',
+        'justify-content-center',
+        'text-muted',
+        'p-4',
+        'border',
+        'mt-4'
+      ],
     }
   }
 
@@ -159,13 +177,28 @@ class Base extends Component {
       />
     )
   }
+  renderChecklist() {
+    const note = this.props.app.checkList.note
+    const noteEmpty = note.length === 0
 
-  render () {
-    const { formInput } = this.state
+    if (noteEmpty) return (
+      <EmptyValue {...this.state.emptyValue} classNameWrap={this.state.emptyValue.classNameWrapChecklist}/>
+    )
     const checkboxListView = {
       render: this.renderTodo.bind(this),
       helper: this.findByNoteIdTodo.bind(this),
     }
+    return (
+      <CardList
+        list={ this.props.app.checkList.note }
+        view={ checkboxListView }
+        action={this.handleActionCard}
+      />
+    )
+  }
+
+  render () {
+    const { formInput } = this.state
     const showFormInput = formInput.show ? <FormInput {...formInput} /> : null
 
     return (
@@ -179,11 +212,12 @@ class Base extends Component {
           </div>
         </div>
         {showFormInput}
-        <CardList
-          list={ this.props.app.checkList.note }
-          view={ checkboxListView }
-          action={this.handleActionCard}
-        />
+        {this.renderChecklist()}
+        {/*<CardList*/}
+        {/*  list={ this.props.app.checkList.note }*/}
+        {/*  view={ checkboxListView }*/}
+        {/*  action={this.handleActionCard}*/}
+        {/*/>*/}
       </section>
     )
   }

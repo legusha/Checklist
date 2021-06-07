@@ -1,4 +1,4 @@
-import {mutation} from "../services";
+import {mutation} from '~/services/shared';
 
 const {
   updateTodo,

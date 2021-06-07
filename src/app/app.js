@@ -10,8 +10,14 @@ import { ModelProvider } from '~/components/model-context';
 import ModalActions from '~/components/modal';
 import ModalContent from '~/components/modal-content';
 
-import { Checklist, Note, Todo } from '~/services';
-const checkList = new Checklist (new Note(), new Todo());
+import { Checklist, Todo } from '~/services/shared';
+import note from '~/services/shared/request/note';
+
+const checkList = new Checklist ({newItem (props) {
+    return {
+      ...props
+    }
+  }}, new Todo());
 
 
 export default class App extends Component {
@@ -83,6 +89,11 @@ export default class App extends Component {
       modal: this.initApiModal(),
       props,
     })
+  }
+
+  async componentDidMount() {
+    const data = await note.getNote();
+    console.log(data)
   }
 
   // Hooks

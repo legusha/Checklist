@@ -1,9 +1,9 @@
+import request from './request'
 import Checklist from './checklist'
-import Todo from './todo'
 import mutation from './mutation'
 
 export {
-  Checklist,
-  Todo,
-  mutation
+  request,
+  mutation,
+  Checklist
 }

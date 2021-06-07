@@ -10,14 +10,22 @@ import { ModelProvider } from '~/components/model-context';
 import ModalActions from '~/components/modal';
 import ModalContent from '~/components/modal-content';
 
-import { Checklist, Todo } from '~/services/shared';
-import note from '~/services/shared/request/note';
+import { Checklist } from '~/services/shared';
+import request from '~/services/shared/request';
 
 const checkList = new Checklist ({newItem (props) {
     return {
       ...props
     }
-  }}, new Todo());
+  }}, {
+  newItem (props) {
+    const { executeFlag = false } = props
+    return {
+      ...props,
+      executeFlag
+    }
+  }
+});
 
 
 export default class App extends Component {
@@ -92,8 +100,9 @@ export default class App extends Component {
   }
 
   async componentDidMount() {
-    const data = await note.getNote();
-    console.log(data)
+    const data = await request.getNote();
+    const data2 = await request.getTodo();
+    console.log(data, data2)
   }
 
   // Hooks

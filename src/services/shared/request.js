@@ -4,7 +4,7 @@ import { utilsServices } from '~/utils'
 
 const { attachArgsToMethods, params } = utilsServices
 
-const resourceMain = {
+const requestConfig = {
   request: {
     baseURL: 'http://localhost:3001/',
     headers: {
@@ -13,13 +13,7 @@ const resourceMain = {
     },
   },
   helper: {
-    params: [
-      // example
-      // {
-      //   type: 'query',
-      //   query: 'query',
-      // },
-    ],
+    params: [],
     ...params,
   },
   // Endpoints must be in the type of Functions and return type String
@@ -27,38 +21,42 @@ const resourceMain = {
     note() {
       return `note`
     },
+    todo() {
+      return `todo`
+    },
   },
 }
 
-const { request, endPoints } = resourceMain
+const { request, endPoints } = requestConfig
 const instanceRequest = axios.create(request)
 
-const mapFunc = {
+const urls = {
   getNote: 'note',
+  getTodo: 'todo',
 }
 
 const attachEndPoints = {
   mapEndPoints: endPoints,
-  config: resourceMain,
-  ...attachArgsToMethods(mapFunc),
+  config: requestConfig,
+  ...attachArgsToMethods(urls),
 }
 
-class Note extends Http {
+class Request extends Http {
   constructor(request, attachEndPoints) {
     super(request, attachEndPoints)
     // One instance for all
-    if (typeof Note.instance === 'object') {
-      return Note.instance
+    if (typeof Request.instance === 'object') {
+      return Request.instance
     }
 
     attachEndPoints.attach(this)
 
-    Note.instance = this
+    Request.instance = this
     return this
   }
 
   setAuthToken(token) {
-    resourceMain.token = token
+    requestConfig.token = token
   }
 
   // Note
@@ -67,6 +65,11 @@ class Note extends Http {
     const source = this.generateSource(endPoint, [])
     return await this.makeRequestResource(this.getResource, [source])
   }
+
+  async getTodo(endPoint) {
+    const source = this.generateSource(endPoint, [])
+    return await this.makeRequestResource(this.getResource, [source])
+  }
 }
 
-export default new Note(instanceRequest, attachEndPoints)
+export default new Request(instanceRequest, attachEndPoints)

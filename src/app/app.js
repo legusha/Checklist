@@ -3,7 +3,7 @@ import {Route, Switch, Redirect} from 'react-router-dom';
 
 import Controller from './controller'
 
-import PageBase from '../views/base';
+import PageBase from '@views/base';
 import PageNote from '../views/note';
 
 import { ModelProvider } from '../components/model-context';

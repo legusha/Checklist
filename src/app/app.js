@@ -27,7 +27,6 @@ const checkList = new Checklist ({newItem (props) {
   }
 });
 
-
 export default class App extends Component {
 
   constructor(props) {
@@ -36,18 +35,8 @@ export default class App extends Component {
 
     this.state = {
       checkList: {
-        note: [
-          checkList.newNote({title: 'Note #1'}),
-          checkList.newNote({title: 'Note #2'}),
-          checkList.newNote({title: 'Note #3'}),
-          checkList.newNote({title: 'Note #4'}),
-        ],
-        todo: [
-          checkList.newTodo({noteId: 105, title: 'Checkbox First notes'}),
-          checkList.newTodo({noteId: 105, title: 'Checkbox Second notes'}),
-          checkList.newTodo({noteId: 106, title: 'Checkbox Three notes'}),
-          checkList.newTodo({noteId: 108, title: 'Checkbox First notes 2'}),
-        ],
+        note: [],
+        todo: [],
       },
       modal: {
         show: false,
@@ -100,9 +89,10 @@ export default class App extends Component {
   }
 
   async componentDidMount() {
-    const data = await request.getNote();
-    const data2 = await request.getTodo();
-    console.log(data, data2)
+    const listNote = await request.getNote();
+    const listTodo = await request.getTodo();
+    this.contoller.setNote(listNote)
+    this.contoller.setTodo(listTodo)
   }
 
   // Hooks

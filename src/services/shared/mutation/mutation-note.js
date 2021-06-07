@@ -29,4 +29,16 @@ const deleteNote = function (item, oldState) {
   }
 }
 
-export {updateNote, deleteNote}
+
+
+const setNote = function (noteList, oldState) {
+  return {
+    ...oldState,
+    checkList: {
+      ...oldState.checkList,
+      note: noteList
+    }
+  }
+}
+
+export {updateNote, deleteNote, setNote}

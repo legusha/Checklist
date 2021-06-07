@@ -19,4 +19,14 @@ const updateTodo = function (checklist, item, oldState) {
   }
 }
 
-export {updateTodo}
+const setTodo = function (todoList, oldState) {
+  return {
+    ...oldState,
+    checkList: {
+      ...oldState.checkList,
+      todo: todoList
+    }
+  }
+}
+
+export {updateTodo, setTodo}

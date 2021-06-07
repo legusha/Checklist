@@ -1,8 +1,11 @@
 import {mutation} from '~/services/shared';
+import request from '~/services/shared/request';
 
 const {
   updateTodo,
   updateNote,
+  setNote,
+  setTodo,
   setModalDisplay,
   setModalAction,
   deleteNote,
@@ -11,6 +14,16 @@ const {
 export default function ({ checkList }, setState) {
   return {
     // Checklist
+
+    setNote: (noteList) => {
+      const handler = setNote.bind(this, noteList);
+      setState(handler)
+    },
+
+    setTodo: (todoList) => {
+      const handler = setTodo.bind(this, todoList);
+      setState(handler)
+    },
 
     updateTodo: (item) => {
       const handler = updateTodo.bind(this, checkList, item);

@@ -3,14 +3,14 @@ import {Route, Switch, Redirect} from 'react-router-dom';
 
 import Controller from './controller'
 
-import PageBase from '@/views/base';
-import PageNote from '@/views/note';
+import PageBase from '~/views/base';
+import PageNote from '~/views/note';
 
-import { ModelProvider } from '@/components/model-context';
-import ModalActions from '@/components/modal';
-import ModalContent from '@/components/modal-content';
+import { ModelProvider } from '~/components/model-context';
+import ModalActions from '~/components/modal';
+import ModalContent from '~/components/modal-content';
 
-import { Checklist, Note, Todo } from '@/services';
+import { Checklist, Note, Todo } from '~/services';
 const checkList = new Checklist (new Note(), new Todo());
 
 
@@ -41,7 +41,7 @@ export default class App extends Component {
         currentContentType: '',
       },
     }
-
+    console.log(this.state.checkList);
     this.modalContent = this.initModalContent();
   }
 

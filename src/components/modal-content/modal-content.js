@@ -19,7 +19,7 @@ export default function ({ handlers, modal, props }) {
           <BButton variant="secondary" onClick={modalHide}>
             Close
           </BButton>
-          <BButton variant="primary" onClick={modalHide}>
+          <BButton variant="primary" onClick={handlerWrap.bind(null, false, props.edit, props.item)}>
             Save Changes
           </BButton>
         </div>

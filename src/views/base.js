@@ -99,7 +99,7 @@ class Base extends Component {
           {
             typeName: 'edit',
             handler: this.props.app.modal.updateWithItem,
-            args: [true, 'checklist:item:edit', { edit: this.props.app.checkList.noteDelete }]
+            args: [true, 'checklist:item:edit', { edit: this.props.history.push.bind(this.props.history, '/note') }]
           },
           {
             typeName: 'delete',
@@ -141,14 +141,14 @@ class Base extends Component {
   }
 
   set button (value) {
-    const oldButtons = this.state.buttons
-    const newButtons = Object.assign({ ...oldButtons }, { currentIndex: value })
+    const oldButtons = this.state.buttons;
+    const newButtons = Object.assign({ ...oldButtons }, { currentIndex: value });
 
     this.setState({ buttons: newButtons })
   }
 
   handleButton ({ nextCurrentIndex, onClick }) {
-    onClick()
+    onClick();
     this.button = nextCurrentIndex
 
   }

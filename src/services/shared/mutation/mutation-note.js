@@ -10,27 +10,6 @@ const updateNote = function (checklist, item, oldState) {
   }
 }
 
-const deleteNote = function (item, oldState) {
-
-  const listNote = oldState.checkList.note;
-  const indexItem = listNote.findIndex(note => note.id === item.id);
-
-  const startAllNote = listNote.slice(0, indexItem)
-  const endAllNote = listNote.slice(indexItem + 1)
-
-  const allNote = [...startAllNote, ...endAllNote];
-
-  return {
-    ...oldState,
-    checkList: {
-      ...oldState.checkList,
-      note: allNote,
-    }
-  }
-}
-
-
-
 const setNote = function (noteList, oldState) {
   return {
     ...oldState,
@@ -41,4 +20,4 @@ const setNote = function (noteList, oldState) {
   }
 }
 
-export {updateNote, deleteNote, setNote}
+export {updateNote, setNote}

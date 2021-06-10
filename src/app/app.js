@@ -53,7 +53,7 @@ export default class App extends Component {
     return {
       newTodo: checkList.newTodo.bind(checkList),
       newNote: checkList.newNote.bind(checkList),
-      updateTodo: this.contoller.updateTodo,
+      updateTodo: this.contoller.updateTodo.bind(this.contoller),
       updateNote: this.contoller.updateNote,
       deleteNote: this.contoller.deleteNote.bind(this.contoller),
     }

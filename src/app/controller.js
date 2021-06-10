@@ -19,30 +19,29 @@ export default function ({ checkList }, setState) {
       // setState(handler)
     },
 
-    setNote: (noteList) => {
+    noteUpdateList: (noteList) => {
       const handler = setNote.bind(this, noteList);
       setState(handler)
     },
 
-    setTodo: (todoList) => {
+    todoUpdateList: (todoList) => {
       const handler = setTodo.bind(this, todoList);
       setState(handler)
     },
-
-    async updateTodo (item) {
+    async todoUpdateItem(item) {
       const newTodo = { ...item, executeFlag: !item.executeFlag };
       await request.updateTodo(newTodo);
       const listTodo = await request.getTodo();
-      this.setTodo(listTodo);
+      this.todoUpdateList(listTodo);
     },
-    updateNote: (item) => {
+    noteUpdateItem: (item) => {
       const handler = updateNote.bind(this, checkList, item);
       setState(handler)
     },
     async deleteNote ({ id }) {
       await request.deleteNote(id);
       const listNote = await request.getNote();
-      this.setNote(listNote);
+      this.noteUpdateList(listNote);
     },
 
 

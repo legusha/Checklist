@@ -53,8 +53,8 @@ export default class App extends Component {
     return {
       newTodo: checkList.newTodo.bind(checkList),
       newNote: checkList.newNote.bind(checkList),
-      updateTodo: this.contoller.updateTodo.bind(this.contoller),
-      updateNote: this.contoller.updateNote,
+      updateTodo: this.contoller.todoUpdateItem.bind(this.contoller),
+      updateNote: this.contoller.noteUpdateItem,
       deleteNote: this.contoller.deleteNote.bind(this.contoller),
     }
   }
@@ -90,8 +90,8 @@ export default class App extends Component {
   async componentDidMount() {
     const listNote = await request.getNote();
     const listTodo = await request.getTodo();
-    this.contoller.setNote(listNote)
-    this.contoller.setTodo(listTodo)
+    this.contoller.noteUpdateList(listNote)
+    this.contoller.todoUpdateList(listTodo)
   }
 
   // Hooks

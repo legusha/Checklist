@@ -19,7 +19,7 @@
   ],
   "todo": [
     {
-      "executeFlag": true,
+      "executeFlag": false,
       "id": 5,
       "noteId": 105,
       "title": "Checkbox First notes"
@@ -31,13 +31,13 @@
       "title": "Checkbox Second notes"
     },
     {
-      "executeFlag": true,
+      "executeFlag": false,
       "id": 7,
       "noteId": 106,
       "title": "Checkbox Three notes"
     },
     {
-      "executeFlag": false,
+      "executeFlag": true,
       "id": 8,
       "noteId": 108,
       "title": "Checkbox First notes 2"

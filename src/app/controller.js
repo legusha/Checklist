@@ -10,7 +10,7 @@ const {
   setModalAction,
 } = mutation;
 
-export default function ({ checkList }, setState) {
+export default function (setState) {
   return {
     // Checklist
 
@@ -29,16 +29,16 @@ export default function ({ checkList }, setState) {
       setState(handler)
     },
     async todoUpdateItem(item) {
-      const newTodo = { ...item, executeFlag: !item.executeFlag };
-      await request.updateTodo(newTodo);
+      await request.updateTodo(item);
       const listTodo = await request.getTodo();
       this.todoUpdateList(listTodo);
     },
     noteUpdateItem: (item) => {
-      const handler = updateNote.bind(this, checkList, item);
-      setState(handler)
+      console.log(item)
+      // const handler = updateNote.bind(this, item);
+      // setState(handler)
     },
-    async deleteNote ({ id }) {
+    async noteDelete ({ id }) {
       await request.deleteNote(id);
       const listNote = await request.getNote();
       this.noteUpdateList(listNote);

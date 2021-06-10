@@ -13,7 +13,9 @@ class Base extends Component {
     const classNameCheckbox = 'checkbox-wrap'
     const isCheckbox = e.target.parentNode.classList.contains(classNameCheckbox)
     if (isCheckbox) {
-      this.props.app.checkList.updateTodo(item)
+      const { checkList } = this.props.app;
+      const todoNew = checkList.todoNew(item);
+      checkList.todoUpdate(todoNew);
     }
   }
 
@@ -30,7 +32,7 @@ class Base extends Component {
     e.preventDefault();
     e.stopPropagation();
 
-    this.props.app.checkList.updateNote({title: this.state.formInput.input.value})
+    this.props.app.checkList.noteUpdate({title: this.state.formInput.input.value})
   }
 
   handleActionCard = (item, actionType) => {
@@ -93,12 +95,12 @@ class Base extends Component {
           {
             typeName: 'edit',
             handler: this.props.app.modal.updateWithItem,
-            args: [true, 'checklist:item:edit', { edit: this.props.app.checkList.deleteNote }]
+            args: [true, 'checklist:item:edit', { edit: this.props.app.checkList.noteDelete }]
           },
           {
             typeName: 'delete',
             handler: this.props.app.modal.updateWithItem,
-            args: [true, 'checklist:item:remove', { delete: this.props.app.checkList.deleteNote }]
+            args: [true, 'checklist:item:remove', { delete: this.props.app.checkList.noteDelete }]
           }
         ],
       },

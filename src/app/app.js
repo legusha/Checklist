@@ -10,28 +10,13 @@ import { ModelProvider } from '~/components/model-context';
 import ModalActions from '~/components/modal';
 import ModalContent from '~/components/modal-content';
 
-import { Checklist } from '~/services/shared';
 import request from '~/services/shared/request';
-
-const checkList = new Checklist ({newItem (props) {
-    return {
-      ...props
-    }
-  }}, {
-  newItem (props) {
-    const { executeFlag = false } = props
-    return {
-      ...props,
-      executeFlag
-    }
-  }
-});
 
 export default class App extends Component {
 
   constructor(props) {
     super(props);
-    this.contoller = new Controller({ checkList }, this.setState.bind(this));
+    this.contoller = new Controller(this.setState.bind(this));
 
     this.state = {
       checkList: {
@@ -51,11 +36,10 @@ export default class App extends Component {
 
   initApiCheckList = () => {
     return {
-      newTodo: checkList.newTodo.bind(checkList),
-      newNote: checkList.newNote.bind(checkList),
-      updateTodo: this.contoller.todoUpdateItem.bind(this.contoller),
-      updateNote: this.contoller.noteUpdateItem,
-      deleteNote: this.contoller.deleteNote.bind(this.contoller),
+      todoNew: (props) => ({...props, executeFlag: !props.executeFlag}),
+      todoUpdate: this.contoller.todoUpdateItem.bind(this.contoller),
+      noteUpdate: this.contoller.noteUpdateItem,
+      noteDelete: this.contoller.noteDelete.bind(this.contoller),
     }
   }
   initApiModal = () => {

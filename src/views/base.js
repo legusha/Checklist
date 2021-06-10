@@ -5,6 +5,7 @@ import CardList from '../components/card-list'
 import CheckboxList from '../components/checkbox-list'
 import EmptyValue from '../components/empty-value'
 import { WithModelContext } from '../components/hoc'
+import {Topbar} from '../components/layout';
 
 
 class Base extends Component {
@@ -110,15 +111,7 @@ class Base extends Component {
       },
     },
     emptyValue: {
-      text: 'Список пуст',
-      classNameWrap: [
-        'w-100',
-        'h-100',
-        'd-flex',
-        'align-items-center',
-        'justify-content-center',
-        'text-muted',
-      ],
+      text: 'Empty list',
       classNameWrapChecklist: [
         'w-100',
         'h-100',
@@ -208,22 +201,10 @@ class Base extends Component {
     const showFormInput = formInput.show ? <FormInput {...formInput} /> : null
 
     return (
-      <section className="container main">
-        <div className="main-action text-left mb-4 p-4 border-secondary bg-secondary d-flex align-items-center justify-content-between">
-          <div>
-            <h3 className={'text-muted font-weight-6 font-24'}>Welcome to Checklist</h3>
-          </div>
-          <div>
-            {this.button}
-          </div>
-        </div>
+      <section className="container-lg container-fluid main">
+        <Topbar rightContent={this.button}/>
         {showFormInput}
         {this.renderChecklist()}
-        {/*<CardList*/}
-        {/*  list={ this.props.app.checkList.note }*/}
-        {/*  view={ checkboxListView }*/}
-        {/*  action={this.handleActionCard}*/}
-        {/*/>*/}
       </section>
     )
   }

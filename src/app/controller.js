@@ -1,5 +1,5 @@
 import {mutation} from '~/services/shared';
-import request from '~/services/shared/request';
+import { request } from '~/services/shared';
 
 const {
   updateTodo,
@@ -14,6 +14,11 @@ const {
 export default function ({ checkList }, setState) {
   return {
     // Checklist
+
+    setNoteNew: (item) => {
+      // const handler = setNote.bind(this, noteList);
+      // setState(handler)
+    },
 
     setNote: (noteList) => {
       const handler = setNote.bind(this, noteList);
@@ -33,9 +38,10 @@ export default function ({ checkList }, setState) {
       const handler = updateNote.bind(this, checkList, item);
       setState(handler)
     },
-    deleteNote: (item) => {
-      const handler = deleteNote.bind(this, item);
-      setState(handler)
+    async deleteNote ({ id }) {
+      await request.deleteNote(id);
+      const listNote = await request.getNote();
+      this.setNote(listNote);
     },
 
 

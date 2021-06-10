@@ -44,7 +44,6 @@ export default class App extends Component {
         currentContentType: '',
       },
     }
-    console.log(this.state.checkList);
     this.modalContent = this.initModalContent();
   }
 
@@ -56,7 +55,7 @@ export default class App extends Component {
       newNote: checkList.newNote.bind(checkList),
       updateTodo: this.contoller.updateTodo,
       updateNote: this.contoller.updateNote,
-      deleteNote: this.contoller.deleteNote,
+      deleteNote: this.contoller.deleteNote.bind(this.contoller),
     }
   }
   initApiModal = () => {

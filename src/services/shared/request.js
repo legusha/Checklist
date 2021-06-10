@@ -21,6 +21,9 @@ const requestConfig = {
     note() {
       return `note`
     },
+    noteID(id) {
+      return `note/${id}`
+    },
     todo() {
       return `todo`
     },
@@ -33,6 +36,7 @@ const instanceRequest = axios.create(request)
 const urls = {
   getNote: 'note',
   getTodo: 'todo',
+  deleteNote: 'noteID'
 }
 
 const attachEndPoints = {
@@ -65,7 +69,12 @@ class Request extends Http {
     const source = this.generateSource(endPoint, [])
     return await this.makeRequestResource(this.getResource, [source])
   }
+  async deleteNote(endPoint, id) {
+    const source = this.generateSource(endPoint, [id])
+    return await this.makeRequestResource(this.deleteResource, [source])
+  }
 
+  // Todo
   async getTodo(endPoint) {
     const source = this.generateSource(endPoint, [])
     return await this.makeRequestResource(this.getResource, [source])

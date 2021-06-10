@@ -15,17 +15,21 @@
     {
       "id": 108,
       "title": "Note #108"
+    },
+    {
+      "title": "Hello Noter",
+      "id": 109
     }
   ],
   "todo": [
     {
-      "complete": true,
+      "complete": false,
       "id": 5,
       "noteId": 105,
       "title": "Checkbox First notes"
     },
     {
-      "complete": true,
+      "complete": false,
       "id": 6,
       "noteId": 105,
       "title": "Checkbox Second notes"

@@ -19,7 +19,7 @@ export default function CardList ({ list , view, action }) {
       const cardBody = renderView(helperView(id))
 
       return (
-        <div className='col-lg-3 col-md-6 col-12' key={id}>
+        <div className='col-lg-4 col-12 mb-3' key={id}>
           <Card
             classNameWrap={['card', 'mb-3', 'note', 'bg-white', 'h-100']}
             header={
@@ -40,7 +40,7 @@ export default function CardList ({ list , view, action }) {
     })
 
     return (
-      <div className='row w-100'>
+      <div className='row w-100 m-0'>
         {renderList}
       </div>
     )

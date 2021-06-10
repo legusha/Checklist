@@ -6,14 +6,14 @@ export default function Checkbox ({ option, handler }) {
     option: PropTypes.object,
     handler: PropTypes.func
   }
-  const { id, title, executeFlag } = option
+  const { id, title, complete } = option
 
   return (
     <div className="d-inline checkbox-wrap">
       <input
         className="checkbox checkbox-success"
         type="checkbox"
-        checked={executeFlag}
+        checked={complete}
         onChange={handler}
         id={id}
       />

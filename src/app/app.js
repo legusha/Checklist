@@ -3,37 +3,25 @@ import {Route, Switch, Redirect} from 'react-router-dom';
 
 import Controller from './controller'
 
-import PageBase from '../views/base';
-import PageNote from '../views/note';
+import PageBase from '~/views/base';
+import PageNote from '~/views/note';
 
-import { ModelProvider } from '../components/model-context';
-import ModalActions from '../components/modal';
-import ModalContent from '../components/modal-content';
+import { ModelProvider } from '~/components/model-context';
+import ModalActions from '~/components/modal';
+import ModalContent from '~/components/modal-content';
 
-import { Checklist, Note, Todo } from '../services';
-const checkList = new Checklist (new Note(), new Todo());
-
+import request from '~/services/request';
 
 export default class App extends Component {
 
   constructor(props) {
     super(props);
-    this.contoller = new Controller({ checkList }, this.setState.bind(this));
+    this.contoller = new Controller(request, this.setState.bind(this));
 
     this.state = {
       checkList: {
-        note: [
-          checkList.newNote({title: 'Note #1'}),
-          checkList.newNote({title: 'Note #2'}),
-          checkList.newNote({title: 'Note #3'}),
-          checkList.newNote({title: 'Note #4'}),
-        ],
-        todo: [
-          checkList.newTodo({noteId: 105, title: 'Checkbox First notes'}),
-          checkList.newTodo({noteId: 105, title: 'Checkbox Second notes'}),
-          checkList.newTodo({noteId: 106, title: 'Checkbox Three notes'}),
-          checkList.newTodo({noteId: 108, title: 'Checkbox First notes 2'}),
-        ],
+        note: [],
+        todo: [],
       },
       modal: {
         show: false,
@@ -41,7 +29,6 @@ export default class App extends Component {
         currentContentType: '',
       },
     }
-
     this.modalContent = this.initModalContent();
   }
 
@@ -49,11 +36,10 @@ export default class App extends Component {
 
   initApiCheckList = () => {
     return {
-      newTodo: checkList.newTodo.bind(checkList),
-      newNote: checkList.newNote.bind(checkList),
-      updateTodo: this.contoller.updateTodo,
-      updateNote: this.contoller.updateNote,
-      deleteNote: this.contoller.deleteNote,
+      todoNew: (props) => ({...props, complete: !props.complete}),
+      todoUpdate: this.contoller.todoUpdateItem.bind(this.contoller),
+      noteNew: this.contoller.noteCreateItem.bind(this.contoller),
+      noteDelete: this.contoller.noteDelete.bind(this.contoller),
     }
   }
   initApiModal = () => {
@@ -83,6 +69,13 @@ export default class App extends Component {
       modal: this.initApiModal(),
       props,
     })
+  }
+
+  async componentDidMount() {
+    const listNote = await request.getNote();
+    const listTodo = await request.getTodo();
+    this.contoller.noteUpdateList(listNote)
+    this.contoller.todoUpdateList(listTodo)
   }
 
   // Hooks

@@ -5,6 +5,7 @@ import CardList from '../components/card-list'
 import CheckboxList from '../components/checkbox-list'
 import EmptyValue from '../components/empty-value'
 import { WithModelContext } from '../components/hoc'
+import {Topbar} from '../components/layout';
 
 
 class Base extends Component {
@@ -13,7 +14,9 @@ class Base extends Component {
     const classNameCheckbox = 'checkbox-wrap'
     const isCheckbox = e.target.parentNode.classList.contains(classNameCheckbox)
     if (isCheckbox) {
-      this.props.app.checkList.updateTodo(item)
+      const { checkList } = this.props.app;
+      const todoNew = checkList.todoNew(item);
+      checkList.todoUpdate(todoNew);
     }
   }
 
@@ -30,7 +33,11 @@ class Base extends Component {
     e.preventDefault();
     e.stopPropagation();
 
-    this.props.app.checkList.updateNote({title: this.state.formInput.input.value})
+    const formInput = { ...this.state.formInput };
+    this.props.app.checkList.noteNew({title: formInput.input.value});
+    formInput.input.value = '';
+
+    this.setState({formInput})
   }
 
   handleActionCard = (item, actionType) => {
@@ -93,26 +100,18 @@ class Base extends Component {
           {
             typeName: 'edit',
             handler: this.props.app.modal.updateWithItem,
-            args: [true, 'checklist:item:edit', { edit: this.props.app.checkList.deleteNote }]
+            args: [true, 'checklist:item:edit', { edit: this.props.history.push.bind(this.props.history, '/note') }]
           },
           {
             typeName: 'delete',
             handler: this.props.app.modal.updateWithItem,
-            args: [true, 'checklist:item:remove', { delete: this.props.app.checkList.deleteNote }]
+            args: [true, 'checklist:item:remove', { delete: this.props.app.checkList.noteDelete }]
           }
         ],
       },
     },
     emptyValue: {
-      text: 'Список пуст',
-      classNameWrap: [
-        'w-100',
-        'h-100',
-        'd-flex',
-        'align-items-center',
-        'justify-content-center',
-        'text-muted',
-      ],
+      text: 'Empty list',
       classNameWrapChecklist: [
         'w-100',
         'h-100',
@@ -135,14 +134,14 @@ class Base extends Component {
   }
 
   set button (value) {
-    const oldButtons = this.state.buttons
-    const newButtons = Object.assign({ ...oldButtons }, { currentIndex: value })
+    const oldButtons = this.state.buttons;
+    const newButtons = Object.assign({ ...oldButtons }, { currentIndex: value });
 
     this.setState({ buttons: newButtons })
   }
 
   handleButton ({ nextCurrentIndex, onClick }) {
-    onClick()
+    onClick();
     this.button = nextCurrentIndex
 
   }
@@ -202,22 +201,10 @@ class Base extends Component {
     const showFormInput = formInput.show ? <FormInput {...formInput} /> : null
 
     return (
-      <section className="container main">
-        <div className="main-action text-left mb-4 p-4 border-secondary bg-secondary d-flex align-items-center justify-content-between">
-          <div>
-            <h3 className={'text-muted font-weight-6 font-24'}>Welcome to Checklist</h3>
-          </div>
-          <div>
-            {this.button}
-          </div>
-        </div>
+      <section className="container-lg container-fluid main">
+        <Topbar rightContent={this.button}/>
         {showFormInput}
         {this.renderChecklist()}
-        {/*<CardList*/}
-        {/*  list={ this.props.app.checkList.note }*/}
-        {/*  view={ checkboxListView }*/}
-        {/*  action={this.handleActionCard}*/}
-        {/*/>*/}
       </section>
     )
   }

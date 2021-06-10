@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "axios": "^0.21.1",
     "bootstrap": "^4.5.3",
     "mdi-react": "^7.3.0",
     "react": "^16.13.1",
@@ -15,9 +16,10 @@
     "react-scripts": "3.4.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "react-app-rewired start",
+    "start:mock": "json-server --port=3001 --no-delete-cascade --watch db.json",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -36,6 +38,9 @@
     ]
   },
   "devDependencies": {
-    "node-sass": "^4.14.1"
+    "json-server": "^0.16.3",
+    "node-sass": "^4.14.1",
+    "react-app-rewire-alias": "^1.0.3",
+    "react-app-rewired": "^2.1.8"
   }
 }

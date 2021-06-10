@@ -13,14 +13,14 @@ export default function ({ handlers, modal, props }) {
     {
       typeName: 'checklist:item:edit',
       content: {
-        header: <div>Item edit</div>,
-        body: <div>Item edit</div>,
+        header: <div className="font-20 font-weight-6 text-muted">Are you sure?</div>,
+        body: <div className="font-14 font-weight-6">Go to the edit note page?</div>,
         footer: <div>
           <BButton variant="secondary" onClick={modalHide}>
-            Close
+            Cancel
           </BButton>
-          <BButton variant="primary" onClick={modalHide}>
-            Save Changes
+          <BButton variant="primary" onClick={handlerWrap.bind(null, false, props.edit, props.item)} className="ml-3">
+            Accept
           </BButton>
         </div>
       }
@@ -29,12 +29,12 @@ export default function ({ handlers, modal, props }) {
       typeName: 'checklist:item:remove',
       content: {
         header: <div className="font-20 font-weight-6 text-muted">Are you sure?</div>,
-        body: <div className="font-14 font-weight-6">Please accept action or cancel.</div>,
+        body: <div className="font-14 font-weight-6">Please accept deleting note or cancel.</div>,
         footer: <div>
-          <BButton variant="secondary" onClick={modalHide} size="sm">
+          <BButton variant="secondary" onClick={modalHide}>
             Cancel
           </BButton>
-          <BButton variant="primary" onClick={handlerWrap.bind(null, false, props.delete, props.item)} size="sm" className="ml-3">
+          <BButton variant="primary" onClick={handlerWrap.bind(null, false, props.delete, props.item)} className="ml-3">
             Accept
           </BButton>
         </div>

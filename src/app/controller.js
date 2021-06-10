@@ -1,28 +1,49 @@
-import {mutation} from "../services";
+import mutation from './mutation';
 
 const {
-  updateTodo,
-  updateNote,
+  setNote,
+  setTodo,
   setModalDisplay,
   setModalAction,
-  deleteNote,
 } = mutation;
 
-export default function ({ checkList }, setState) {
+export default function (request, setState) {
   return {
     // Checklist
 
-    updateTodo: (item) => {
-      const handler = updateTodo.bind(this, checkList, item);
-      setState(handler);
+    setNoteNew: (item) => {
+      // const handler = setNote.bind(this, noteList);
+      // setState(handler)
     },
-    updateNote: (item) => {
-      const handler = updateNote.bind(this, checkList, item);
+
+    noteUpdateList: (noteList) => {
+      const handler = setNote.bind(this, noteList);
       setState(handler)
     },
-    deleteNote: (item) => {
-      const handler = deleteNote.bind(this, item);
+
+    todoUpdateList: (todoList) => {
+      const handler = setTodo.bind(this, todoList);
       setState(handler)
+    },
+    async noteCreateItem(item) {
+      await request.postNote(item);
+      await this.noteUpdate();
+    },
+    async todoUpdateItem(item) {
+      await request.updateTodo(item);
+      await this.todoUpdate();
+    },
+    async noteUpdate() {
+      const listNote = await request.getNote();
+      this.noteUpdateList(listNote);
+    },
+    async todoUpdate() {
+      const listTodo = await request.getTodo();
+      this.todoUpdateList(listTodo);
+    },
+    async noteDelete ({ id }) {
+      await request.deleteNote(id);
+      await this.noteUpdate();
     },
 
 

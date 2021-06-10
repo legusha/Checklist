@@ -1,9 +1,7 @@
-import {mutation} from '~/services/shared';
+import mutation from './mutation';
 import { request } from '~/services/shared';
 
 const {
-  updateTodo,
-  updateNote,
   setNote,
   setTodo,
   setModalDisplay,
@@ -28,20 +26,26 @@ export default function (setState) {
       const handler = setTodo.bind(this, todoList);
       setState(handler)
     },
-    async todoUpdateItem(item) {
-      await request.updateTodo(item);
-      const listTodo = await request.getTodo();
-      this.todoUpdateList(listTodo);
-    },
     noteUpdateItem: (item) => {
       console.log(item)
       // const handler = updateNote.bind(this, item);
       // setState(handler)
     },
-    async noteDelete ({ id }) {
-      await request.deleteNote(id);
+    async todoUpdateItem(item) {
+      await request.updateTodo(item);
+      await this.todoUpdate();
+    },
+    async noteUpdate() {
       const listNote = await request.getNote();
       this.noteUpdateList(listNote);
+    },
+    async todoUpdate() {
+      const listTodo = await request.getTodo();
+      this.todoUpdateList(listTodo);
+    },
+    async noteDelete ({ id }) {
+      await request.deleteNote(id);
+      await this.noteUpdate();
     },
 
 

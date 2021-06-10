@@ -38,6 +38,7 @@ const instanceRequest = axios.create(request)
 
 const urls = {
   getNote: 'note',
+  postNote: 'note',
   getTodo: 'todo',
   updateTodo: 'todoID',
   deleteNote: 'noteID'
@@ -72,6 +73,10 @@ class Request extends Http {
   async getNote(endPoint) {
     const source = this.generateSource(endPoint, [])
     return await this.makeRequestResource(this.getResource, [source])
+  }
+  async postNote(endPoint, item) {
+    const source = this.generateSource(endPoint, [])
+    return await this.makeRequestResource(this.postResource, [source, item])
   }
   async deleteNote(endPoint, id) {
     const source = this.generateSource(endPoint, [id])

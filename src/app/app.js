@@ -10,13 +10,13 @@ import { ModelProvider } from '~/components/model-context';
 import ModalActions from '~/components/modal';
 import ModalContent from '~/components/modal-content';
 
-import request from '~/services/shared/request';
+import request from '~/services/request';
 
 export default class App extends Component {
 
   constructor(props) {
     super(props);
-    this.contoller = new Controller(this.setState.bind(this));
+    this.contoller = new Controller(request, this.setState.bind(this));
 
     this.state = {
       checkList: {
@@ -38,7 +38,7 @@ export default class App extends Component {
     return {
       todoNew: (props) => ({...props, executeFlag: !props.executeFlag}),
       todoUpdate: this.contoller.todoUpdateItem.bind(this.contoller),
-      noteUpdate: this.contoller.noteUpdateItem,
+      noteNew: this.contoller.noteCreateItem.bind(this.contoller),
       noteDelete: this.contoller.noteDelete.bind(this.contoller),
     }
   }

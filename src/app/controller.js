@@ -1,5 +1,4 @@
 import mutation from './mutation';
-import { request } from '~/services/shared';
 
 const {
   setNote,
@@ -8,7 +7,7 @@ const {
   setModalAction,
 } = mutation;
 
-export default function (setState) {
+export default function (request, setState) {
   return {
     // Checklist
 
@@ -26,10 +25,9 @@ export default function (setState) {
       const handler = setTodo.bind(this, todoList);
       setState(handler)
     },
-    noteUpdateItem: (item) => {
-      console.log(item)
-      // const handler = updateNote.bind(this, item);
-      // setState(handler)
+    async noteCreateItem(item) {
+      await request.postNote(item);
+      await this.noteUpdate();
     },
     async todoUpdateItem(item) {
       await request.updateTodo(item);

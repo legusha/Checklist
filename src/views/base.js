@@ -32,7 +32,11 @@ class Base extends Component {
     e.preventDefault();
     e.stopPropagation();
 
-    this.props.app.checkList.noteUpdate({title: this.state.formInput.input.value})
+    const formInput = { ...this.state.formInput };
+    this.props.app.checkList.noteNew({title: formInput.input.value});
+    formInput.input.value = '';
+
+    this.setState({formInput})
   }
 
   handleActionCard = (item, actionType) => {

@@ -101,7 +101,7 @@ export default class App extends Component {
         <Switch>
           <ModelProvider value={{ app }}>
             <Route path="/" component={PageBase} exact />
-            <Route path="/note" component={PageNote} exact />
+            <Route path="/note/:id" component={PageNote} exact />
             <Redirect to={'/'}/>
           </ModelProvider>
         </Switch>

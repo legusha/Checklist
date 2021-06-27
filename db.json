@@ -25,13 +25,13 @@
       "title": "Checkbox First notes"
     },
     {
-      "complete": false,
+      "complete": true,
       "id": 6,
       "noteId": 105,
       "title": "Checkbox Second notes"
     },
     {
-      "complete": true,
+      "complete": false,
       "id": 7,
       "noteId": 106,
       "title": "Checkbox Three notes"

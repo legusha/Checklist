@@ -100,7 +100,9 @@ class Base extends Component {
           {
             typeName: 'edit',
             handler: this.props.app.modal.updateWithItem,
-            args: [true, 'checklist:item:edit', { edit: this.props.history.push.bind(this.props.history, '/note') }]
+            args: [true, 'checklist:item:edit', { edit: ({ id }) => {
+                this.props.history.push(`/note/${id}`)
+              } }]
           },
           {
             typeName: 'delete',

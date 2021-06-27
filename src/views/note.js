@@ -7,7 +7,7 @@ function Note() {
     <section className="container-lg container-fluid main">
       <Topbar rightContent={null}/>
       <div className={'d-flex justify-between flex-wrap notes-list p-4 border mt-4'}>
-        <EmptyValue text={'Empty list'} />
+        <EmptyValue text={'Note not found'} />
       </div>
     </section>
   );

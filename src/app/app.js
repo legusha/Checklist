@@ -39,6 +39,7 @@ export default class App extends Component {
       todoNew: (props) => ({...props, complete: !props.complete}),
       todoUpdate: this.contoller.todoUpdateItem.bind(this.contoller),
       noteNew: this.contoller.noteCreateItem.bind(this.contoller),
+      noteByID: request.getNoteByID,
       noteDelete: this.contoller.noteDelete.bind(this.contoller),
     }
   }

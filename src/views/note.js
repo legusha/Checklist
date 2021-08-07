@@ -31,16 +31,20 @@ function Note({ match, app }) {
   }
 
 
-  function handleUpdateTitle (note, noteInput) {
+  async function handleUpdateTitle (note, noteInput) {
     const newItem = {
       ...note,
       title: noteInput,
-    }
-    app.checkList.noteUpdate(newItem)
+    };
+    await app.checkList.noteUpdate(newItem);
+    await fetchNote()
   }
 
-  function handleCheckboxChange(item) {
-    console.log(item)
+  async function handleCheckboxChange(item) {
+    const { checkList } = app;
+    const newTodo = checkList.todoNew(item);
+    await checkList.todoUpdate(newTodo);
+    await fetchTodo();
   }
 
   function renderTodo (listTodo) {
@@ -57,22 +61,30 @@ function Note({ match, app }) {
 
   // Fetch
 
+  async function fetchTodo() {
+    const newTodo = await app.checkList.todoGetByNoteID({ noteID });
+    updateTodo(newTodo)
+  }
+
+  async function fetchNote() {
+    const noteData = await app.checkList.noteByID(noteID);
+    updateNote(noteData);
+  }
+
   useEffect(() => {
-    async function fetchNote() {
-      const noteData = await app.checkList.noteByID(noteID);
-      updateNote(noteData);
+    async function fetchNoteList() {
+      await fetchNote();
     }
 
-    fetchNote();
+    fetchNoteList();
   }, [noteID]);
 
   useEffect(() => {
-    async function fetchTodo() {
-      const newTodo = await app.checkList.todoGetByNoteID({ noteID });
-      updateTodo(newTodo)
+    async function fetchTodoList() {
+      await fetchTodo()
     }
 
-    fetchTodo();
+    fetchTodoList();
   }, [noteID]);
 
 

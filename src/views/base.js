@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Button, FormInput } from '../components/ui'
+import {Button, FormInputWrap} from '../components/ui'
 import CardList from '../components/card-list'
 import CheckboxList from '../components/checkbox-list'
 import EmptyValue from '../components/empty-value'
@@ -20,24 +20,8 @@ class Base extends Component {
     }
   }
 
-  handleChangeFormInput = e => {
-    e.stopPropagation();
-
-    const formInput = { ...this.state.formInput };
-    formInput.input.value = e.target.value;
-
-    this.setState({formInput})
-  }
-
-  handleSubmitFormInput = e => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const formInput = { ...this.state.formInput };
-    this.props.app.checkList.noteNew({title: formInput.input.value});
-    formInput.input.value = '';
-
-    this.setState({formInput})
+  handleSubmitFormInput = (note, noteTitle) => {
+    this.props.app.checkList.noteNew({title: noteTitle});
   }
 
   handleActionCard = (item, actionType) => {
@@ -49,10 +33,10 @@ class Base extends Component {
 
   toggleFormInput = e => {
     const newState = oldState => {
-      const formInput = { ...oldState.formInput, show: !oldState.formInput.show }
+      const displayFormInput = !oldState.displayFormInput
       return {
         ...oldState,
-        formInput
+        displayFormInput
       }
     }
     this.setState(newState)
@@ -78,19 +62,7 @@ class Base extends Component {
       ],
       currentIndex: 0
     },
-    formInput: {
-      btn: {
-        title: 'Add'
-      },
-      input: {
-        value: ''
-      },
-      show: false,
-      events: {
-        onChange: this.handleChangeFormInput,
-        onSubmit: this.handleSubmitFormInput
-      },
-    },
+    displayFormInput: false,
     checkList: {
       events: {
         self: this,
@@ -100,7 +72,9 @@ class Base extends Component {
           {
             typeName: 'edit',
             handler: this.props.app.modal.updateWithItem,
-            args: [true, 'checklist:item:edit', { edit: this.props.history.push.bind(this.props.history, '/note') }]
+            args: [true, 'checklist:item:edit', { edit: ({ id }) => {
+                this.props.history.push(`/note/${id}`)
+              } }]
           },
           {
             typeName: 'delete',
@@ -126,6 +100,13 @@ class Base extends Component {
     }
   }
 
+  findByNoteIdTodo = (id) => {
+    const { todo } = this.props.app.checkList
+    return todo.filter(item => item.noteId === id)
+  }
+
+  // Button
+
   get button () {
     const buttons = this.state.buttons
     const { all, currentIndex } = buttons
@@ -146,10 +127,7 @@ class Base extends Component {
 
   }
 
-  findByNoteIdTodo = (id) => {
-    const { todo } = this.props.app.checkList
-    return todo.filter(item => item.noteId === id)
-  }
+  // Render
 
   renderButton (btn) {
     const { color, label } = btn
@@ -197,8 +175,8 @@ class Base extends Component {
   }
 
   render () {
-    const { formInput } = this.state
-    const showFormInput = formInput.show ? <FormInput {...formInput} /> : null
+    const { displayFormInput } = this.state
+    const showFormInput = displayFormInput ? <FormInputWrap note={null} handler={this.handleSubmitFormInput} /> : null
 
     return (
       <section className="container-lg container-fluid main">

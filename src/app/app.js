@@ -37,8 +37,12 @@ export default class App extends Component {
   initApiCheckList = () => {
     return {
       todoNew: (props) => ({...props, complete: !props.complete}),
+      todoNewCreate: (props) => console.log(props),
       todoUpdate: this.contoller.todoUpdateItem.bind(this.contoller),
+      todoGetByNoteID: request.getTodoByNoteID,
       noteNew: this.contoller.noteCreateItem.bind(this.contoller),
+      noteUpdate: this.contoller.noteUpdateItem.bind(this.contoller),
+      noteByID: request.getNoteByID,
       noteDelete: this.contoller.noteDelete.bind(this.contoller),
     }
   }
@@ -101,7 +105,7 @@ export default class App extends Component {
         <Switch>
           <ModelProvider value={{ app }}>
             <Route path="/" component={PageBase} exact />
-            <Route path="/note" component={PageNote} exact />
+            <Route path="/note/:id" component={PageNote} exact />
             <Redirect to={'/'}/>
           </ModelProvider>
         </Switch>

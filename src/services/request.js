@@ -13,7 +13,12 @@ const requestConfig = {
     },
   },
   helper: {
-    params: [],
+    params: [
+      {
+        type: 'noteID',
+        query: 'noteId',
+      },
+    ],
     ...params,
   },
   // Endpoints must be in the type of Functions and return type String
@@ -21,8 +26,9 @@ const requestConfig = {
     note() {
       return `note`
     },
-    todo() {
-      return `todo`
+    todo(params = {}) {
+      const query = this.helper.mappingParams(params)
+      return `todo?${query}`
     },
     noteID(id) {
       return `note/${id}`
@@ -38,8 +44,11 @@ const instanceRequest = axios.create(request)
 
 const urls = {
   getNote: 'note',
+  getNoteByID: 'noteID',
   postNote: 'note',
+  putNote: 'noteID',
   getTodo: 'todo',
+  getTodoByNoteID: 'todo',
   updateTodo: 'todoID',
   deleteNote: 'noteID'
 }
@@ -74,6 +83,14 @@ class Request extends Http {
     const source = this.generateSource(endPoint, [])
     return await this.makeRequestResource(this.getResource, [source])
   }
+  async getNoteByID(endPoint, id) {
+    const source = this.generateSource(endPoint, [id])
+    return await this.makeRequestResource(this.getResource, [source])
+  }
+  async putNote(endPoint, { id, body }) {
+    const source = this.generateSource(endPoint, [id])
+    return await this.makeRequestResource(this.putResource, [source, body])
+  }
   async postNote(endPoint, item) {
     const source = this.generateSource(endPoint, [])
     return await this.makeRequestResource(this.postResource, [source, item])
@@ -86,6 +103,11 @@ class Request extends Http {
   // Todo
   async getTodo(endPoint) {
     const source = this.generateSource(endPoint, [])
+    return await this.makeRequestResource(this.getResource, [source])
+  }
+
+  async getTodoByNoteID(endPoint, noteID) {
+    const source = this.generateSource(endPoint, [noteID])
     return await this.makeRequestResource(this.getResource, [source])
   }
   async updateTodo(endPoint, item) {

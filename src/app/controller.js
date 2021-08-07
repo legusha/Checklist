@@ -29,6 +29,13 @@ export default function (request, setState) {
       await request.postNote(item);
       await this.noteUpdate();
     },
+    async noteUpdateItem(item) {
+      const params = {
+        id: item.id,
+        body: item
+      }
+      return await request.putNote(params);
+    },
     async todoUpdateItem(item) {
       await request.updateTodo(item);
       await this.todoUpdate();

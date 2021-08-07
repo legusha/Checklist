@@ -1,5 +1,7 @@
 import BButton from "react-bootstrap/Button";
-import React from "react";
+import React, {useState} from 'react'
+
+import ContentTodo from './modal-content-todo'
 
 export default function ({ handlers, modal, props }) {
   const { modalHide } = handlers
@@ -8,7 +10,7 @@ export default function ({ handlers, modal, props }) {
     handler(...args)
     modal.update(show)
   }
-
+  console.log(props)
   return [
     {
       typeName: 'checklist:item:edit',
@@ -36,6 +38,21 @@ export default function ({ handlers, modal, props }) {
           </BButton>
           <BButton variant="primary" onClick={handlerWrap.bind(null, false, props.delete, props.item)} className="ml-3">
             Accept
+          </BButton>
+        </div>
+      }
+    },
+    {
+      typeName: 'checklist:todo:add',
+      content: {
+        header: <div className="font-20 font-weight-6 text-muted">Are you sure, create todo?</div>,
+        body: <ContentTodo {...props}/>,
+        footer: <div>
+          <BButton variant="secondary" onClick={modalHide}>
+            Cancel
+          </BButton>
+          <BButton variant="primary" onClick={() => handlerWrap(false, props['todo:add'], props.modalTodo)} className="ml-3">
+            Create
           </BButton>
         </div>
       }

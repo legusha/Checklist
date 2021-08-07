@@ -2,13 +2,12 @@ import React, {useEffect, useState} from 'react'
 import PropTypes from 'prop-types'
 import FormInput from "./form-input";
 
-export default function FormInputWrap ({ note }) {
-  // FormInput.propTypes = {
-  //   btn: PropTypes.object,
-  //   input: PropTypes.object,
-  //   events: PropTypes.object,
-  // }
-  const noteInputVal = {
+export default function FormInputWrap ({ note, handler }) {
+  FormInput.propTypes = {
+    note: PropTypes.object,
+    handler: PropTypes.func,
+  }
+  const noteInput = {
     btn: {
       title: 'Save'
     },
@@ -21,12 +20,11 @@ export default function FormInputWrap ({ note }) {
     },
   }
 
-  const [noteInput, updateNoteInput] = useState(noteInputVal)
+  const [inputValue, updateInputValue] = useState(note?.title);
+  const [noteItem, updateNoteItem] = useState(note);
 
   function updateNoteInputVal (val) {
-    const formInput = { ...noteInput };
-    formInput.input.value = val;
-    updateNoteInput(formInput)
+    updateInputValue(val);
   }
 
   function handleChangeFormInput (e) {
@@ -37,21 +35,19 @@ export default function FormInputWrap ({ note }) {
   function handleSubmitFormInput (e) {
     e.preventDefault();
     e.stopPropagation();
-
-    const formInput = { ...noteInput };
-    console.log(formInput.input.value)
-    // this.props.app.checkList.noteNew({title: formInput.input.value});
+    handler(noteItem, noteInput);
     updateNoteInputVal('');
-    formInput.input.value = '';
   }
 
+
   useEffect(() => {
-    if (note?.title) {
+    if (note) {
+      updateNoteItem(note);
       updateNoteInputVal(note.title);
     }
   }, [note]);
 
   return (
-    <FormInput {...noteInput} />
+    <FormInput {...{...noteInput, input: {value: inputValue}}} />
   )
 }

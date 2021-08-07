@@ -40,6 +40,7 @@ const urls = {
   getNote: 'note',
   getNoteByID: 'noteID',
   postNote: 'note',
+  putNote: 'noteID',
   getTodo: 'todo',
   updateTodo: 'todoID',
   deleteNote: 'noteID'
@@ -78,6 +79,10 @@ class Request extends Http {
   async getNoteByID(endPoint, id) {
     const source = this.generateSource(endPoint, [id])
     return await this.makeRequestResource(this.getResource, [source])
+  }
+  async putNote(endPoint, { id, body }) {
+    const source = this.generateSource(endPoint, [id])
+    return await this.makeRequestResource(this.putResource, [source, body])
   }
   async postNote(endPoint, item) {
     const source = this.generateSource(endPoint, [])

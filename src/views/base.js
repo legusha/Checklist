@@ -100,6 +100,13 @@ class Base extends Component {
     }
   }
 
+  findByNoteIdTodo = (id) => {
+    const { todo } = this.props.app.checkList
+    return todo.filter(item => item.noteId === id)
+  }
+
+  // Button
+
   get button () {
     const buttons = this.state.buttons
     const { all, currentIndex } = buttons
@@ -120,10 +127,7 @@ class Base extends Component {
 
   }
 
-  findByNoteIdTodo = (id) => {
-    const { todo } = this.props.app.checkList
-    return todo.filter(item => item.noteId === id)
-  }
+  // Render
 
   renderButton (btn) {
     const { color, label } = btn

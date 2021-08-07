@@ -24,8 +24,8 @@ export default function FormInput ({ btn, input, events }) {
         aria-label="Note name"
       />
       <BButton
-        className="btn-outline-success bg-white l-height-26"
-        size="lg"
+        className="l-height-26"
+        variant={'outline-success'}
         type="submit">{btn.title}
       </BButton>
     </form>

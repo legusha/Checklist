@@ -37,6 +37,7 @@ export default class App extends Component {
   initApiCheckList = () => {
     return {
       todoNew: (props) => ({...props, complete: !props.complete}),
+      todoNewCreate: (props) => console.log(props),
       todoUpdate: this.contoller.todoUpdateItem.bind(this.contoller),
       todoGetByNoteID: request.getTodoByNoteID,
       noteNew: this.contoller.noteCreateItem.bind(this.contoller),

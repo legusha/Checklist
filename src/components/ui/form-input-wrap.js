@@ -20,7 +20,7 @@ export default function FormInputWrap ({ note, handler }) {
     },
   }
 
-  const [inputValue, updateInputValue] = useState(note?.title);
+  const [inputValue, updateInputValue] = useState(note?.title || '');
   const [noteItem, updateNoteItem] = useState(note);
 
   function updateNoteInputVal (val) {
@@ -29,16 +29,31 @@ export default function FormInputWrap ({ note, handler }) {
 
   function handleChangeFormInput (e) {
     e.stopPropagation();
-    updateNoteInputVal(e.target.value);
+    updateNoteInputVal(getFormValue(e));
   }
 
   function handleSubmitFormInput (e) {
     e.preventDefault();
     e.stopPropagation();
-    handler(noteItem, noteInput);
+    handler(noteItem, getFormValue(e));
     updateNoteInputVal('');
   }
 
+  function getNoteInput() {
+    return {
+      ...noteInput,
+      input: {value: inputValue}
+    }
+  }
+
+  function getFormValue(e) {
+    const target = e.target
+    if (target.tagName === 'FORM') {
+      const input = e.target.firstElementChild
+      return input.value
+    }
+    return target.value
+  }
 
   useEffect(() => {
     if (note) {
@@ -48,6 +63,6 @@ export default function FormInputWrap ({ note, handler }) {
   }, [note]);
 
   return (
-    <FormInput {...{...noteInput, input: {value: inputValue}}} />
+    <FormInput {...getNoteInput()} />
   )
 }

@@ -13,7 +13,12 @@ const requestConfig = {
     },
   },
   helper: {
-    params: [],
+    params: [
+      {
+        type: 'noteID',
+        query: 'noteId',
+      },
+    ],
     ...params,
   },
   // Endpoints must be in the type of Functions and return type String
@@ -21,8 +26,9 @@ const requestConfig = {
     note() {
       return `note`
     },
-    todo() {
-      return `todo`
+    todo(params = {}) {
+      const query = this.helper.mappingParams(params)
+      return `todo?${query}`
     },
     noteID(id) {
       return `note/${id}`
@@ -42,6 +48,7 @@ const urls = {
   postNote: 'note',
   putNote: 'noteID',
   getTodo: 'todo',
+  getTodoByNoteID: 'todo',
   updateTodo: 'todoID',
   deleteNote: 'noteID'
 }
@@ -96,6 +103,11 @@ class Request extends Http {
   // Todo
   async getTodo(endPoint) {
     const source = this.generateSource(endPoint, [])
+    return await this.makeRequestResource(this.getResource, [source])
+  }
+
+  async getTodoByNoteID(endPoint, noteID) {
+    const source = this.generateSource(endPoint, [noteID])
     return await this.makeRequestResource(this.getResource, [source])
   }
   async updateTodo(endPoint, item) {

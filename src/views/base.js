@@ -85,11 +85,11 @@ class Base extends Component {
       input: {
         value: ''
       },
-      show: false,
       events: {
         onChange: this.handleChangeFormInput,
         onSubmit: this.handleSubmitFormInput
       },
+      show: false,
     },
     checkList: {
       events: {

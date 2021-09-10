@@ -1,7 +1,6 @@
-import React, {Component, useEffect, useState} from 'react';
+import React, { useEffect } from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 
-import Controller from './controller'
 import { useAppState } from '../hooks'
 
 import PageBase from '~/views/base';
@@ -14,20 +13,15 @@ import ModalContent from '~/components/modal-content';
 import request from '~/services/request';
 
 export default function App2 () {
-  const controller = new Controller(request, () => {})
   const [state, provider] = useAppState(request,() => {})
-  const [modal] = useState({
-    show: false,
-    context: {},
-    currentContentType: '',
-  })
   let modalContent = initModalContent()
 
   function initModalContent(props = {}) {
+    console.log('initModalContent', props)
     return ModalContent({
       handlers: {
-        modalShow: controller.modalShow.bind(controller),
-        modalHide: controller.modalHide.bind(controller)
+        modalShow: provider.modal.show,
+        modalHide: provider.modal.hide,
       },
       modal: initApiModal(),
       props,
@@ -39,27 +33,27 @@ export default function App2 () {
     return {
       todoNew: (props) => ({...props, complete: !props.complete}),
       todoNewCreate: (props) => console.log(props),
-      todoUpdate: provider.todo.itemUpdate.bind(provider),
+      todoUpdate: provider.todo.itemUpdate,
       todoGetByNoteID: request.getTodoByNoteID,
-      noteNew: provider.note.itemNew.bind(provider),
-      noteUpdate: provider.note.itemUpdate.bind(provider),
+      noteNew: provider.note.itemNew,
+      noteUpdate: provider.note.itemUpdate,
       noteByID: request.getNoteByID,
-      noteDelete: provider.note.listRemoveItem.bind(controller),
+      noteDelete: provider.note.listRemoveItem,
     }
   }
   function initApiModal() {
     return {
       update: (value, modalContentType = 'checklist:item:remove') => {
-        controller.modalUpdateContent(modalContentType);
-        controller.modalToggle(value)
+        provider.modal.updateContent(modalContentType);
+        provider.modal.toggle(value)
       },
       updateWithItem: (item, value, modalContentType = 'checklist:item:remove', props) => {
-        controller.modalUpdateContent(modalContentType);
-        modalContent = this.initModalContent({ item, ...props })
-        controller.modalToggle(value)
+        provider.modal.updateContent(modalContentType);
+        modalContent = initModalContent({ item, ...props })
+        provider.modal.toggle(value)
       },
       currentContent: () => {
-        const { currentContentType } = modal
+        const { currentContentType } = state.modal
         return modalContent.find(item => item.typeName === currentContentType)
       },
     }
@@ -88,7 +82,7 @@ export default function App2 () {
       ...apiCheckList,
     },
     modal: {
-      ...modal,
+      ...state.modal,
       ...apiModal
     }
   }
@@ -106,106 +100,3 @@ export default function App2 () {
     </div>
   )
 }
-
-// export default class App extends Component {
-//
-//   constructor(props) {
-//     super(props);
-//     this.contoller = new Controller(request, this.setState.bind(this));
-//
-//     this.state = {
-//       checkList: {
-//         note: [],
-//         todo: [],
-//       },
-//       modal: {
-//         show: false,
-//         context: {},
-//         currentContentType: '',
-//       },
-//     }
-//     this.modalContent = this.initModalContent();
-//   }
-//
-//   // Init handlers
-//
-//   initApiCheckList = () => {
-//     return {
-//       todoNew: (props) => ({...props, complete: !props.complete}),
-//       todoNewCreate: (props) => console.log(props),
-//       todoUpdate: this.contoller.todoUpdateItem.bind(this.contoller),
-//       todoGetByNoteID: request.getTodoByNoteID,
-//       noteNew: this.contoller.noteCreateItem.bind(this.contoller),
-//       noteUpdate: this.contoller.noteUpdateItem.bind(this.contoller),
-//       noteByID: request.getNoteByID,
-//       noteDelete: this.contoller.noteDelete.bind(this.contoller),
-//     }
-//   }
-//   initApiModal = () => {
-//     const { modal } = this.state;
-//     return {
-//       update: (value, modalContentType = 'checklist:item:remove') => {
-//         this.contoller.modalUpdateContent(modalContentType);
-//         this.contoller.modalToggle(value)
-//       },
-//       updateWithItem: (item, value, modalContentType = 'checklist:item:remove', props) => {
-//         this.contoller.modalUpdateContent(modalContentType);
-//         this.modalContent = this.initModalContent({ item, ...props })
-//         this.contoller.modalToggle(value)
-//       },
-//       currentContent: () => {
-//         const { currentContentType } = modal
-//         return this.modalContent.find(item => item.typeName === currentContentType)
-//       },
-//     }
-//   }
-//   initModalContent(props = {}) {
-//     return ModalContent({
-//       handlers: {
-//         modalShow: this.contoller.modalShow.bind(this.contoller),
-//         modalHide: this.contoller.modalHide.bind(this.contoller)
-//       },
-//       modal: this.initApiModal(),
-//       props,
-//     })
-//   }
-//
-//   async componentDidMount() {
-//     const listNote = await request.getNote();
-//     const listTodo = await request.getTodo();
-//     this.contoller.noteUpdateList(listNote)
-//     this.contoller.todoUpdateList(listTodo)
-//   }
-//
-//   // Hooks
-//
-//   render() {
-//     const { checkList: checkListState, modal } = this.state;
-//     const apiCheckList = this.initApiCheckList();
-//     const apiModal = this.initApiModal();
-//
-//     const app = {
-//       checkList: {
-//         ...checkListState,
-//         ...apiCheckList,
-//       },
-//       modal: {
-//         ...modal,
-//         ...apiModal
-//       }
-//     }
-//
-//     return (
-//       <div className="App, mt-4">
-//         <Switch>
-//           <ModelProvider value={{ app }}>
-//             <Route path="/" component={PageBase} exact />
-//             <Route path="/note/:id" component={PageNote} exact />
-//             <Redirect to={'/'}/>
-//           </ModelProvider>
-//         </Switch>
-//         <ModalActions modal={app.modal} />
-//       </div>
-//     )
-//   }
-// }

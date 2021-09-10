@@ -1,28 +1,20 @@
 import React, {useState} from 'react'
-import mutation from '../app/mutation';
 import {
   useContextNote,
-  useContextTodoList
+  useContextTodoList,
+  useContextModal
 } from './context'
 
-const {
-  setNote,
-  setTodo,
-  setModalDisplay,
-  setModalAction,
-} = mutation;
 
 export default function useAppState(request, setState) {
   const [processing, setProcessing] = useState(false)
   const [note, setNote] = useContextNote()
   const [todoList, setTodoList] = useContextTodoList()
-
+  const [modal, modalProvider] = useContextModal()
 
   // Checklist
 
   const setNoteNew = (item) => {
-    // const handler = setNote.bind(this, noteList);
-    // setState(handler)
   }
 
   const noteUpdateList = (noteList) => {
@@ -64,32 +56,31 @@ export default function useAppState(request, setState) {
 
   // Modal
 
-  const modalUpdateContent = (...args) => {
-    const handler = setModalAction.bind(this, ...args);
-    setState(handler)
+  const modalUpdateContent = (contentType) => {
+    modalProvider.updateContentType(contentType)
   }
 
   const modalUpdate = (value) => {
-  const handler = setModalDisplay.bind(this, value);
-  setState(handler)
+    modalProvider.display(value)
 }
 
   const modalToggle = (value) => {
-  this.modalUpdate(value)
+    modalUpdate(value)
 }
 
   const modalShow = () => {
-    this.modalUpdate(true)
+    modalUpdate(true)
   }
 
   const modalHide = () => {
-    this.modalUpdate(false)
+    modalUpdate(false)
   }
 
   const state = {
     processing,
     note,
-    todoList
+    todoList,
+    modal,
   }
   const provider = {
     note: {

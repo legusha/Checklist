@@ -16,7 +16,6 @@ import request from '~/services/request';
 export default function App2 () {
   const controller = new Controller(request, () => {})
   const [state, provider] = useAppState(request,() => {})
-  const [todo] = useState([])
   const [modal] = useState({
     show: false,
     context: {},
@@ -40,12 +39,12 @@ export default function App2 () {
     return {
       todoNew: (props) => ({...props, complete: !props.complete}),
       todoNewCreate: (props) => console.log(props),
-      todoUpdate: controller.todoUpdateItem.bind(controller),
+      todoUpdate: provider.todo.itemUpdate.bind(provider),
       todoGetByNoteID: request.getTodoByNoteID,
-      noteNew: controller.noteCreateItem.bind(controller),
-      noteUpdate: controller.noteUpdateItem.bind(controller),
+      noteNew: provider.note.itemNew.bind(provider),
+      noteUpdate: provider.note.itemUpdate.bind(provider),
       noteByID: request.getNoteByID,
-      noteDelete: controller.noteDelete.bind(controller),
+      noteDelete: provider.note.listRemoveItem.bind(controller),
     }
   }
   function initApiModal() {
@@ -71,7 +70,7 @@ export default function App2 () {
       const listNote = await request.getNote();
       const listTodo = await request.getTodo();
       provider.note.listUpdate(listNote)
-      controller.todoUpdateList(listTodo)
+      provider.todo.listUpdate(listTodo)
     }
     handler()
   }, [])
@@ -81,7 +80,7 @@ export default function App2 () {
 
   const checklist = {
     note: state.note,
-    todo
+    todo: state.todoList,
   }
   const app = {
     checkList: {

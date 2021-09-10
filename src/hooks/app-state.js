@@ -1,6 +1,9 @@
 import React, {useState} from 'react'
 import mutation from '../app/mutation';
-import {useContextNote} from './context'
+import {
+  useContextNote,
+  useContextTodoList
+} from './context'
 
 const {
   setNote,
@@ -12,6 +15,7 @@ const {
 export default function useAppState(request, setState) {
   const [processing, setProcessing] = useState(false)
   const [note, setNote] = useContextNote()
+  const [todoList, setTodoList] = useContextTodoList()
 
 
   // Checklist
@@ -26,7 +30,7 @@ export default function useAppState(request, setState) {
   }
   const noteCreateItem = async (item) => {
     await request.postNote(item);
-    await this.noteUpdate();
+    await noteUpdate();
   }
   const noteUpdateItem = async (item) => {
     const params = {
@@ -37,25 +41,24 @@ export default function useAppState(request, setState) {
   }
   const noteUpdate = async () => {
     const listNote = await request.getNote();
-    this.noteUpdateList(listNote);
+    noteUpdateList(listNote);
   }
   const noteDelete  = async ({ id }) => {
     await request.deleteNote(id);
-    await this.noteUpdate();
+    await noteUpdate();
   }
 
   const todoUpdateList = (todoList) => {
-  const handler = setTodo.bind(this, todoList);
-  setState(handler)
-}
+    setTodoList(todoList)
+  }
 
   const todoUpdateItem = async (item) => {
     await request.updateTodo(item);
-    await this.todoUpdate();
+    await todoUpdate();
   }
   const todoUpdate = async () => {
     const listTodo = await request.getTodo();
-    this.todoUpdateList(listTodo);
+    todoUpdateList(listTodo);
   }
 
 
@@ -85,7 +88,8 @@ export default function useAppState(request, setState) {
 
   const state = {
     processing,
-    note
+    note,
+    todoList
   }
   const provider = {
     note: {

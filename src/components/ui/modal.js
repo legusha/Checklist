@@ -12,19 +12,17 @@ function Modal({ show, handleClose, header, body, footer, handleShow }) {
     footer: PropTypes.object,
   }
   return (
-    <>
-      <BModal show={show} onHide={handleClose}>
-        <BModal.Header closeButton>
-          { header }
-        </BModal.Header>
-        <BModal.Body>
-          { body }
-        </BModal.Body>
-        <BModal.Footer>
-          { footer }
-        </BModal.Footer>
-      </BModal>
-    </>
+    <BModal show={show} onHide={handleClose}>
+      <BModal.Header closeButton>
+        { header }
+      </BModal.Header>
+      <BModal.Body>
+        { body }
+      </BModal.Body>
+      <BModal.Footer>
+        { footer }
+      </BModal.Footer>
+    </BModal>
   );
 }
 

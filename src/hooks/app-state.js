@@ -2,16 +2,17 @@ import React, {useState} from 'react'
 import {
   useContextNote,
   useContextTodoList,
-  useContextModal
+  contextModal
 } from './context'
 
+const { useModal, useModalContent } = contextModal
 
 export default function useAppState(request, setState) {
   const [processing, setProcessing] = useState(false)
   const [note, setNote] = useContextNote()
   const [todoList, setTodoList] = useContextTodoList()
-  const [modal, modalProvider] = useContextModal()
-
+  const [modal, modalProvider] = useModal()
+  const [modalContent, modalProviderContent] = useModalContent()
   // Checklist
 
   const setNoteNew = (item) => {
@@ -80,7 +81,10 @@ export default function useAppState(request, setState) {
     processing,
     note,
     todoList,
-    modal,
+    modal: {
+      ...modal,
+      content: modalContent,
+    }
   }
   const provider = {
     note: {
@@ -101,6 +105,7 @@ export default function useAppState(request, setState) {
       hide: modalHide,
       update: modalUpdate,
       updateContent: modalUpdateContent,
+      updateProviderContent: modalProviderContent,
       toggle: modalToggle
     }
   }

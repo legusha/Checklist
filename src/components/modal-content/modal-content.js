@@ -5,6 +5,7 @@ import ContentTodo from './modal-content-todo'
 
 export default function ({ handlers, modal, props }) {
   const { modalHide } = handlers
+
   function handlerWrap(show = false, handler, ...args) {
     if (handler) handler(...args)
     modal.update(show)

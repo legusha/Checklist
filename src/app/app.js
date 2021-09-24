@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 
 import { useAppState } from '../hooks'
@@ -14,10 +14,8 @@ import request from '~/services/request';
 
 export default function App2 () {
   const [state, provider] = useAppState(request,() => {})
-  let modalContent = initModalContent()
 
   function initModalContent(props = {}) {
-    console.log('initModalContent', props)
     return ModalContent({
       handlers: {
         modalShow: provider.modal.show,
@@ -49,12 +47,12 @@ export default function App2 () {
       },
       updateWithItem: (item, value, modalContentType = 'checklist:item:remove', props) => {
         provider.modal.updateContent(modalContentType);
-        modalContent = initModalContent({ item, ...props })
+        provider.modal.updateProviderContent(initModalContent({ item, ...props }))
         provider.modal.toggle(value)
       },
       currentContent: () => {
         const { currentContentType } = state.modal
-        return modalContent.find(item => item.typeName === currentContentType)
+        return state.modal.content.find(item => item.typeName === currentContentType)
       },
     }
   }

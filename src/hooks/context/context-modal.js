@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 
-export default function useModal() {
+export function useModal() {
   const [modal, setModal] = useState({
     show: false,
     context: {},
@@ -10,5 +10,11 @@ export default function useModal() {
     display: (show) => setModal({ ...modal, show }),
     updateContentType: (currentContentType) => setCurrentContentType(currentContentType),
   }
+
   return [{...modal, currentContentType}, modalProvider]
+}
+
+export function useModalContent() {
+  const [modalContent, setModalContent] = useState([])
+  return [modalContent, setModalContent]
 }

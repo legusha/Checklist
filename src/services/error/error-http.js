@@ -1,4 +1,5 @@
 // import eventBus from '~/plugins/services/eventBusInstance'
+import { emitter } from '../events'
 
 export default (e) => {
   const { response } = e
@@ -8,6 +9,9 @@ export default (e) => {
 
     if (status === '401' || status === 401) {
     }
+    throw new Error(e)
   }
+
+  emitter.emit('error', e.message)
   throw new Error(e)
 }

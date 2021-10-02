@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect } from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 
 import { useAppState } from '../hooks'
@@ -11,9 +11,14 @@ import ModalActions from '~/components/modal';
 import ModalContent from '~/components/modal-content';
 
 import request from '~/services/request';
+import { emitter } from '~/services/events';
 
 export default function App2 () {
-  const [state, provider] = useAppState(request,() => {})
+  const services = {
+    request,
+    emitter,
+  }
+  const [state, provider] = useAppState(services)
 
   function initModalContent(props = {}) {
     return ModalContent({

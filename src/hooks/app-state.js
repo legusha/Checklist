@@ -7,13 +7,16 @@ import {
 
 const { useModal, useModalContent } = contextModal
 
-export default function useAppState(request, setState) {
+export default function useAppState({ request, emitter }) {
   const [processing, setProcessing] = useState(false)
   const [note, setNote] = useContextNote()
   const [todoList, setTodoList] = useContextTodoList()
   const [modal, modalProvider] = useModal()
   const [modalContent, modalProviderContent] = useModalContent()
   // Checklist
+  emitter.on('error', function (text) {
+    console.log(text)
+  })
 
   const setNoteNew = (item) => {
   }

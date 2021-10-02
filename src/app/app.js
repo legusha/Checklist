@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 
+import { RouterProvider } from '../router'
 import { useAppState } from '../hooks'
 
 import PageBase from '~/views/base';
@@ -94,9 +95,7 @@ export default function App2 () {
     <div className="App, mt-4">
       <Switch>
         <ModelProvider value={{ app }}>
-          <Route path="/" component={PageBase} exact />
-          <Route path="/note/:id" component={PageNote} exact />
-          <Redirect to={'/'}/>
+          <RouterProvider/>
         </ModelProvider>
       </Switch>
       <ModalActions modal={app.modal} />

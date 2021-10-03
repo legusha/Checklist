@@ -1,11 +1,11 @@
 import React from 'react';
-import { ModelConsumer } from '../model-context';
+import { AppConsumer } from '../app-context';
 
 const WithModelContext = (Wrapped, mapMethodsToProps) => {
 
   return (props) => {
     return (
-      <ModelConsumer>
+      <AppConsumer>
         {
           (modelContext) => {
             const serviceProps = mapMethodsToProps(modelContext);
@@ -15,7 +15,7 @@ const WithModelContext = (Wrapped, mapMethodsToProps) => {
             );
           }
         }
-      </ModelConsumer>
+      </AppConsumer>
     );
   }
 };

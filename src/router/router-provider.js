@@ -2,6 +2,8 @@ import React from 'react';
 import {Redirect, Route, Switch} from 'react-router-dom';
 import { routes } from './router';
 
+const pageUrl404 = '/404'
+
 const RouterProvider = () => {
   return (
       <Switch>
@@ -13,7 +15,7 @@ const RouterProvider = () => {
             key={route.path}
           />
         )}
-        <Redirect to='/'/>
+        <Redirect to={pageUrl404}/>
       </Switch>
   );
 };

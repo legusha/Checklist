@@ -1,25 +1,26 @@
 import React, { useEffect } from 'react';
-import {Route, Switch, Redirect} from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 
-import { RouterProvider } from '../router'
-import { useAppState } from '../hooks'
+import { RouterProvider } from '~/router'
+import { useAppState } from '~/hooks'
 
-import PageBase from '~/views/base';
-import PageNote from '~/views/note';
-
-import { ModelProvider } from '~/components/model-context';
+import { AppProvider } from '~/components/app-context';
 import ModalActions from '~/components/modal';
 import ModalContent from '~/components/modal-content';
+import ErrorView from '~/views/error'
 
 import request from '~/services/request';
-import { emitter } from '~/services/events';
+
+const Page404 = () => <h1>Four: 404 </h1>
+
 
 export default function App2 () {
   const services = {
     request,
-    emitter,
   }
   const [state, provider] = useAppState(services)
+  const [fetchNote, processing, error] = provider.hooks.useFetching(request.getNote)
+  const [fetchTodo, processingTodo, errorTodo] = provider.hooks.useFetching(request.getTodo)
 
   function initModalContent(props = {}) {
     return ModalContent({
@@ -65,10 +66,13 @@ export default function App2 () {
 
   useEffect(() => {
     const handler = async () => {
-      const listNote = await request.getNote();
-      const listTodo = await request.getTodo();
-      provider.note.listUpdate(listNote)
-      provider.todo.listUpdate(listTodo)
+      const listNote = await fetchNote()
+      const listTodo = await fetchTodo()
+
+      if (!error && !errorTodo) {
+        provider.note.listUpdate(listNote)
+        provider.todo.listUpdate(listTodo)
+      }
     }
     handler()
   }, [])
@@ -91,14 +95,31 @@ export default function App2 () {
     }
   }
 
-  return (
-    <div className="App, mt-4">
+  function Content() {
+    return <div>
       <Switch>
-        <ModelProvider value={{ app }}>
+        <AppProvider value={{ app }}>
           <RouterProvider/>
-        </ModelProvider>
+        </AppProvider>
       </Switch>
       <ModalActions modal={app.modal} />
+    </div>
+  }
+
+  function ContentError() {
+    return <ErrorView/>
+  }
+
+  function ContentWithError() {
+    if (error || errorTodo) {
+      return <ContentError/>
+    }
+    return <Content/>
+  }
+
+  return (
+    <div className="App, mt-4">
+      <ContentWithError/>
     </div>
   )
 }

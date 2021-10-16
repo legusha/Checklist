@@ -11,6 +11,7 @@ import ErrorView from '~/views/error'
 import { WithProcessing } from '~/components/hoc'
 
 import request from '~/services/request';
+import {Topbar} from "../components/layout";
 
 const Page404 = () => <h1>Four: 404 </h1>
 
@@ -97,20 +98,27 @@ export default function App () {
     }
   }
 
-  function Content() {
-    const content = () => <section>
-      <Switch>
-        <AppProvider value={{ app }}>
-          <RouterProvider/>
-        </AppProvider>
-      </Switch>
-      <ModalActions modal={app.modal} />
+  const Content = () => <section>
+    <Switch>
+      <AppProvider value={{ app }}>
+        <RouterProvider/>
+      </AppProvider>
+    </Switch>
+    <ModalActions modal={app.modal} />
+  </section>
+
+  // Todo need create Layout for decompoze this code
+  function WithProcessingContent() {
+    const loading = () => <section className="container-lg container-fluid main">
+      <Topbar/>
+      <div className='text-center'>
+        <h4>Loading...</h4>
+      </div>
     </section>
-    const a = () => <h1>Loading</h1>
     return <WithProcessing
       process={fetchProcessing}
-      Content={content}
-      ProcessContent={a}
+      Content={Content}
+      ProcessContent={loading}
     />
   }
 
@@ -118,7 +126,7 @@ export default function App () {
     <main className="App, mt-4">
       <WithProcessing
         process={fetchErrors}
-        Content={Content}
+        Content={WithProcessingContent}
         ProcessContent={ErrorView}
       />
     </main>

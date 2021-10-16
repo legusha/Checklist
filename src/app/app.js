@@ -8,19 +8,21 @@ import { AppProvider } from '~/components/app-context';
 import ModalActions from '~/components/modal';
 import ModalContent from '~/components/modal-content';
 import ErrorView from '~/views/error'
+import { WithProcessing } from '~/components/hoc'
 
 import request from '~/services/request';
 
 const Page404 = () => <h1>Four: 404 </h1>
 
-
-export default function App2 () {
+export default function App () {
   const services = {
     request,
   }
   const [state, provider] = useAppState(services)
   const [fetchNote, processing, error] = provider.hooks.useFetching(request.getNote)
   const [fetchTodo, processingTodo, errorTodo] = provider.hooks.useFetching(request.getTodo)
+  const fetchProcessing = [processing, processingTodo]
+  const fetchErrors = [error, errorTodo]
 
   function initModalContent(props = {}) {
     return ModalContent({
@@ -96,30 +98,29 @@ export default function App2 () {
   }
 
   function Content() {
-    return <div>
+    const content = () => <section>
       <Switch>
         <AppProvider value={{ app }}>
           <RouterProvider/>
         </AppProvider>
       </Switch>
       <ModalActions modal={app.modal} />
-    </div>
-  }
-
-  function ContentError() {
-    return <ErrorView/>
-  }
-
-  function ContentWithError() {
-    if (error || errorTodo) {
-      return <ContentError/>
-    }
-    return <Content/>
+    </section>
+    const a = () => <h1>Loading</h1>
+    return <WithProcessing
+      process={fetchProcessing}
+      Content={content}
+      ProcessContent={a}
+    />
   }
 
   return (
-    <div className="App, mt-4">
-      <ContentWithError/>
-    </div>
+    <main className="App, mt-4">
+      <WithProcessing
+        process={fetchErrors}
+        Content={Content}
+        ProcessContent={ErrorView}
+      />
+    </main>
   )
 }

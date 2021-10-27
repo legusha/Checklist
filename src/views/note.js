@@ -5,6 +5,10 @@ import {WithModelContext} from '~/components/hoc';
 import { FormInputWrap } from '~/components/ui';
 import CheckboxList from "../components/checkbox-list";
 import BButton from "react-bootstrap/Button";
+import request from '~/services/request';
+import { context } from '~/hooks';
+
+const { useContextNoteOnce } = context
 
 const todoEmptyValue = {
   text: 'Empty list',
@@ -24,7 +28,8 @@ const todoEmptyValue = {
 function Note({ match, app }) {
 
   const noteID = match.params.id;
-  const [note, updateNote] = useState(null);
+  const [note, fetchNote] = useContextNoteOnce(noteID, request.getNoteByID)
+  // const [note, updateNote] = useState(null);
   const [todo, updateTodo] = useState([]);
   const todoEvent = {
     self: this,
@@ -37,12 +42,16 @@ function Note({ match, app }) {
 
 
   async function handleUpdateTitle (note, noteInput) {
-    const newItem = {
+    const item = {
       ...note,
       title: noteInput,
     };
-    await app.checkList.noteUpdate(newItem);
-    await fetchNote()
+    const params = {
+      id: item.id,
+      body: item
+    }
+    await request.putNote(params);
+    await fetchNote.fetch(noteID)
   }
 
   async function handleCheckboxChange(item) {
@@ -87,22 +96,9 @@ function Note({ match, app }) {
   // Fetch
 
   async function fetchTodo() {
-    const newTodo = await app.checkList.todoGetByNoteID({ noteID });
+    const newTodo = await request.getTodoByNoteID({ noteID });
     updateTodo(newTodo)
   }
-
-  async function fetchNote() {
-    const noteData = await app.checkList.noteByID(noteID);
-    updateNote(noteData);
-  }
-
-  useEffect(() => {
-    async function fetchNoteList() {
-      await fetchNote();
-    }
-
-    fetchNoteList();
-  }, [noteID]);
 
   useEffect(() => {
     async function fetchTodoList() {

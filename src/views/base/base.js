@@ -113,11 +113,9 @@ function Base ({ app, history }) {
   // Render
 
   function WithProcessingContent() {
-    const loading = () => <section className="container-lg container-fluid main">
-      <div className='text-center'>
-        <h4>Loading...</h4>
-      </div>
-    </section>
+    const loading = () => <div className='text-center'>
+      <h4>Loading...</h4>
+    </div>
     return <WithProcessing
       process={fetchProcessing}
       Content={Content}
@@ -161,15 +159,18 @@ function Base ({ app, history }) {
 
   function Content() {
     return (
-      <section className="container-lg container-fluid main">
-        <Topbar rightContent={buttonsCreate()}/>
-        {showFormInput}
+      <div>
         {renderChecklist()}
-      </section>
+      </div>
     )
   }
   return (
-    <WithProcessingContent/>
+    <section className="container-lg container-fluid main">
+      <Topbar rightContent={buttonsCreate()}/>
+      {showFormInput}
+      <WithProcessingContent/>
+    </section>
+
   )
 }
 const mapContextToProps = ({ app }) => {

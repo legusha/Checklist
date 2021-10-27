@@ -33,9 +33,7 @@ export default function App () {
   // Init handlers
   function initApiCheckList() {
     return {
-      todoGetByNoteID: request.getTodoByNoteID,
       noteUpdate: provider.note.itemUpdate,
-      noteByID: request.getNoteByID,
     }
   }
   function initApiModal() {

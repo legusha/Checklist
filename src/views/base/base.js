@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 
 import { FormInputWrap } from '../../components/ui'
 import CardList from '../../components/card-list'
@@ -6,10 +6,22 @@ import CheckboxList from '../../components/checkbox-list'
 import EmptyValue from '../../components/empty-value'
 import { WithModelContext } from '../../components/hoc'
 import {Topbar} from '../../components/layout';
+import { WithProcessing } from '~/components/hoc'
 import useButtonsIndex from './use-buttons-index'
+import { useFetching, context } from '~/hooks';
+import request from '~/services/request';
 
+const { useContextNote: useNote, useContextTodoList: useTodo } = context;
 
 function Base ({ app, history }) {
+  const [fetchNote, processing, error] = useFetching(request.getNote)
+  const [fetchTodo, processingTodo, errorTodo] = useFetching(request.getTodo)
+  const fetchProcessing = [processing, processingTodo]
+  const fetchErrors = [error, errorTodo]
+
+  const [notes, setNotes] = useNote()
+  const [todos, setTodos] = useTodo()
+
   const buttonsVariant = [
     {
       to: '/note',
@@ -26,11 +38,7 @@ function Base ({ app, history }) {
       onClick: toggleFormInput
     }
   ]
-  const buttonsHandler = ({nextCurrentIndex, onClick}) => {
-    onClick();
-    setButtonsIndex(nextCurrentIndex)
-  }
-  const [setButtonsIndex, buttonsCreate] = useButtonsIndex(buttonsVariant, buttonsHandler)
+  const [setButtonsIndex, buttonsCreate] = useButtonsIndex(buttonsVariant, handleButtons)
   const [displayFormInput, setDisplayFormInput] = useState(false)
   const [checkList] = useState({
     events: {
@@ -71,8 +79,11 @@ function Base ({ app, history }) {
   })
 
   const findByNoteIdTodo = (id) => {
-    const {todo} = app.checkList
-    return todo.filter(item => item.noteId === id)
+    return todos.filter(item => item.noteId === id)
+  }
+  function handleButtons ({nextCurrentIndex, onClick}) {
+    onClick();
+    setButtonsIndex(nextCurrentIndex)
   }
 
   function handleSubmitFormInput (note, noteTitle) {
@@ -102,6 +113,19 @@ function Base ({ app, history }) {
 
   // Render
 
+  function WithProcessingContent() {
+    const loading = () => <section className="container-lg container-fluid main">
+      <div className='text-center'>
+        <h4>Loading...</h4>
+      </div>
+    </section>
+    return <WithProcessing
+      process={fetchProcessing}
+      Content={Content}
+      ProcessContent={loading}
+    />
+  }
+
   const renderTodo = (listTodo) => {
     const {events} = checkList
 
@@ -116,8 +140,7 @@ function Base ({ app, history }) {
     )
   }
   const renderChecklist = () => {
-    const note = app.checkList.note
-    const noteEmpty = note.length === 0
+    const noteEmpty = notes.length === 0
 
     if (noteEmpty) return (
       <EmptyValue {...emptyValue} classNameWrap={emptyValue.classNameWrapChecklist}/>
@@ -128,20 +151,39 @@ function Base ({ app, history }) {
     }
     return (
       <CardList
-        list={app.checkList.note}
+        list={notes}
         view={checkboxListView}
         action={handleActionCard}
       />
     )
   }
 
+  useEffect(() => {
+    const handler = async () => {
+      const listNote = await fetchNote()
+      const listTodo = await fetchTodo()
+
+      if (!error && !errorTodo) {
+        setNotes(listNote)
+        setTodos(listTodo)
+      }
+    }
+    handler()
+  }, [])
+
   const showFormInput = displayFormInput ? <FormInputWrap note={null} handler={handleSubmitFormInput}/> : null
+
+  function Content() {
+    return (
+      <section className="container-lg container-fluid main">
+        <Topbar rightContent={buttonsCreate()}/>
+        {showFormInput}
+        {renderChecklist()}
+      </section>
+    )
+  }
   return (
-    <section className="container-lg container-fluid main">
-      <Topbar rightContent={buttonsCreate()}/>
-      {showFormInput}
-      {renderChecklist()}
-    </section>
+    <WithProcessingContent/>
   )
 }
 const mapContextToProps = ({ app }) => {

@@ -4,7 +4,6 @@ import {
   useContextTodoList,
   contextModal
 } from './context'
-import { useFetching } from './use-fetching';
 
 const { useModal, useModalContent } = contextModal
 
@@ -87,9 +86,6 @@ export default function useAppState({ request }) {
     }
   }
   const provider = {
-    hooks: {
-      useFetching,
-    },
     note: {
       new : setNoteNew,
       itemNew: noteCreateItem,

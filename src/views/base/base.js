@@ -1,60 +1,36 @@
 import React, {useState} from 'react'
 
-import {Button, FormInputWrap} from '../components/ui'
-import CardList from '../components/card-list'
-import CheckboxList from '../components/checkbox-list'
-import EmptyValue from '../components/empty-value'
-import { WithModelContext } from '../components/hoc'
-import {Topbar} from '../components/layout';
+import { FormInputWrap } from '../../components/ui'
+import CardList from '../../components/card-list'
+import CheckboxList from '../../components/checkbox-list'
+import EmptyValue from '../../components/empty-value'
+import { WithModelContext } from '../../components/hoc'
+import {Topbar} from '../../components/layout';
+import useButtonsIndex from './use-buttons-index'
 
 
 function Base ({ app, history }) {
-
-  const handleChangeListNote = (item, e) => {
-    const classNameCheckbox = 'checkbox-wrap'
-    const isCheckbox = e.target.parentNode.classList.contains(classNameCheckbox)
-    if (isCheckbox) {
-      const { checkList } = app;
-      const todoNew = checkList.todoNew(item);
-      checkList.todoUpdate(todoNew);
+  const buttonsVariant = [
+    {
+      to: '/note',
+      label: 'Add',
+      color: 'success',
+      nextCurrentIndex: 1,
+      onClick: toggleFormInput
+    },
+    {
+      to: '/',
+      label: 'Cancel',
+      color: 'primary',
+      nextCurrentIndex: 0,
+      onClick: toggleFormInput
     }
+  ]
+  const buttonsHandler = ({nextCurrentIndex, onClick}) => {
+    onClick();
+    setButtonsIndex(nextCurrentIndex)
   }
-
-  const handleSubmitFormInput = (note, noteTitle) => {
-    app.checkList.noteNew({title: noteTitle});
-  }
-
-  const handleActionCard = (item, actionType) => {
-    console.log(actionType)
-    const action = checkList.events.actionsModal.find(item => item.typeName === actionType);
-    if (action) {
-      action.handler(item, ...action.args)
-    }
-  }
-
-  const toggleFormInput = e => {
-    setDisplayFormInput(!displayFormInput)
-  }
-
-  const [buttons, setButtons] = useState({
-    all: [
-      {
-        to: '/note',
-        label: 'Add',
-        color: 'success',
-        nextCurrentIndex: 1,
-        onClick: toggleFormInput
-      },
-      {
-        to: '/',
-        label: 'Cancel',
-        color: 'primary',
-        nextCurrentIndex: 0,
-        onClick: toggleFormInput
-      }
-    ],
-    currentIndex: 0
-  })
+  const [setButtonsIndex, buttonsCreate] = useButtonsIndex(buttonsVariant, buttonsHandler)
   const [displayFormInput, setDisplayFormInput] = useState(false)
   const [checkList] = useState({
     events: {
@@ -99,36 +75,32 @@ function Base ({ app, history }) {
     return todo.filter(item => item.noteId === id)
   }
 
-  // Buttons
-
-  const buttonsCreate = () => {
-    const {all, currentIndex} = buttons
-    return renderButton(all[currentIndex])
-  }
-  const buttonsUpdate = (value) => {
-    const newButtons = Object.assign({...buttons}, {currentIndex: value});
-    setButtons(newButtons)
+  function handleSubmitFormInput (note, noteTitle) {
+    app.checkList.noteNew({title: noteTitle});
   }
 
-  const handleButton = ({nextCurrentIndex, onClick}) => {
-    onClick();
-    buttonsUpdate(nextCurrentIndex)
+  function handleChangeListNote (item, e) {
+    const classNameCheckbox = 'checkbox-wrap'
+    const isCheckbox = e.target.parentNode.classList.contains(classNameCheckbox)
+    if (isCheckbox) {
+      const { checkList } = app;
+      const todoNew = checkList.todoNew(item);
+      checkList.todoUpdate(todoNew);
+    }
+  }
 
+  function handleActionCard (item, actionType) {
+    const action = checkList.events.actionsModal.find(item => item.typeName === actionType);
+    if (action) {
+      action.handler(item, ...action.args)
+    }
+  }
+
+  function toggleFormInput (e) {
+    setDisplayFormInput(!displayFormInput)
   }
 
   // Render
-
-  const renderButton = (btn) => {
-    const {color, label} = btn
-
-    return (
-      <Button
-        color={color}
-        label={label}
-        handler={() => handleButton(btn)}
-      />
-    )
-  }
 
   const renderTodo = (listTodo) => {
     const {events} = checkList

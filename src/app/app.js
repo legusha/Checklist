@@ -8,19 +8,22 @@ import { AppProvider } from '~/components/app-context';
 import ModalActions from '~/components/modal';
 import ModalContent from '~/components/modal-content';
 import ErrorView from '~/views/error'
+import { WithProcessing } from '~/components/hoc'
 
 import request from '~/services/request';
+import {Topbar} from "../components/layout";
 
 const Page404 = () => <h1>Four: 404 </h1>
 
-
-export default function App2 () {
+export default function App () {
   const services = {
     request,
   }
   const [state, provider] = useAppState(services)
   const [fetchNote, processing, error] = provider.hooks.useFetching(request.getNote)
   const [fetchTodo, processingTodo, errorTodo] = provider.hooks.useFetching(request.getTodo)
+  const fetchProcessing = [processing, processingTodo]
+  const fetchErrors = [error, errorTodo]
 
   function initModalContent(props = {}) {
     return ModalContent({
@@ -95,31 +98,37 @@ export default function App2 () {
     }
   }
 
-  function Content() {
-    return <div>
-      <Switch>
-        <AppProvider value={{ app }}>
-          <RouterProvider/>
-        </AppProvider>
-      </Switch>
-      <ModalActions modal={app.modal} />
-    </div>
-  }
+  const Content = () => <section>
+    <Switch>
+      <AppProvider value={{ app }}>
+        <RouterProvider/>
+      </AppProvider>
+    </Switch>
+    <ModalActions modal={app.modal} />
+  </section>
 
-  function ContentError() {
-    return <ErrorView/>
-  }
-
-  function ContentWithError() {
-    if (error || errorTodo) {
-      return <ContentError/>
-    }
-    return <Content/>
+  // Todo need create Layout for decompoze this code
+  function WithProcessingContent() {
+    const loading = () => <section className="container-lg container-fluid main">
+      <Topbar/>
+      <div className='text-center'>
+        <h4>Loading...</h4>
+      </div>
+    </section>
+    return <WithProcessing
+      process={fetchProcessing}
+      Content={Content}
+      ProcessContent={loading}
+    />
   }
 
   return (
-    <div className="App, mt-4">
-      <ContentWithError/>
-    </div>
+    <main className="App, mt-4">
+      <WithProcessing
+        process={fetchErrors}
+        Content={WithProcessingContent}
+        ProcessContent={ErrorView}
+      />
+    </main>
   )
 }

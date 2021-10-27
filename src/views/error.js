@@ -1,5 +1,5 @@
 import React from 'react'
-import {Topbar} from "../components/layout";
+import {Topbar} from "~/components/layout";
 
 export default function ErrorView () {
   return (

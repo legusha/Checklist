@@ -2,7 +2,7 @@ import React from 'react'
 
 
 export default function WithProcessing ({ process, ProcessContent, Content }) {
-  const isProcessRun = process.find(error => error)
+  const isProcessRun = process.find(pr => pr)
   if (isProcessRun) {
     return <ProcessContent/>
   }

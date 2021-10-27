@@ -14,13 +14,11 @@ import request from '~/services/request';
 const { useContextNote: useNote, useContextTodoList: useTodo } = context;
 
 function Base ({ app, history }) {
-  const [fetchNote, processing, error] = useFetching(request.getNote)
-  const [fetchTodo, processingTodo, errorTodo] = useFetching(request.getTodo)
-  const fetchProcessing = [processing, processingTodo]
-  const fetchErrors = [error, errorTodo]
+  const [notes, fetchNote] = useNote(request.getNote)
+  const [todos, fetchTodo, todosHelper] = useTodo(request.getTodo)
+  const fetchProcessing = [fetchNote.processing, fetchTodo.processing]
+  const fetchErrors = [fetchNote.error, fetchTodo.error]
 
-  const [notes, setNotes] = useNote()
-  const [todos, setTodos] = useTodo()
 
   const buttonsVariant = [
     {
@@ -58,7 +56,10 @@ function Base ({ app, history }) {
         {
           typeName: 'delete',
           handler: app.modal.updateWithItem,
-          args: [true, 'checklist:item:remove', {delete: app.checkList.noteDelete}]
+          args: [true, 'checklist:item:remove', {delete: async ({ id }) => {
+              await request.deleteNote(id);
+              await fetchNote.fetch()
+            }}]
         }
       ],
     },
@@ -78,25 +79,23 @@ function Base ({ app, history }) {
     ],
   })
 
-  const findByNoteIdTodo = (id) => {
-    return todos.filter(item => item.noteId === id)
-  }
   function handleButtons ({nextCurrentIndex, onClick}) {
     onClick();
     setButtonsIndex(nextCurrentIndex)
   }
 
-  function handleSubmitFormInput (note, noteTitle) {
-    app.checkList.noteNew({title: noteTitle});
+  async function handleSubmitFormInput (note, noteTitle) {
+    await request.postNote({title: noteTitle});
+    await fetchNote.fetch()
   }
 
-  function handleChangeListNote (item, e) {
+  async function handleChangeListNote (item, e) {
     const classNameCheckbox = 'checkbox-wrap'
     const isCheckbox = e.target.parentNode.classList.contains(classNameCheckbox)
     if (isCheckbox) {
-      const { checkList } = app;
-      const todoNew = checkList.todoNew(item);
-      checkList.todoUpdate(todoNew);
+      const todoNew = todosHelper.toggleComplete(item);
+      await request.updateTodo(todoNew);
+      await fetchTodo.fetch()
     }
   }
 
@@ -147,7 +146,7 @@ function Base ({ app, history }) {
     )
     const checkboxListView = {
       render: renderTodo,
-      helper: findByNoteIdTodo,
+      helper: todosHelper.findByNoteId,
     }
     return (
       <CardList
@@ -157,19 +156,6 @@ function Base ({ app, history }) {
       />
     )
   }
-
-  useEffect(() => {
-    const handler = async () => {
-      const listNote = await fetchNote()
-      const listTodo = await fetchTodo()
-
-      if (!error && !errorTodo) {
-        setNotes(listNote)
-        setTodos(listTodo)
-      }
-    }
-    handler()
-  }, [])
 
   const showFormInput = displayFormInput ? <FormInputWrap note={null} handler={handleSubmitFormInput}/> : null
 

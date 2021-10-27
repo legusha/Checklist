@@ -33,14 +33,9 @@ export default function App () {
   // Init handlers
   function initApiCheckList() {
     return {
-      todoNew: (props) => ({...props, complete: !props.complete}),
-      todoNewCreate: (props) => console.log(props),
-      todoUpdate: provider.todo.itemUpdate,
       todoGetByNoteID: request.getTodoByNoteID,
-      noteNew: provider.note.itemNew,
       noteUpdate: provider.note.itemUpdate,
       noteByID: request.getNoteByID,
-      noteDelete: provider.note.listRemoveItem,
     }
   }
   function initApiModal() {
@@ -64,13 +59,8 @@ export default function App () {
   const apiCheckList = initApiCheckList();
   const apiModal = initApiModal();
 
-  const checklist = {
-    note: state.note,
-    todo: state.todoList,
-  }
   const app = {
     checkList: {
-      ...checklist,
       ...apiCheckList,
     },
     modal: {

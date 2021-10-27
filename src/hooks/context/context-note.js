@@ -1,6 +1,28 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 
-export default function useNote() {
+import { useFetching } from '../use-fetching';
+
+export default function useNote(request) {
   const [note, setNote] = useState([])
-  return [note, setNote]
+  const [fetchNote, processing, error] = useFetching(request)
+
+  const fetch = async () => {
+    const listNote = await fetchNote()
+
+    if (!error) {
+      console.log(listNote)
+      setNote(prevNote => listNote)
+    }
+  }
+
+  useEffect(() => {
+    fetch()
+  }, [])
+
+  const fetching = {
+    fetch,
+    processing,
+    error
+  }
+  return [note, fetching]
 }

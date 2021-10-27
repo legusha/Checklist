@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, {useState} from 'react'
 
 import {Button, FormInputWrap} from '../components/ui'
 import CardList from '../components/card-list'
@@ -8,145 +8,133 @@ import { WithModelContext } from '../components/hoc'
 import {Topbar} from '../components/layout';
 
 
-class Base extends Component {
+function Base ({ app, history }) {
 
-  handleChangeListNote = (item, e) => {
+  const handleChangeListNote = (item, e) => {
     const classNameCheckbox = 'checkbox-wrap'
     const isCheckbox = e.target.parentNode.classList.contains(classNameCheckbox)
     if (isCheckbox) {
-      const { checkList } = this.props.app;
+      const { checkList } = app;
       const todoNew = checkList.todoNew(item);
       checkList.todoUpdate(todoNew);
     }
   }
 
-  handleSubmitFormInput = (note, noteTitle) => {
-    this.props.app.checkList.noteNew({title: noteTitle});
+  const handleSubmitFormInput = (note, noteTitle) => {
+    app.checkList.noteNew({title: noteTitle});
   }
 
-  handleActionCard = (item, actionType) => {
+  const handleActionCard = (item, actionType) => {
     console.log(actionType)
-    const action = this.state.checkList.events.actionsModal.find(item => item.typeName === actionType);
+    const action = checkList.events.actionsModal.find(item => item.typeName === actionType);
     if (action) {
       action.handler(item, ...action.args)
     }
   }
 
-  toggleFormInput = e => {
-    const newState = oldState => {
-      const displayFormInput = !oldState.displayFormInput
-      return {
-        ...oldState,
-        displayFormInput
-      }
-    }
-    this.setState(newState)
+  const toggleFormInput = e => {
+    setDisplayFormInput(!displayFormInput)
   }
 
-  state = {
-    buttons: {
-      all: [
+  const [buttons, setButtons] = useState({
+    all: [
+      {
+        to: '/note',
+        label: 'Add',
+        color: 'success',
+        nextCurrentIndex: 1,
+        onClick: toggleFormInput
+      },
+      {
+        to: '/',
+        label: 'Cancel',
+        color: 'primary',
+        nextCurrentIndex: 0,
+        onClick: toggleFormInput
+      }
+    ],
+    currentIndex: 0
+  })
+  const [displayFormInput, setDisplayFormInput] = useState(false)
+  const [checkList] = useState({
+    events: {
+      self: this,
+      onChangeCheckbox: handleChangeListNote,
+      onActionCard: handleActionCard,
+      actionsModal: [
         {
-          to: '/note',
-          label: 'Add',
-          color: 'success',
-          nextCurrentIndex: 1,
-          onClick: this.toggleFormInput
+          typeName: 'edit',
+          handler: app.modal.updateWithItem,
+          args: [true, 'checklist:item:edit', {
+            edit: ({id}) => {
+              history.push(`/note/${id}`)
+            }
+          }]
         },
         {
-          to: '/',
-          label: 'Cancel',
-          color: 'primary',
-          nextCurrentIndex: 0,
-          onClick: this.toggleFormInput
+          typeName: 'delete',
+          handler: app.modal.updateWithItem,
+          args: [true, 'checklist:item:remove', {delete: app.checkList.noteDelete}]
         }
       ],
-      currentIndex: 0
     },
-    displayFormInput: false,
-    checkList: {
-      events: {
-        self: this,
-        onChangeCheckbox: this.handleChangeListNote,
-        onActionCard: this.handleActionCard,
-        actionsModal: [
-          {
-            typeName: 'edit',
-            handler: this.props.app.modal.updateWithItem,
-            args: [true, 'checklist:item:edit', { edit: ({ id }) => {
-                this.props.history.push(`/note/${id}`)
-              } }]
-          },
-          {
-            typeName: 'delete',
-            handler: this.props.app.modal.updateWithItem,
-            args: [true, 'checklist:item:remove', { delete: this.props.app.checkList.noteDelete }]
-          }
-        ],
-      },
-    },
-    emptyValue: {
-      text: 'Empty list',
-      classNameWrapChecklist: [
-        'w-100',
-        'h-100',
-        'd-flex',
-        'align-items-center',
-        'justify-content-center',
-        'text-muted',
-        'p-4',
-        'border',
-        'mt-4'
-      ],
-    }
-  }
+  })
+  const [emptyValue] = useState({
+    text: 'Empty list',
+    classNameWrapChecklist: [
+      'w-100',
+      'h-100',
+      'd-flex',
+      'align-items-center',
+      'justify-content-center',
+      'text-muted',
+      'p-4',
+      'border',
+      'mt-4'
+    ],
+  })
 
-  findByNoteIdTodo = (id) => {
-    const { todo } = this.props.app.checkList
+  const findByNoteIdTodo = (id) => {
+    const {todo} = app.checkList
     return todo.filter(item => item.noteId === id)
   }
 
-  // Button
+  // Buttons
 
-  get button () {
-    const buttons = this.state.buttons
-    const { all, currentIndex } = buttons
-
-    return this.renderButton(all[currentIndex])
+  const buttonsCreate = () => {
+    const {all, currentIndex} = buttons
+    return renderButton(all[currentIndex])
+  }
+  const buttonsUpdate = (value) => {
+    const newButtons = Object.assign({...buttons}, {currentIndex: value});
+    setButtons(newButtons)
   }
 
-  set button (value) {
-    const oldButtons = this.state.buttons;
-    const newButtons = Object.assign({ ...oldButtons }, { currentIndex: value });
-
-    this.setState({ buttons: newButtons })
-  }
-
-  handleButton ({ nextCurrentIndex, onClick }) {
+  const handleButton = ({nextCurrentIndex, onClick}) => {
     onClick();
-    this.button = nextCurrentIndex
+    buttonsUpdate(nextCurrentIndex)
 
   }
 
   // Render
 
-  renderButton (btn) {
-    const { color, label } = btn
+  const renderButton = (btn) => {
+    const {color, label} = btn
 
     return (
       <Button
         color={color}
         label={label}
-        handler={this.handleButton.bind(this, btn)}
+        handler={() => handleButton(btn)}
       />
     )
   }
 
-  renderTodo (listTodo) {
-    const { events } = this.state.checkList
+  const renderTodo = (listTodo) => {
+    const {events} = checkList
 
     if (listTodo.length === 0) return (
-      <EmptyValue {...this.state.emptyValue}/>
+      <EmptyValue {...emptyValue}/>
     )
     return (
       <CheckboxList
@@ -155,40 +143,35 @@ class Base extends Component {
       />
     )
   }
-  renderChecklist() {
-    const note = this.props.app.checkList.note
+  const renderChecklist = () => {
+    const note = app.checkList.note
     const noteEmpty = note.length === 0
 
     if (noteEmpty) return (
-      <EmptyValue {...this.state.emptyValue} classNameWrap={this.state.emptyValue.classNameWrapChecklist}/>
+      <EmptyValue {...emptyValue} classNameWrap={emptyValue.classNameWrapChecklist}/>
     )
     const checkboxListView = {
-      render: this.renderTodo.bind(this),
-      helper: this.findByNoteIdTodo.bind(this),
+      render: renderTodo,
+      helper: findByNoteIdTodo,
     }
     return (
       <CardList
-        list={ this.props.app.checkList.note }
-        view={ checkboxListView }
-        action={this.handleActionCard}
+        list={app.checkList.note}
+        view={checkboxListView}
+        action={handleActionCard}
       />
     )
   }
 
-  render () {
-    const { displayFormInput } = this.state
-    const showFormInput = displayFormInput ? <FormInputWrap note={null} handler={this.handleSubmitFormInput} /> : null
-
-    return (
-      <section className="container-lg container-fluid main">
-        <Topbar rightContent={this.button}/>
-        {showFormInput}
-        {this.renderChecklist()}
-      </section>
-    )
-  }
+  const showFormInput = displayFormInput ? <FormInputWrap note={null} handler={handleSubmitFormInput}/> : null
+  return (
+    <section className="container-lg container-fluid main">
+      <Topbar rightContent={buttonsCreate()}/>
+      {showFormInput}
+      {renderChecklist()}
+    </section>
+  )
 }
-
 const mapContextToProps = ({ app }) => {
   return {
     app,

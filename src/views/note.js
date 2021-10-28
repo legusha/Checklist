@@ -8,7 +8,7 @@ import BButton from "react-bootstrap/Button";
 import request from '~/services/request';
 import { context } from '~/hooks';
 
-const { useContextNoteOnce } = context
+const { useNoteOnce, useTodoOnce } = context
 
 const todoEmptyValue = {
   text: 'Empty list',
@@ -28,9 +28,9 @@ const todoEmptyValue = {
 function Note({ match, app }) {
 
   const noteID = match.params.id;
-  const [note, fetchNote] = useContextNoteOnce(noteID, request.getNoteByID)
-  // const [note, updateNote] = useState(null);
-  const [todo, updateTodo] = useState([]);
+  const [note, fetchNote, fetchNoteUpdate] = useNoteOnce(noteID, { get: request.getNoteByID, put: request.putNote })
+  const [todo, fetchTodo] = useTodoOnce(noteID, request.getTodoByNoteID)
+  // console.log(todo)
   const todoEvent = {
     self: this,
     onChangeCheckbox: handleCheckboxChange
@@ -46,19 +46,16 @@ function Note({ match, app }) {
       ...note,
       title: noteInput,
     };
-    const params = {
-      id: item.id,
-      body: item
-    }
-    await request.putNote(params);
+    await fetchNoteUpdate.fetch(item)
     await fetchNote.fetch(noteID)
   }
 
   async function handleCheckboxChange(item) {
     const { checkList } = app;
-    const newTodo = checkList.todoNew(item);
+    const toggleComplete = (props) => ({...props, complete: !props.complete})
+    const newTodo = toggleComplete(item);
     await checkList.todoUpdate(newTodo);
-    await fetchTodo();
+    await fetchTodo.fetch(noteID);
   }
   function handleTodoAdd() {
     console.log(app.modal.context)
@@ -94,20 +91,6 @@ function Note({ match, app }) {
   }
 
   // Fetch
-
-  async function fetchTodo() {
-    const newTodo = await request.getTodoByNoteID({ noteID });
-    updateTodo(newTodo)
-  }
-
-  useEffect(() => {
-    async function fetchTodoList() {
-      await fetchTodo()
-    }
-
-    fetchTodoList();
-  }, [noteID]);
-
 
   return (
     <section className="container-lg container-fluid main">

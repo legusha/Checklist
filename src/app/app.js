@@ -33,7 +33,7 @@ export default function App () {
   // Init handlers
   function initApiCheckList() {
     return {
-      noteUpdate: provider.note.itemUpdate,
+      // noteUpdate: provider.note.itemUpdate,
     }
   }
   function initApiModal() {

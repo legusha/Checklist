@@ -1,11 +1,13 @@
-import useContextNote from './context-note'
-import useContextNoteOnce from './context-note-once'
-import useContextTodoList from './context-todo-list'
+import useContextNote from './use-note'
+import useNoteOnce from './use-note-once'
+import useContextTodoList from './use-todo'
+import useTodoOnce from './use-todo-once'
 import * as contextModal from './context-modal'
 
 export {
   useContextNote,
-  useContextNoteOnce,
+  useNoteOnce,
   useContextTodoList,
+  useTodoOnce,
   contextModal
 }

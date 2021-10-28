@@ -51,22 +51,18 @@ function Note({ match, app }) {
   }
 
   async function handleCheckboxChange(item) {
-    const { checkList } = app;
     const toggleComplete = (props) => ({...props, complete: !props.complete})
     const newTodo = toggleComplete(item);
-    await checkList.todoUpdate(newTodo);
+    await request.updateTodo(newTodo);
     await fetchTodo.fetch(noteID);
   }
   function handleTodoAdd() {
-    console.log(app.modal.context)
-    console.log(app.modal.modal)
-    console.log(app.modal.currentContentType)
     app.modal.updateWithItem(
       {},
       true,
       'checklist:todo:add',
       {
-        'todo:add': app.checkList.todoNewCreate,
+        'todo:add': (props) => console.log('todoNewCreate', props),
         modalTodo,
         formHandler: handleModalTodo
       })

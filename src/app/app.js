@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Switch } from 'react-router-dom';
 
 import { RouterProvider } from '~/router'
@@ -7,11 +7,11 @@ import { useAppState } from '~/hooks'
 import { AppProvider } from '~/components/app-context';
 import ModalActions from '~/components/modal';
 import ModalContent from '~/components/modal-content';
-import ErrorView from '~/views/error'
+// import ErrorView from '~/views/error'
 
 import request from '~/services/request';
 
-const Page404 = () => <h1>Four: 404 </h1>
+// const Page404 = () => <h1>Four: 404 </h1>
 
 export default function App () {
   const services = {
@@ -31,11 +31,6 @@ export default function App () {
   }
 
   // Init handlers
-  function initApiCheckList() {
-    return {
-      // noteUpdate: provider.note.itemUpdate,
-    }
-  }
   function initApiModal() {
     return {
       update: (value, modalContentType = 'checklist:item:remove') => {
@@ -54,13 +49,9 @@ export default function App () {
     }
   }
 
-  const apiCheckList = initApiCheckList();
   const apiModal = initApiModal();
 
   const app = {
-    checkList: {
-      ...apiCheckList,
-    },
     modal: {
       ...state.modal,
       ...apiModal

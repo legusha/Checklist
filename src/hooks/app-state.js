@@ -9,28 +9,6 @@ export default function useAppState({ request }) {
   const [modal, modalProvider] = useModal()
   const [modalContent, modalProviderContent] = useModalContent()
 
-  const setNoteNew = (item) => {
-  }
-
-  // const noteUpdateList = (noteList) => {
-  //   setNote(noteList)
-  // }
-  const noteCreateItem = async (item) => {
-    await request.postNote(item);
-    await noteUpdate();
-  }
-  const noteUpdateItem = async (item) => {
-    const params = {
-      id: item.id,
-      body: item
-    }
-    return await request.putNote(params);
-  }
-  const noteUpdate = async () => {
-    const listNote = await request.getNote();
-    // noteUpdateList(listNote);
-  }
-
   // Modal
 
   const modalUpdateContent = (contentType) => {
@@ -60,13 +38,6 @@ export default function useAppState({ request }) {
     }
   }
   const provider = {
-    note: {
-      new : setNoteNew,
-      itemNew: noteCreateItem,
-      itemUpdate: noteUpdateItem,
-      // listUpdate: noteUpdateList,
-      listUpdateRequest: noteUpdate,
-    },
     modal: {
       show: modalShow,
       hide: modalHide,

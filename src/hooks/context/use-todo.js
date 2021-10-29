@@ -4,8 +4,6 @@ import {useFetching} from '../use-fetching'
 export default function useTodoList(request) {
   const [todo, setTodo] = useState([])
   const [fetchTodo, processing, error] = useFetching(request)
-  const toggleComplete = (props) => ({...props, complete: !props.complete})
-  const findByNoteId = (id) => todo.filter(item => item.noteId === id)
 
   const fetch = async () => {
     const listTodo = await fetchTodo()
@@ -25,9 +23,5 @@ export default function useTodoList(request) {
     processing,
     error
   }
-  const helper = {
-    toggleComplete,
-    findByNoteId
-  }
-  return [todo, fetching, helper]
+  return [todo, fetching]
 }

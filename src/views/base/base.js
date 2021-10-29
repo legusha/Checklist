@@ -11,11 +11,15 @@ import useButtonsIndex from './use-buttons-index'
 import { useFetching, context } from '~/hooks';
 import request from '~/services/request';
 
-const { useContextNote: useNote, useContextTodoList: useTodo } = context;
+const { useContextNote: useNote, useContextTodoList: useTodo, useTodoHelper } = context;
 
 function Base ({ app, history }) {
   const [notes, fetchNote] = useNote(request.getNote)
-  const [todos, fetchTodo, todosHelper] = useTodo(request.getTodo)
+  const [todos, fetchTodo] = useTodo(request.getTodo)
+  const {
+    toggleComplete: todoToggleComplete,
+    findByNoteId: todoFindByNoteID,
+  } = useTodoHelper(todos)
   const fetchProcessing = [fetchNote.processing, fetchTodo.processing]
   const fetchErrors = [fetchNote.error, fetchTodo.error]
 
@@ -93,7 +97,7 @@ function Base ({ app, history }) {
     const classNameCheckbox = 'checkbox-wrap'
     const isCheckbox = e.target.parentNode.classList.contains(classNameCheckbox)
     if (isCheckbox) {
-      const todoNew = todosHelper.toggleComplete(item);
+      const todoNew = todoToggleComplete(item);
       await request.updateTodo(todoNew);
       await fetchTodo.fetch()
     }
@@ -124,6 +128,7 @@ function Base ({ app, history }) {
   }
 
   const renderTodo = (listTodo) => {
+    console.log(listTodo)
     const {events} = checkList
 
     if (listTodo.length === 0) return (
@@ -144,7 +149,7 @@ function Base ({ app, history }) {
     )
     const checkboxListView = {
       render: renderTodo,
-      helper: todosHelper.findByNoteId,
+      helper: todoFindByNoteID,
     }
     return (
       <CardList

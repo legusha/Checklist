@@ -3,7 +3,7 @@ import useNoteOnce from './use-note-once'
 import useContextTodoList from './use-todo'
 import useTodoHelper from './use-todo-helper'
 import useTodoOnce from './use-todo-once'
-import * as contextModal from './context-modal'
+import useModal from './use-modal'
 
 export {
   useContextNote,
@@ -11,5 +11,5 @@ export {
   useContextTodoList,
   useTodoHelper,
   useTodoOnce,
-  contextModal
+  useModal
 }

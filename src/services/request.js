@@ -50,6 +50,8 @@ const urls = {
   getTodo: 'todo',
   getTodoByNoteID: 'todo',
   updateTodo: 'todoID',
+  postTodo: 'todo',
+  deleteTodo: 'todoID',
   deleteNote: 'noteID'
 }
 
@@ -105,7 +107,6 @@ class Request extends Http {
     const source = this.generateSource(endPoint, [])
     return await this.makeRequestResource(this.getResource, [source])
   }
-
   async getTodoByNoteID(endPoint, noteID) {
     const source = this.generateSource(endPoint, [noteID])
     return await this.makeRequestResource(this.getResource, [source])
@@ -114,6 +115,15 @@ class Request extends Http {
     const source = this.generateSource(endPoint, [item.id])
     return await this.makeRequestResource(this.putResource, [source, item])
   }
+  async postTodo(endPoint, { body }) {
+    const source = this.generateSource(endPoint, [])
+    return await this.makeRequestResource(this.postResource, [source, body])
+  }
+  async deleteTodo(endPoint, id) {
+    const source = this.generateSource(endPoint, [id])
+    return await this.makeRequestResource(this.deleteResource, [source])
+  }
+
 }
 
 export default new Request(instanceRequest, attachEndPoints)

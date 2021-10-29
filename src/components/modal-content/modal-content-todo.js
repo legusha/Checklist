@@ -1,14 +1,20 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 // import PropTypes from 'prop-types'
 import BButton from 'react-bootstrap/Button'
 
-export default function FormInput ({ input, checkbox, formHandler }) {
+export default function FormInput ({ modalTodo, checkbox, formHandler }) {
   // FormInput.propTypes = {
   //   btn: PropTypes.object,
   //   input: PropTypes.object,
   //   events: PropTypes.object,
   // }
   // const { onChange, onSubmit } = events
+  // modalTodo.checkbox
+  const [inputValue, setInputValue] = useState(modalTodo.input)
+
+  useEffect(() => {
+    formHandler('input', inputValue)
+  }, [inputValue])
 
   return (
     <form
@@ -16,9 +22,12 @@ export default function FormInput ({ input, checkbox, formHandler }) {
     >
       <input
         type="text"
-        value={input}
+        value={inputValue}
         onChange={
-          (e) => formHandler('input', e.target.value)
+          (e) => {
+            setInputValue(e.target.value)
+            formHandler('input', e.target.value)
+          }
         }
         className="mr-4 form-control"
         placeholder="Note name"

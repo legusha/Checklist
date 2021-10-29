@@ -29,12 +29,15 @@ const todoEmptyValue = {
 function Note({ match }) {
 
   const noteID = match.params.id;
-  const [note, fetchNote, fetchNoteUpdate] = useNoteOnce(noteID, { get: request.getNoteByID, put: request.putNote })
-  const [todo, fetchTodo] = useTodoOnce(noteID, request.getTodoByNoteID)
+  const [note, fetchNote, fetchNoteUpdate] =
+    useNoteOnce(noteID, { get: request.getNoteByID, put: request.putNote })
+  const [todo, fetchTodo,  fetchingTodoCreate, fetchingDeleteTodo] =
+    useTodoOnce(noteID, { get: request.getTodoByNoteID, post: request.postTodo, delete: request.deleteTodo })
 
   const todoEvent = {
     self: this,
-    onChangeCheckbox: handleCheckboxChange
+    onChangeCheckbox: handleCheckboxChange,
+    onRemove: handleCheckboxRemove,
   }
   const [modalTodo, modalTodoUpdate] = useState({
     input: '',
@@ -48,7 +51,26 @@ function Note({ match }) {
     ...apiModal
   }
 
+  const openModalTodo = () =>
+    modal.updateWithItem(
+    {},
+    true,
+    'checklist:todo:add',
+    {
+      'todo:add': async () => {
+        await fetchingTodoCreate.fetch(noteID, modalTodo)
+      },
+      modalTodo,
+      formHandler: handleModalTodo
+    })
 
+  useEffect(() => {
+    if (modalTodo.input) {
+      openModalTodo()
+    }
+  }, [modalTodo.input])
+
+  //Handlers
   async function handleUpdateTitle (note, noteInput) {
     const item = {
       ...note,
@@ -64,22 +86,19 @@ function Note({ match }) {
     await request.updateTodo(newTodo);
     await fetchTodo.fetch(noteID);
   }
+
+  async function handleCheckboxRemove(id) {
+    await fetchingDeleteTodo.fetch(id);
+  }
   function handleTodoAdd() {
-    modal.updateWithItem(
-      {},
-      true,
-      'checklist:todo:add',
-      {
-        'todo:add': (props) => console.log('todoNewCreate', props),
-        modalTodo,
-        formHandler: handleModalTodo
-      })
+    handleModalTodo('input', '')
+    openModalTodo()
   }
   function handleModalTodo(key, value) {
-    modalTodoUpdate({
-      ...modalTodo,
+    modalTodoUpdate(prevState => ({
+      ...prevState,
       [key]: value
-    })
+    }))
   }
 
   function renderTodo (listTodo) {

@@ -26,6 +26,7 @@ export default function useModal() {
         dispatch(modalToggle(value))
       },
       updateWithItem: (item, value, modalContentType = 'checklist:item:remove', props) => {
+        console.log(props)
         dispatch(modalUpdateContentType(modalContentType))
         dispatch(modalUpdateContent(initModalContent({ item, ...props })))
         dispatch(modalToggle(value))

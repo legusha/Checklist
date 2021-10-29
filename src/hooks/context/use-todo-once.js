@@ -13,13 +13,17 @@ export default function (noteID, request) {
   }
 
   async function createTodo(noteID, props) {
+    const radix = 10
+    const NewNoteID = parseInt(noteID, radix)
     const params = {
       body: {
-        noteId: noteID,
+        noteId: NewNoteID,
         complete: props.checkbox,
         title: props.input
       }
     }
+
+
     await fetchCreateTodo(params);
     await fetch(noteID)
     // updateTodo(() => todoData);

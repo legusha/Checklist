@@ -4,11 +4,12 @@ import EmptyValue from '~/components/empty-value';
 import {WithModelContext} from '~/components/hoc';
 import { FormInputWrap } from '~/components/ui';
 import CheckboxList from "../components/checkbox-list";
+import ModalActions from '~/components/modal';
 import BButton from "react-bootstrap/Button";
 import request from '~/services/request';
 import { context } from '~/hooks';
 
-const { useNoteOnce, useTodoOnce } = context
+const { useNoteOnce, useTodoOnce, useModal } = context
 
 const todoEmptyValue = {
   text: 'Empty list',
@@ -25,12 +26,12 @@ const todoEmptyValue = {
   ],
 }
 
-function Note({ match, app }) {
+function Note({ match }) {
 
   const noteID = match.params.id;
   const [note, fetchNote, fetchNoteUpdate] = useNoteOnce(noteID, { get: request.getNoteByID, put: request.putNote })
   const [todo, fetchTodo] = useTodoOnce(noteID, request.getTodoByNoteID)
-  // console.log(todo)
+
   const todoEvent = {
     self: this,
     onChangeCheckbox: handleCheckboxChange
@@ -39,6 +40,13 @@ function Note({ match, app }) {
     input: '',
     checkbox: false,
   })
+  // Modal
+  const { modal: modalState, initModal } = useModal()
+  const apiModal = initModal()
+  const modal = {
+    ...modalState,
+    ...apiModal
+  }
 
 
   async function handleUpdateTitle (note, noteInput) {
@@ -57,7 +65,7 @@ function Note({ match, app }) {
     await fetchTodo.fetch(noteID);
   }
   function handleTodoAdd() {
-    app.modal.updateWithItem(
+    modal.updateWithItem(
       {},
       true,
       'checklist:todo:add',
@@ -105,6 +113,7 @@ function Note({ match, app }) {
           {renderTodo(todo)}
         </div>
       </div>
+      <ModalActions modal={modal} />
     </section>
   );
 }

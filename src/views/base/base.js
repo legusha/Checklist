@@ -5,15 +5,18 @@ import CardList from '../../components/card-list'
 import CheckboxList from '../../components/checkbox-list'
 import EmptyValue from '../../components/empty-value'
 import { WithModelContext } from '../../components/hoc'
-import {Topbar} from '../../components/layout';
+import {Topbar} from '../../components/layout'
 import { WithProcessing } from '~/components/hoc'
+import ModalActions from '~/components/modal'
+
 import useButtonsIndex from './use-buttons-index'
-import { useFetching, context } from '~/hooks';
+import { context } from '~/hooks';
 import request from '~/services/request';
 
-const { useContextNote: useNote, useContextTodoList: useTodo, useTodoHelper } = context;
+const { useContextNote: useNote, useContextTodoList: useTodo, useTodoHelper, useModal } = context;
 
-function Base ({ app, history }) {
+function Base ({ history }) {
+  // Context
   const [notes, fetchNote] = useNote(request.getNote)
   const [todos, fetchTodo] = useTodo(request.getTodo)
   const {
@@ -23,7 +26,14 @@ function Base ({ app, history }) {
   const fetchProcessing = [fetchNote.processing, fetchTodo.processing]
   const fetchErrors = [fetchNote.error, fetchTodo.error]
 
-
+  // Modal
+  const { modal: modalState, initModal } = useModal()
+  const apiModal = initModal()
+  const modal = {
+    ...modalState,
+    ...apiModal
+  }
+  // Buttons
   const buttonsVariant = [
     {
       to: '/note',
@@ -42,6 +52,8 @@ function Base ({ app, history }) {
   ]
   const [setButtonsIndex, buttonsCreate] = useButtonsIndex(buttonsVariant, handleButtons)
   const [displayFormInput, setDisplayFormInput] = useState(false)
+
+  // Checklist action
   const [checkList] = useState({
     events: {
       self: this,
@@ -50,7 +62,7 @@ function Base ({ app, history }) {
       actionsModal: [
         {
           typeName: 'edit',
-          handler: app.modal.updateWithItem,
+          handler: modal.updateWithItem,
           args: [true, 'checklist:item:edit', {
             edit: ({id}) => {
               history.push(`/note/${id}`)
@@ -59,7 +71,7 @@ function Base ({ app, history }) {
         },
         {
           typeName: 'delete',
-          handler: app.modal.updateWithItem,
+          handler: modal.updateWithItem,
           args: [true, 'checklist:item:remove', {delete: async ({ id }) => {
               await request.deleteNote(id);
               await fetchNote.fetch()
@@ -68,6 +80,7 @@ function Base ({ app, history }) {
       ],
     },
   })
+  // Empty list custom classes
   const [emptyValue] = useState({
     text: 'Empty list',
     classNameWrapChecklist: [
@@ -128,7 +141,6 @@ function Base ({ app, history }) {
   }
 
   const renderTodo = (listTodo) => {
-    console.log(listTodo)
     const {events} = checkList
 
     if (listTodo.length === 0) return (
@@ -174,6 +186,7 @@ function Base ({ app, history }) {
       <Topbar rightContent={buttonsCreate()}/>
       {showFormInput}
       <WithProcessingContent/>
+      <ModalActions modal={modal} />
     </section>
 
   )

@@ -6,12 +6,12 @@ import CheckboxList from '../../components/checkbox-list'
 import EmptyValue from '../../components/empty-value'
 import { WithModelContext } from '../../components/hoc'
 import {Topbar} from '../../components/layout'
-import { WithProcessing } from '~/components/hoc'
-import ModalActions from '~/components/modal'
+import { WithProcessing } from 'components/hoc'
+import ModalActions from 'components/modal'
 
 import useButtonsIndex from './use-buttons-index'
-import { context } from '~/hooks';
-import request from '~/services/request';
+import { context } from 'hooks';
+import request from 'services/request';
 
 const { useContextNote: useNote, useContextTodoList: useTodo, useTodoHelper, useModal } = context;
 

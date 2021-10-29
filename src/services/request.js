@@ -1,6 +1,6 @@
 import axios from 'axios'
-import Http from '~/services/http'
-import { utilsServices } from '~/utils'
+import Http from 'services/http'
+import { utilsServices } from 'utils'
 
 const { attachArgsToMethods, params } = utilsServices
 

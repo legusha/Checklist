@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {Topbar} from '~/components/layout';
-import EmptyValue from '~/components/empty-value';
-import {WithModelContext} from '~/components/hoc';
-import { FormInputWrap } from '~/components/ui';
+import {Topbar} from 'components/layout';
+import EmptyValue from 'components/empty-value';
+import {WithModelContext} from 'components/hoc';
+import { FormInputWrap } from 'components/ui';
 import CheckboxList from "../components/checkbox-list";
-import ModalActions from '~/components/modal';
+import ModalActions from 'components/modal';
 import BButton from "react-bootstrap/Button";
-import request from '~/services/request';
-import { context } from '~/hooks';
+import request from 'services/request';
+import { context } from 'hooks';
 
 const { useNoteOnce, useTodoOnce, useModal } = context
 

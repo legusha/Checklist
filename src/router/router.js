@@ -1,5 +1,5 @@
-import PageBase from '~/views/base';
-import PageNote from '~/views/note';
+import PageBase from 'views/base';
+import PageNote from 'views/note';
 import React from 'react'
 
 const Page404 = () => <h1>Page 404</h1>

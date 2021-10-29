@@ -2,6 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './app'
 import {BrowserRouter} from 'react-router-dom'
+import {Provider} from 'react-redux'
+import {store} from './store'
 import * as serviceWorker from './serviceWorker'
 
 import './assets/scss/main.scss'
@@ -9,7 +11,9 @@ import './assets/scss/main.scss'
 const application = (
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>,
     </BrowserRouter>
   </React.StrictMode>
 )

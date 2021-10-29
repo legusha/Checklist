@@ -2,6 +2,13 @@
   "name": "todo-list-r",
   "version": "0.1.2",
   "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "start:mock": "json-server --port=3001 --no-delete-cascade --watch db.json",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -17,12 +24,9 @@
     "react-scripts": "3.4.3",
     "redux": "^4.1.2"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "start:mock": "json-server --port=3001 --no-delete-cascade --watch db.json",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+  "devDependencies": {
+    "json-server": "^0.16.3",
+    "sass": "^1.43.2"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -38,10 +42,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "json-server": "^0.16.3",
-    "react-app-rewire-alias": "^1.0.3",
-    "sass": "^1.43.2"
   }
 }

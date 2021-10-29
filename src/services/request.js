@@ -6,7 +6,7 @@ const { attachArgsToMethods, params } = utilsServices
 
 const requestConfig = {
   request: {
-    baseURL: 'http://localhost:3001/',
+    baseURL: process.env.REACT_APP_ROOT_URL,
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',

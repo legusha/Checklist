@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react'
 
-import { FormInputWrap } from '../../components/ui'
-import CardList from '../../components/card-list'
-import CheckboxList from '../../components/checkbox-list'
-import EmptyValue from '../../components/empty-value'
-import { WithModelContext } from '../../components/hoc'
-import {Topbar} from '../../components/layout'
+import { FormInputWrap } from 'components/ui'
+import CardList from 'components/card-list'
+import CheckboxList from 'components/checkbox-list'
+import EmptyValue from 'components/empty-value'
+import { WithModelContext } from 'components/hoc'
+import {Topbar} from 'components/layout'
 import { WithProcessing } from 'components/hoc'
 import ModalActions from 'components/modal'
+import ErrorView from 'views/error'
 
 import useButtonsIndex from './use-buttons-index'
 import { context } from 'hooks';
@@ -129,16 +130,6 @@ function Base ({ history }) {
 
   // Render
 
-  function WithProcessingContent() {
-    const loading = () => <div className='text-center'>
-      <h4>Loading...</h4>
-    </div>
-    return <WithProcessing
-      process={fetchProcessing}
-      Content={Content}
-      ProcessContent={loading}
-    />
-  }
 
   const renderTodo = (listTodo) => {
     const {events} = checkList
@@ -171,10 +162,40 @@ function Base ({ history }) {
       />
     )
   }
-
   const showFormInput = displayFormInput ? <FormInputWrap note={null} handler={handleSubmitFormInput}/> : null
 
+  function WithProcessingContent() {
+    const loading = () => <div className='text-center'>
+      <h4>Loading...</h4>
+    </div>
+    return <WithProcessing
+      process={fetchProcessing}
+      Content={ContentProcessing}
+      ProcessContent={loading}
+    />
+  }
+  function WithErrorContent() {
+    // const loading = () => <div className='text-center'>
+    //   <h4>Loading...</h4>
+    // </div>
+    return <WithProcessing
+      process={fetchErrors}
+      Content={Content}
+      ProcessContent={ErrorView}
+    />
+  }
+
   function Content() {
+    return (
+      <section className="container-lg container-fluid main">
+        <Topbar rightContent={buttonsCreate()}/>
+        {showFormInput}
+        <WithProcessingContent/>
+        <ModalActions modal={modal} />
+      </section>
+    )
+  }
+  function ContentProcessing() {
     return (
       <div>
         {renderChecklist()}
@@ -182,13 +203,7 @@ function Base ({ history }) {
     )
   }
   return (
-    <section className="container-lg container-fluid main">
-      <Topbar rightContent={buttonsCreate()}/>
-      {showFormInput}
-      <WithProcessingContent/>
-      <ModalActions modal={modal} />
-    </section>
-
+    <WithErrorContent/>
   )
 }
 const mapContextToProps = ({ app }) => {

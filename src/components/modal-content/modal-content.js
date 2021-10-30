@@ -10,6 +10,7 @@ export default function ({ handlers, modal, props }) {
     if (handler) handler(...args)
     modal.update(show)
   }
+
   return [
     {
       typeName: 'checklist:item:edit',

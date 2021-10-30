@@ -1,7 +1,7 @@
 import React from 'react'
 import {useDispatch, useSelector} from "react-redux";
-import ModalContent from '~/components/modal-content';
-import {modalToggle, modalShow, modalHide, modalUpdateContentType, modalUpdateContent} from '~/store/modal-reducer'
+import ModalContent from 'components/modal-content';
+import {modalToggle, modalShow, modalHide, modalUpdateContentType, modalUpdateContent} from 'store/modal-reducer'
 
 export default function useModal() {
   const modal = useSelector(state => state.modalReducer)
@@ -26,6 +26,7 @@ export default function useModal() {
         dispatch(modalToggle(value))
       },
       updateWithItem: (item, value, modalContentType = 'checklist:item:remove', props) => {
+        console.log(props)
         dispatch(modalUpdateContentType(modalContentType))
         dispatch(modalUpdateContent(initModalContent({ item, ...props })))
         dispatch(modalToggle(value))

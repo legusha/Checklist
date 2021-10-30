@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
-import { RouterProvider } from '~/router'
-import { AppProvider } from '~/components/app-context';
+import { RouterProvider } from 'router'
+import { AppProvider } from 'components/app-context';
 
 export default function App () {
   const app = {}

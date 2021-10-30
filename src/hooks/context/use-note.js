@@ -10,7 +10,6 @@ export default function useNote(request) {
     const listNote = await fetchNote()
 
     if (!error) {
-      console.log(listNote)
       setNote(prevNote => listNote)
     }
   }

@@ -9,7 +9,6 @@ export default function useTodoList(request) {
     const listTodo = await fetchTodo()
 
     if (!error) {
-      console.log(listTodo)
       setTodo(prevNote => listTodo)
     }
   }

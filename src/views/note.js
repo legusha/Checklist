@@ -9,7 +9,7 @@ import BButton from "react-bootstrap/Button";
 import request from 'services/request';
 import { context } from 'hooks';
 
-const { useNoteOnce, useTodoOnce, useModal } = context
+const { useNoteOnce, useTodoOnce, useTodoHelper, useModal, } = context
 
 const todoEmptyValue = {
   text: 'Empty list',
@@ -33,6 +33,7 @@ function Note({ match }) {
     useNoteOnce(noteID, { get: request.getNoteByID, put: request.putNote })
   const [todo, fetchTodo,  fetchingTodoCreate, fetchingDeleteTodo] =
     useTodoOnce(noteID, { get: request.getTodoByNoteID, post: request.postTodo, delete: request.deleteTodo })
+  const { toggleComplete } = useTodoHelper()
 
   const todoEvent = {
     self: this,
@@ -81,7 +82,6 @@ function Note({ match }) {
   }
 
   async function handleCheckboxChange(item) {
-    const toggleComplete = (props) => ({...props, complete: !props.complete})
     const newTodo = toggleComplete(item);
     await request.updateTodo(newTodo);
     await fetchTodo.fetch(noteID);
@@ -90,10 +90,12 @@ function Note({ match }) {
   async function handleCheckboxRemove(id) {
     await fetchingDeleteTodo.fetch(id);
   }
+
   function handleTodoAdd() {
     handleModalTodo('input', '')
     openModalTodo()
   }
+
   function handleModalTodo(key, value) {
     modalTodoUpdate(prevState => ({
       ...prevState,
@@ -112,8 +114,6 @@ function Note({ match }) {
       />
     )
   }
-
-  // Fetch
 
   return (
     <section className="container-lg container-fluid main">

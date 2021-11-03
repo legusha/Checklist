@@ -8,6 +8,8 @@ export default (e) => {
 
     if (status === '401' || status === 401) {
     }
+    throw new Error(e)
   }
+  console.log(e.message)
   throw new Error(e)
 }

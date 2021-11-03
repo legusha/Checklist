@@ -1,12 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import IconClose from "mdi-react/CloseIcon";
 
-export default function Checkbox ({ option, handler }) {
+export default function Checkbox ({ option, handler, handlerOnRemove }) {
   Checkbox.propTypes = {
     option: PropTypes.object,
-    handler: PropTypes.func
+    handler: PropTypes.func,
+    handlerOnRemove: PropTypes.func
   }
   const { id, title, complete } = option
+
+  const IconRemove = () =>
+    handlerOnRemove ?
+      <IconClose className='text-danger cursor-point' onClick={() => handlerOnRemove(id)}/> :
+      null
 
   return (
     <div className="d-inline checkbox-wrap">
@@ -18,6 +25,7 @@ export default function Checkbox ({ option, handler }) {
         id={id}
       />
       <label htmlFor={id} >{title}</label>
+      <IconRemove/>
     </div>
   )
 }

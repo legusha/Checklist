@@ -1,8 +1,11 @@
 ## About Application
 
 The essence of this application is a checklist with local database and is a db.json file.<br />
+If you want to change use a custom web server,you are need change URL in environments files.<br />
+
 CRUD - support for note list<br />
-U - support for todo list
+CRUD - support for todo list<br />
+Support modal window for some actions<br />
 
 ## Available Scripts
 

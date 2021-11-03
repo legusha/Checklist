@@ -1,5 +1,5 @@
 import BButton from "react-bootstrap/Button";
-import React, {useState} from 'react'
+import React from 'react'
 
 import ContentTodo from './modal-content-todo'
 
@@ -7,10 +7,10 @@ export default function ({ handlers, modal, props }) {
   const { modalHide } = handlers
 
   function handlerWrap(show = false, handler, ...args) {
-    handler(...args)
+    if (handler) handler(...args)
     modal.update(show)
   }
-  console.log(props)
+
   return [
     {
       typeName: 'checklist:item:edit',

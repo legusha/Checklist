@@ -12,7 +12,8 @@ export default function CheckboxList ({ todo, events }) {
         ...item,
         id
       },
-      handler: onChangeCheckbox.bind(self, item)
+      handler: onChangeCheckbox.bind(self, item),
+      handlerOnRemove: events.onRemove,
     }
 
     return (

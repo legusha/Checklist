@@ -1,9 +1,18 @@
 import React from 'react'
+import PropTypes from "prop-types";
 
 import IconPencil from 'mdi-react/PencilIcon';
 import IconClose from 'mdi-react/CloseIcon';
 
 import { Card } from '../ui'
+
+const { array, object, func } = PropTypes;
+
+CardList.propTypes = {
+  list: array,
+  view: object,
+  action: func
+}
 
 export default function CardList ({ list , view, action }) {
 

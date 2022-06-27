@@ -148,7 +148,10 @@ function Base ({ history }) {
     const noteEmpty = notes.length === 0
 
     if (noteEmpty) return (
-      <EmptyValue {...emptyValue} classNameWrap={emptyValue.classNameWrapChecklist}/>
+      <EmptyValue
+        {...emptyValue}
+        classNameWrap={emptyValue.classNameWrapChecklist}
+      />
     )
     const checkboxListView = {
       render: renderTodo,
@@ -162,17 +165,27 @@ function Base ({ history }) {
       />
     )
   }
-  const showFormInput = displayFormInput ? <FormInputWrap note={null} handler={handleSubmitFormInput}/> : null
+  const showFormInput = displayFormInput
+    ?
+      <FormInputWrap
+        note={null}
+        handler={handleSubmitFormInput}/>
+    :
+    null
 
   function WithProcessingContent() {
-    const loading = () => <div className='text-center'>
-      <h4>Loading...</h4>
-    </div>
-    return <WithProcessing
-      process={fetchProcessing}
-      Content={ContentProcessing}
-      ProcessContent={loading}
-    />
+    const loading = () =>
+      <div className='text-center'>
+        <h4>Loading...</h4>
+      </div>
+
+    return (
+      <WithProcessing
+        process={fetchProcessing}
+        Content={ContentProcessing}
+        ProcessContent={loading}
+      />
+    )
   }
   function WithErrorContent() {
     // const loading = () => <div className='text-center'>

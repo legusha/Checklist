@@ -2,12 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import IconClose from "mdi-react/CloseIcon";
 
+Checkbox.propTypes = {
+  option: PropTypes.object,
+  handler: PropTypes.func,
+  handlerOnRemove: PropTypes.func
+}
+
 export default function Checkbox ({ option, handler, handlerOnRemove }) {
-  Checkbox.propTypes = {
-    option: PropTypes.object,
-    handler: PropTypes.func,
-    handlerOnRemove: PropTypes.func
-  }
   const { id, title, complete } = option
 
   const IconRemove = () =>

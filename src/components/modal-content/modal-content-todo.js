@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react'
-// import PropTypes from 'prop-types'
-import BButton from 'react-bootstrap/Button'
+import PropTypes from 'prop-types'
 
-export default function FormInput ({ modalTodo, checkbox, formHandler }) {
-  // FormInput.propTypes = {
-  //   btn: PropTypes.object,
-  //   input: PropTypes.object,
-  //   events: PropTypes.object,
-  // }
+const { object, func } = PropTypes;
+
+FormInput.propTypes = {
+  modalTodo: object,
+  formHandler: func,
+}
+
+export default function FormInput ({ modalTodo, formHandler }) {
   // const { onChange, onSubmit } = events
   // modalTodo.checkbox
   const [inputValue, setInputValue] = useState(modalTodo.input)

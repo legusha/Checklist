@@ -10,10 +10,12 @@ const classNameWrapDef = [
   'text-muted',
 ]
 
+EmptyValue.propTypes = {
+  text: PropTypes.string,
+  classNameWrap: PropTypes.array,
+}
+
 export default function EmptyValue ({ text, classNameWrap = classNameWrapDef }) {
-  EmptyValue.propTypes = {
-    text: PropTypes.string,
-  }
 
   return (
     <div className={classNameWrap.join(' ')}>

@@ -2,11 +2,12 @@ import React, {useEffect, useState} from 'react'
 import PropTypes from 'prop-types'
 import FormInput from "./form-input";
 
+FormInput.propTypes = {
+  note: PropTypes.object,
+  handler: PropTypes.func,
+}
+
 export default function FormInputWrap ({ note, handler }) {
-  FormInput.propTypes = {
-    note: PropTypes.object,
-    handler: PropTypes.func,
-  }
   const noteInput = {
     btn: {
       title: 'Save'

@@ -2,8 +2,17 @@ import BButton from "react-bootstrap/Button";
 import React from 'react'
 
 import ContentTodo from './modal-content-todo'
+import PropTypes from "prop-types";
 
-export default function ({ handlers, modal, props }) {
+const { object } = PropTypes;
+
+ModalContent.propTypes = {
+  handlers: object,
+  modal: object,
+  props: object,
+}
+
+export default function ModalContent({ handlers, modal, props }) {
   const { modalHide } = handlers
 
   function handlerWrap(show = false, handler, ...args) {

@@ -1,6 +1,12 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import { Modal } from '../ui'
+
+const { object } = PropTypes;
+
+ModalActions.propTypes = {
+  modal: object,
+}
 
 export default function ModalActions ({ modal }) {
 

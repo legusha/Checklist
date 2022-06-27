@@ -2,12 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import BButton from 'react-bootstrap/Button'
 
+FormInput.propTypes = {
+  btn: PropTypes.object,
+  input: PropTypes.object,
+  events: PropTypes.object,
+}
+
 export default function FormInput ({ btn, input, events }) {
-  FormInput.propTypes = {
-    btn: PropTypes.object,
-    input: PropTypes.object,
-    events: PropTypes.object,
-  }
   const { onChange, onSubmit } = events
 
   return (

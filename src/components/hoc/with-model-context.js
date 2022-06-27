@@ -1,5 +1,6 @@
 import React from 'react';
 import { AppConsumer } from '../app-context';
+import PropTypes from 'prop-types'
 
 const WithModelContext = (Wrapped, mapMethodsToProps) => {
 
@@ -19,5 +20,12 @@ const WithModelContext = (Wrapped, mapMethodsToProps) => {
     );
   }
 };
+
+const { node, func } = PropTypes;
+
+WithModelContext.propTypes = {
+  Wrapped: node,
+  mapMethodsToProps: func,
+}
 
 export default WithModelContext;

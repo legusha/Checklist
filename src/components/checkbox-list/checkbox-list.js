@@ -1,7 +1,16 @@
 import React from 'react'
+import PropTypes from "prop-types"
 import { Checkbox } from '../ui'
 
+const { array, object } = PropTypes;
+
+CheckboxList.propTypes = {
+  todo: array,
+  events: object,
+}
+
 export default function CheckboxList ({ todo, events }) {
+
   const { self, onChangeCheckbox } = events
 
   const renderTodo = (item) => {
@@ -17,7 +26,10 @@ export default function CheckboxList ({ todo, events }) {
     }
 
     return (
-      <Checkbox key={checkboxKey} {...checkBoxProps}/>
+      <Checkbox
+        key={checkboxKey}
+        {...checkBoxProps}
+      />
     )
   }
 

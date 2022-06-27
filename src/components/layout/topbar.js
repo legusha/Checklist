@@ -1,4 +1,14 @@
 import React from 'react';
+import PropTypes from "prop-types";
+
+const { object, string } = PropTypes;
+Topbar.propTypes = {
+  rightContent: object,
+  leftContent: PropTypes.oneOfType([
+      object,
+      string
+  ]),
+}
 
 export default function Topbar({rightContent, leftContent = 'Welcome to Checklist'}) {
   return (
